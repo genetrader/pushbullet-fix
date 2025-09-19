@@ -1,6 +1,8 @@
-# Pushbullet Chrome Extension (Manifest V3)
+# Pushbullet Chrome Extension UNOFFICIAL (Manifest V3)
 
 A community-maintained version of the Pushbullet Chrome extension updated to work with Manifest V3.  This extension REQUIRES you have an account already with Pushbullet.com and I am NOT affiliated with them and you can sign up when you open the extension.
+
+REPORT ERRORS AND I WILL GET THEM FIXED.  PLEASE PROVIDE ALL CONSOLE ERROR CODE WHEN YOU REPORT.
 
 IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A STAR AND I WILL START TO COMPILE MY DIRECTORY OF VIBE-CODED CHROME EXTENSIONS AND SHARE THEM!  I HAVE A BUNCH - THANKS.
 
