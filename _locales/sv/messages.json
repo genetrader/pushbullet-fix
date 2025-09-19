@@ -1,0 +1,326 @@
+{
+    "sign_in": {
+        "message": "Logga in"
+    },
+    "sign_out": {
+        "message": "Logga ut"
+    },
+    "options": {
+        "message": "Inställningar"
+    },
+    "title_placeholder": {
+        "message": "Titel"
+    },
+    "message_placeholder": {
+        "message": "Skriv ett meddelande, tryck enter för att skicka"
+    },
+    "message_placeholder_link": {
+        "message": "Lägg till ett meddelande, tryck enter för att skicka"
+    },
+    "message_placeholder_files": {
+        "message": "Skriv ett meddelande eller släpp en fil"
+    },
+    "url_placeholder": {
+        "message": "Länk-url"
+    },
+    "devices_placeholder": {
+        "message": "Välj en enhet"
+    },
+    "recipient_placeholder": {
+        "message": "Till"
+    },
+    "thanks_for_installing_title": {
+        "message": "Tack för att du installerat Pushbullet"
+    },
+    "thanks_for_installing_message": {
+        "message": "Klicka här för att logga in"
+    },
+    "updated_notif_title": {
+        "message": "Pushbullet har uppdaterats!"
+    },
+    "updated_notif_message": {
+        "message": "Klicka här för att se vad som är nytt"
+    },
+    "dismiss": {
+        "message": "Avfärda"
+    },
+    "reply": {
+        "message": "Svara"
+    },
+    "mute": {
+        "message": "Tysta"
+    },
+    "mute_app": {
+        "message": "Tysta $1 meddelanden"
+    },
+    "muted_app": {
+        "message": "Tystat $1"
+    },
+    "unmute_app": {
+        "message": "Slå på $1"
+    },
+    "mirror_context_message": {
+        "message": "$1 via Pushbullet klockan $2"
+    },
+    "push_context_message": {
+        "message": "$1 klockan $2"
+    },
+    "from": {
+        "message": "Från $1"
+    },
+    "go_to_link": {
+        "message": "Gå till länk"
+    },
+    "snooze": {
+        "message": "Snooze 1 timme"
+    },
+    "unsnooze": {
+        "message": "Avsnooza"
+    },
+    "all_of_my_devices": {
+        "message": "Alla mina enheter"
+    },
+    "add_a_friend": {
+        "message": "+ Lägg till en vän"
+    },
+    "panel_sign_up": {
+        "message": "Anmäl dig på Pushbullet.com →"
+    },
+    "panel_cant_sign_in": {
+        "message": "Kan du inte logga in? Försök att temporärt inaktivera AdBlock. Om det inte fungerar, Pushbullet behöver tredjeparts-cookies aktiverade för att de ska kunna logga in. Du kan inaktivera dem igen efter att du har loggat in."
+    },
+    "panel_third_party_cookies": {
+        "message": "Klicka här för hur du ändrar denna inställning."
+    },
+    "general": {
+        "message": "Allmänt"
+    },
+    "notifications": {
+        "message": "Meddelanden"
+    },
+    "advanced": {
+        "message": "Avancerat"
+    },
+    "how_to_unmute_app": {
+        "message": "Jag tystade en app, hur jag sätter jag på den igen?"
+    },
+    "alert_desktop_app_notifications": {
+        "message": "Pushbullets dator applikation hanterar notifikationen. Avstängning av notifikationer i dator applikationens inställningar kommer ge kontrollen till tillägget."
+    },
+    "option_background_permission": {
+        "message": "Håll Pushbullet igång när webbläsaren stängs"
+    },
+    "option_background_permission_desc": {
+        "message": "Detta gör att du kan se dina meddelanden utan att behöva hålla ett webbläsarfönster öppet."
+    },
+    "option_use_dark_icon": {
+        "message": "Använd mörk ikon"
+    },
+    "option_use_dark_icon_desc": {
+        "message": "Detta gör vår verktygsfältsikon mörkgrå."
+    },
+    "option_notification_duration": {
+        "message": "Dölja meddelanden automatiskt efter"
+    },
+    "option_show_mirrors": {
+        "message": "Visa notiser på min dator."
+    },
+    "option_show_mirrors_desc": {
+        "message": "Avmarkering kommer att hindra oss från visa notiser (du kan fortfarande se antalet i vår verktygsfältsikon)."
+    },
+    "option_only_show_titles": {
+        "message": "Visa endast meddelandetitlar"
+    },
+    "option_only_show_titles_desc": {
+        "message": "Detta gör att Pushbullet bara visar titeln på notifieringarna och håller meddelandet privat."
+    },
+    "option_play_sound": {
+        "message": "Spela upp ett ljud när ett meddelande anländer"
+    },
+    "option_play_sound_desc": {
+        "message": "Detta kommer att göra att Pushbullet spelar ett kort ljud när ett meddelande anländer."
+    },
+    "option_open_my_pushes_automatically": {
+        "message": "Öppna saker jag pushar till denna webbläsare automatiskt."
+    },
+    "option_open_my_pushes_automatically_desc": {
+        "message": "Detta gör att Pushbullet öppnar något du pushar till denna webbläsare automatiskt i en ny flik."
+    },
+    "option_show_context_menu": {
+        "message": "Visa Pushbullet i högerklicks-menyn"
+    },
+    "option_show_context_menu_desc": {
+        "message": "Visa Pushbullet i listan över högerklicks menyalternativ."
+    },
+    "option_allow_instant_push": {
+        "message": "Aktivera direkt push till"
+    },
+    "option_allow_instant_push_desc": {
+        "message": "Pusha den aktuella fliken till den valda enheten via tangentbordsgenväg."
+    },
+    "option_instant_push_shortcuts": {
+        "message": "Klicka här om du vill ange (för närvarande $1)."
+    },
+    "option_instant_push_shortcuts_not_set": {
+        "message": "inte inställt"
+    },
+    "num_new_messages": {
+        "message": "$1 nya meddelanden"
+    },
+    "unsubscribe_from_channel": {
+        "message": "Sluta följa $1"
+    },
+    "unsubscribed_from_channel": {
+        "message": "Följer inte längre $1"
+    },
+    "undo": {
+        "message": "Ångra"
+    },
+    "done": {
+        "message": "Färdigt"
+    },
+    "sms": {
+        "message": "SMS"
+    },
+    "sms_disclaimer": {
+        "message": "Telefonen måste vara påslagen och ha en internetanslutning för att skicka SMS."
+    },
+    "changelog_tab": {
+        "message": "Nytt"
+    },
+    "no_notifications": {
+        "message": "Inga notifikationer just nu"
+    },
+    "option_clipboard_permission": {
+        "message": "Universal kopiera & klistra in"
+    },
+    "option_clipboard_permission_desc": {
+        "message": "Kopiera text från en enhet och klistra in den på en annan enhet som har denna funktionen aktiverad."
+    },
+    "option_show_notification_count": {
+        "message": "Visa meddelanderäknare i verktygsfältsikonen"
+    },
+    "option_show_notification_count_desc": {
+        "message": "Se dina notifieringar på ett ögonblick i verktygsfältet."
+    },
+    "retry": {
+        "message": "Försök igen"
+    },
+    "clear": {
+        "message": "Töm"
+    },
+    "send_failed": {
+        "message": "Skicka misslyckades"
+    },
+    "devices": {
+        "message": "Enheter"
+    },
+    "friends": {
+        "message": "Vänner"
+    },
+    "following": {
+        "message": "Följer"
+    },
+    "people": {
+        "message": "Personer"
+    },
+    "pushing": {
+        "message": "Pushar"
+    },
+    "account": {
+        "message": "Konto"
+    },
+    "channels": {
+        "message": "Kanaler"
+    },
+    "no_pushes": {
+        "message": "Ingen ny historik"
+    },
+    "me": {
+        "message": "Mig"
+    },
+    "add_link_tooltip": {
+        "message": "Länka nuvarande sida"
+    },
+    "remove_link_tooltip": {
+        "message": "Avlänka nuvarande sida"
+    },
+    "see_full_history": {
+        "message": "Se full historik"
+    },
+    "cancel": {
+        "message": "Avbryt"
+    },
+    "sms_recipient_placeholder": {
+        "message": "Kontakt eller telefonnummer"
+    },
+    "file_too_big": {
+        "message": "Filen är för stor"
+    },
+    "sending": {
+        "message": "Skickar..."
+    },
+    "pending": {
+        "message": "Väntande"
+    },
+    "now": {
+        "message": "Nu"
+    },
+    "phone": {
+        "message": "Telefon"
+    },
+    "new_sms_thread": {
+        "message": "Nytt textmeddelande"
+    },
+    "encryption_password_needed_title": {
+        "message": "Krypterad data togs emot"
+    },
+    "encryption_password_needed_body": {
+        "message": "Klicka här för att ange ditt lösenord"
+    },
+    "decryption_failed_title": {
+        "message": "Dekrypteringen misslyckades"
+    },
+    "decryption_failed_body": {
+        "message": "Vänligen bekräfta att ditt lösenord matchar på alla enheter"
+    },
+    "end_to_end_encryption_label": {
+        "message": "End-to-end-kryptering"
+    },
+    "end_to_end_password_label": {
+        "message": "End-to-end-krypteringslösenord"
+    },
+    "end_to_end_password_desc": {
+        "message": "Om du väljer att ange ett lösenord, måste detta lösenord anges på alla dina enheter."
+    },
+    "save": {
+        "message": "Spara"
+    },
+    "option_automatically_attach_link": {
+        "message": "Bifoga automatiskt den aktuella fliken som meddelande till en enhet"
+    },
+    "option_automatically_attach_link_desc": {
+        "message": "Detta gör att det går fortare att skicka länkar till enheter."
+    },
+    "learn_more": {
+        "message": "Lär dig mer"
+    },
+    "darkmode_label": {
+        "message": "Mörkt läge"
+    },
+    "pushbullet_pro_required": {
+        "message": "Pushbullet Pro krävs"
+    },
+    "pushbullet_pro_feature": {
+        "message": "Pushbullet Pro krävs för att aktivera denna funktionen."
+    },
+    "reply_limit_warning": {
+        "message": "Du är nära gratismeddelande-gränsen för denna månad."
+    },
+    "reply_limit_reached": {
+        "message": "Du har nått gratismeddelande-gränsen för denna månad."
+    },
+    "reply_limit_upgrade": {
+        "message": "Uppgradera till Pushbullet Pro för att skicka obegränsat med meddelanden."
+    }
+}

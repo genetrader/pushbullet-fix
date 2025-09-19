@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Pushbullet Settings</title>
+        <link rel="stylesheet" type="text/css" href="base.css">
+        <link rel="stylesheet" type="text/css" href="big.css">
+        <link rel="stylesheet" type="text/css" href="darkmode.css">
+        <link rel="stylesheet" type="text/css" href="switch.css">
+        <style>
+            html {
+                height: 100%;
+            }
+            body {
+                height: 100%;
+            }
+            button {
+                height: 28px;
+                padding: 0;
+                margin-left: 10px;
+                border: 1px solid transparent;
+                padding: 0 5px;
+            }
+            #header {
+                padding: 15px;
+            }
+            #options {
+                margin-bottom: 40px;
+            }
+            .inner {
+                position: relative;
+            }
+            #account-holder {
+                display: none;
+                position: absolute;
+                top: 0;
+                right: 8px;
+                background-color: white;
+                border-radius: 34px;
+                padding: 3px;
+            }
+            #account-image {
+                display: block;
+                height: 48px;
+                width: 48px;
+                border-radius: 32px;
+            }
+            #ribbon {
+                position: absolute;
+                top: 32px;
+                right: 0;
+                width: 24px;
+                display: none;
+            }
+            .ribbon-small {
+                display: inline-block;
+                vertical-align: top;
+                width: 14px;
+                margin-left: 6px;
+            }
+            #overlay {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+            #pro-dialog {
+                width: 400px;
+                margin: 50px auto 0 auto;
+                padding: 16px;
+                background: white;
+                border-radius: 4px;
+                box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.25);
+            }
+            .dialog-option {
+                font-size: 14px;
+                font-weight: bold;
+                text-transform: uppercase;
+                float: right;
+                margin-left: 16px;
+                cursor: pointer;
+            }
+        </style>
+        <script src="utils.js"></script>
+        <script src="page-v3.js"></script>
+        <script src="options.js"></script>
+    </head>
+    <body>
+        <div id="header">
+            <div class="inner">
+                <div>
+                    <a id="logo-link" href="#">
+                        <div id="logo"></div>
+                    </a>
+                    <div style="margin-left:245px;margin-top:-10px;" id="version"></div>
+                </div>
+                <div id="account-holder">
+                    <img id="account-image">
+                </div>
+                <img id="ribbon" src="ribbon.png">
+            </div>
+        </div>
+        <div style="position:relative;height:100%;">
+            <div class="inner" style="margin-bottom:100px;">
+                <div id="options">
+                    <div id="category-general">
+                        <p id="heading-general" class="section-heading"></p>
+                        <div id="darkmode-option" class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="darkmode-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="darkmode-label" class="option-title"></span>
+                                <img src="ribbon.png" class="ribbon-small">
+                            </label>
+                            <div id="darkmode-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option chrome windows">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="background-permission-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="background-permission-label" class="option-title"></span>
+                            </label>
+                            <div id="background-permission-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="dark-icon-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="dark-icon-label" class="option-title"></span>
+                            </label>
+                            <div id="dark-icon-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="notification-count-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="notification-count-label" class="option-title"></span>
+                            </label>
+                            <div id="notification-count-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="open-automatically-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="open-automatically-label" class="option-title"></span>
+                            </label>
+                            <div id="open-automatically-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="auto-attach-link-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="auto-attach-link-label" class="option-title"></span>
+                            </label>
+                            <div id="auto-attach-link-desc" class="option-desc"></div>
+                        </div>
+                    </div>
+                    <div id="category-notifications">
+                        <p id="heading-notifications" class="section-heading"></p>
+                        <!-- <div class="option option-desc chrome not-opera">
+                            <span id="notification-duration-label" class="option-label" style="display:inline"></span>
+                            <select id="notification-duration-select" style="margin-left:6px;">
+                                <option value="8">8 seconds</option>
+                                <option value="0" selected>30 seconds</option>
+                            </select>
+                        </div> -->
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="show-notifications-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="show-notifications-label" class="option-title"></span>
+                            </label>
+                            <div id="show-notifications-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="titles-only-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="titles-only-label" class="option-title"></span>
+                            </label>
+                            <div id="titles-only-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option chrome">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="play-sound-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="play-sound-label" class="option-title"></span>
+                            </label>
+                            <div id="play-sound-desc" class="option-desc"></div>
+                        </div>
+                    </div>
+                    <div id="category-advanced">
+                        <p id="heading-advanced" class="section-heading"></p>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox"  id="context-menu-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="context-menu-label" class="option-title"></span>
+                            </label>
+                            <div id="context-menu-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox"  id="tabs-permission-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="tabs-permission-label" class="option-title"></span>
+                            </label>
+                            <div id="tabs-permission-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox"  id="hosts-permission-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="hosts-permission-label" class="option-title"></span>
+                            </label>
+                            <div id="hosts-permission-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option chrome">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="instant-push-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="instant-push-label" class="option-title"></span>
+                                <select id="instant-push-devices" style="margin-left:6px;"></select>
+                            </label>
+                            <div></div>
+                            <span id="instant-push-desc" class="option-desc"></span>
+                            <a id="keyboard-shortcut-link" class="option-desc" style="display:block;"></a>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="e2e-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="e2e-label" class="option-title"></span>
+                            </label>
+                            <div id="e2e-desc" class="option-desc"></div>
+                            <div id="e2e-configuration" style="display:none;margin:10px 0 0 48px;">
+                                <span id="e2e-password-label" class="option-label" style="display: inline;"></span>
+                                <input type="password" id="e2e-password" style="display:inline-block;width:200px;border:1px solid #95a5a6;padding:4px 6px;margin-left:20px;">
+                                <button id="e2e-save"></button>
+                                <button id="e2e-clear" class="gray"></button>
+                                <div id="e2e-password-desc" class="option-desc" style="padding-left: 0;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="category-faqs">
+                    <p id="heading-faqs" class="section-heading"></p>
+                    <div style="margin-left:48px;">
+                        <div id="question1" class="option-label" style="padding-bottom:4px;"></div>
+                        <div id="answer1"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="overlay" style="display:none;">
+                <div id="pro-dialog">
+                    <div>
+                        <img src="ribbon.png" width="32" style="display:inline-block;vertical-align:middle;">
+                        <span id="pro-required" style="font-weight:bold;font-size:18px;margin-left:12px;"></span>
+                    </div>
+                    <div id="pro-required-desc" style="margin:16px 0;">
+                    </div>
+                    <div style="overflow:hidden;margin-top:4px;">
+                        <span id="pro-dialog-more" class="dialog-option" style="color:#38a06d"></span>
+                        <span id="pro-dialog-cancel" class="dialog-option"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
