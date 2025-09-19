@@ -1,0 +1,184 @@
+body.darkmode {
+    color: white;
+    background-color: #232a2a;
+    scrollbar-color: #5c6868 #232a2a;
+}
+.darkmode ::-webkit-scrollbar, .darkmode::-webkit-scrollbar {
+    background-color: #232a2a;
+}
+.darkmode ::-webkit-scrollbar-thumb, .darkmode::-webkit-scrollbar-thumb {
+    background-color: #5c6868;
+}
+.darkmode .tab {
+    color: #95a5a6;
+    fill: #95a5a6;
+}
+.darkmode .tab.selected {
+    color: #4ab367;
+    fill: #4ab367;
+}
+.darkmode #footer {
+	box-shadow: none;
+	border-top: 1px solid #5c6868;
+}
+.darkmode #messaging-top {
+	box-shadow: 0 1px 0px 0 #5c6868;
+}
+.darkmode #popout-holder {
+	color: #95a5a6;
+}
+.darkmode .account-item a {
+	color: #95a5a6;
+}
+.darkmode #notifications-top {
+    box-shadow: 0 1px 0px 0 #5c6868;
+}
+.darkmode #notifications-holder {
+    background-color: transparent;
+    scrollbar-color: #5c6868 #232a2a;
+}
+.darkmode #notifications-holder::-webkit-scrollbar {
+    background-color: #232a2a;
+}
+.darkmode #notifications-holder::-webkit-scrollbar-thumb {
+    border: 4px solid #232a2a;
+}
+.darkmode .stream-row.selected {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.darkmode .stream-row:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.darkmode .stream-row.selected:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.darkmode #messaging-content-left {
+    border-color: #5c6868;
+}
+.darkmode .chat-bubble {
+	background-color: #606565;
+}
+.darkmode .chat-bubble.left {
+	background-color: #3e494d;
+}
+.darkmode .chat-bubble.left.sms {
+	background-color: #3a5b5c;
+}
+.darkmode .chat-poker {
+    fill: #606565;
+}
+.darkmode .chat-poker.left {
+    fill: #3e494d;
+}
+.darkmode .chat-poker.left.sms {
+    fill: #3a5b5c;
+}
+.darkmode .chat-cell a {
+    color: white;
+}
+.darkmode #push-right-bottom {
+	border-color: #5c6868;
+}
+.darkmode  #sms-right-bottom {
+	border-color: #5c6868;
+}
+.darkmode  #push-link-holder  {
+	border-color: #5c6868;
+}
+.darkmode textarea {
+	color: white;
+	background-color: #232a2a;
+}
+.darkmode input[type=text] {
+	color: white;
+	background-color: #232a2a;
+}
+.darkmode #push-link-holder-poker {
+	background: #232a2a;
+    border-color: #5c6868;
+}
+.darkmode #push-send-holder {
+	color: #95a5a6;
+}
+.darkmode #sms-send-holder {
+	color: #95a5a6;
+}
+.darkmode #compose-send-holder {
+    color: #95a5a6;
+}
+.darkmode #push-link-close {
+	color: #95a5a6;
+}
+.darkmode #push-link-close:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.darkmode #push-send-holder:hover {
+    color: #4ab367;
+}
+.darkmode #sms-send-holder:hover {
+    color: #4ab367;
+}
+.darkmode #compose-send-holder:hover {
+    color: #4ab367;
+}
+.darkmode .picker {
+    background-color: #3e494d;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
+}
+.darkmode .picker-overlay:hover {
+    background-color: transparent;
+}
+.darkmode .picker-overlay .picker-option {
+    background-color: #3e494d;
+}
+.darkmode .picker-overlay:hover .picker-option {
+     background-color: #323b3e;
+}
+.darkmode .picker-option:hover {
+    background-color: #323b3e;
+}
+.darkmode .picker-option.selected {
+    background-color: #3e494d;
+}
+.darkmode #compose-input-holder {
+    border-color: #5c6868;
+}
+.darkmode .section-heading {
+	color: #95a5a6;
+}
+.darkmode .slider {
+	background-color: #5c6868;
+}
+.darkmode .fake-notification {
+    box-shadow: none;
+}
+.darkmode .drop-zone {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.darkmode #top {
+	background-color: transparent;
+	box-shadow: none;
+	border-bottom: 1px solid #5c6868;
+}
+.darkmode #bottom {
+	border-color: #5c6868;
+}
+.darkmode #quickreply-content {
+	background-color: transparent;
+}
+.darkmode #qr-message {
+	border-bottom: 1px solid #5c6868;
+}
+.darkmode .chat-bubble.failed {
+    background-color: #e85845;
+}
+.darkmode .chat-poker.failed {
+    fill: #e85845;
+}
+.darkmode #snooze-holder {
+    color: #95a5a6;
+}
+.darkmode #account-ribbon {
+    background-image: url(ic_ribbon_darkmode.png);
+}

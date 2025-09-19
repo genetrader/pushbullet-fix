@@ -1,0 +1,320 @@
+{
+    "sign_in": {
+        "message": "Autentificare"
+    },
+    "sign_out": {
+        "message": "Ieșire"
+    },
+    "options": {
+        "message": "Setări"
+    },
+    "title_placeholder": {
+        "message": "Titlu"
+    },
+    "message_placeholder": {
+        "message": "Scrie un mesaj, apasă enter pentru a trimite"
+    },
+    "message_placeholder_link": {
+        "message": "Adaugă un mesaj, apasă enter pentru a trimite"
+    },
+    "message_placeholder_files": {
+        "message": "Scrie un mesaj sau atașează un fișier"
+    },
+    "url_placeholder": {
+        "message": "Link url"
+    },
+    "devices_placeholder": {
+        "message": "Selectează un dispozitiv"
+    },
+    "recipient_placeholder": {
+        "message": "Către"
+    },
+    "thanks_for_installing_title": {
+        "message": "Mulţumim pentru instalarea Pushbullet"
+    },
+    "thanks_for_installing_message": {
+        "message": "Apasă aici pentru autentificare"
+    },
+    "updated_notif_title": {
+        "message": "Pushbullet a fost actualizat!"
+    },
+    "updated_notif_message": {
+        "message": "Apasă aici pentru a vedea ce este nou"
+    },
+    "dismiss": {
+        "message": "Respinge"
+    },
+    "reply": {
+        "message": "Răspunde"
+    },
+    "mute": {
+        "message": "Dezactivează"
+    },
+    "mute_app": {
+        "message": "Dezactivează notificarea $1"
+    },
+    "muted_app": {
+        "message": "$1 a fost dezactivată"
+    },
+    "unmute_app": {
+        "message": "$1 a fost reactivată"
+    },
+    "mirror_context_message": {
+        "message": "$1 prin intermediul Pushbullet la $2"
+    },
+    "push_context_message": {
+        "message": "$1 la $2"
+    },
+    "from": {
+        "message": "De la $1"
+    },
+    "go_to_link": {
+        "message": "Mergi la legătură"
+    },
+    "snooze": {
+        "message": "Amână pentru o oră"
+    },
+    "unsnooze": {
+        "message": "Anulează amânare"
+    },
+    "all_of_my_devices": {
+        "message": "Toate dispozitivele mele"
+    },
+    "add_a_friend": {
+        "message": "Adaugă prieten"
+    },
+    "panel_sign_up": {
+        "message": "Înscrie-te pe Pushbullet.com →"
+    },
+    "panel_cant_sign_in": {
+        "message": "Nu te poți autentifica? Încearcă să dezactivezi temporar AdBlock. Dacă tot nu reușești, Pushbullet are nevoie să ai activate cookieurile terțe pentru autentificare. Le poți dezactiva după autentificare."
+    },
+    "panel_third_party_cookies": {
+        "message": "Apasă aici pentru a afla cum să schimbi această setare."
+    },
+    "general": {
+        "message": "General"
+    },
+    "notifications": {
+        "message": "Notificări"
+    },
+    "advanced": {
+        "message": "Avansat"
+    },
+    "how_to_unmute_app": {
+        "message": "Am dezactivat o aplicaţie, cum o reactivez?"
+    },
+    "alert_desktop_app_notifications": {
+        "message": "Aplicația desktop Pushbullet administrează notificările. Dezactivarea notificărilor in aplicație va restaura controlul acestora către extensie."
+    },
+    "option_background_permission": {
+        "message": "Păstrează Pushbullet pornit când browser-ul meu este închis"
+    },
+    "option_background_permission_desc": {
+        "message": "Acest lucru vă va permite să vedeți notificările fără a menține o fereastră de browser deschisă."
+    },
+    "option_use_dark_icon": {
+        "message": "Utilizează iconiță întunecată"
+    },
+    "option_use_dark_icon_desc": {
+        "message": "Această acțiune va transforma iconița într-un gri închis."
+    },
+    "option_notification_duration": {
+        "message": "Ascunde notificările automat după"
+    },
+    "option_show_mirrors": {
+        "message": "Afișează notificările pe calculatorul meu"
+    },
+    "option_show_mirrors_desc": {
+        "message": "Debifând asta, vei opri afișarea notificărilor (poți însă să vezi în continuare contorul în pictograma barei de instrumente)."
+    },
+    "option_only_show_titles": {
+        "message": "Afișează numai titlurile notificărilor"
+    },
+    "option_only_show_titles_desc": {
+        "message": "Asta va face ca Pushbullet să afișeze doar titlul notificărilor, păstrând mesajul privat."
+    },
+    "option_play_sound": {
+        "message": "Redă un sunet atunci când sosește o notificare"
+    },
+    "option_play_sound_desc": {
+        "message": "Asta va face ca Pushbullet să redea un sunet scurt în momentul în care sosește o notificare, avertizându-te că a venit."
+    },
+    "option_open_my_pushes_automatically": {
+        "message": "Deschide automat ceea, ce trimit acestui browser"
+    },
+    "option_open_my_pushes_automatically_desc": {
+        "message": "Acest lucru va face Pushbullet sa deschidă orice trimiți acestui browser automat într-o filă nouă."
+    },
+    "option_show_context_menu": {
+        "message": "Afișează Pushbullet în meniul contextual"
+    },
+    "option_show_context_menu_desc": {
+        "message": "Arată Pushbullet în lista de opţiuni la click dreapta."
+    },
+    "option_allow_instant_push": {
+        "message": "Activează trimiterea către"
+    },
+    "option_allow_instant_push_desc": {
+        "message": "Trimite fila curentă la dispozitivul ales prin comandă rapidă de la tastieră."
+    },
+    "option_instant_push_shortcuts": {
+        "message": "Click aici pentru a alege (momentan este $1)."
+    },
+    "option_instant_push_shortcuts_not_set": {
+        "message": "neconfigurat"
+    },
+    "num_new_messages": {
+        "message": "$1 mesaje noi"
+    },
+    "unsubscribe_from_channel": {
+        "message": "Nu urmări $1"
+    },
+    "unsubscribed_from_channel": {
+        "message": "Nu mai urmăresc $1"
+    },
+    "undo": {
+        "message": "Anulare"
+    },
+    "done": {
+        "message": "Gata"
+    },
+    "sms": {
+        "message": "SMS"
+    },
+    "sms_disclaimer": {
+        "message": "Telefonul trebuie să fie pornit și conectat la internet pentru a trimite mesaje."
+    },
+    "changelog_tab": {
+        "message": "Ce este nou"
+    },
+    "no_notifications": {
+        "message": "Nicio notificare deocamdată"
+    },
+    "option_clipboard_permission": {
+        "message": "Universal copy & paste"
+    },
+    "option_clipboard_permission_desc": {
+        "message": "Copiază textul de pe un singur dispozitiv, apoi lipește-l pe oricare altul care are, de asemenea, această setare activată."
+    },
+    "option_show_notification_count": {
+        "message": "Arată numărul notificărilor pe pictograma barei de instrumente"
+    },
+    "option_show_notification_count_desc": {
+        "message": "Vezi numărul de notificări dintr-o privire în bara ta de instrumente."
+    },
+    "retry": {
+        "message": "Reîncearcă"
+    },
+    "clear": {
+        "message": "Golește"
+    },
+    "send_failed": {
+        "message": "Trimitere eșuată"
+    },
+    "devices": {
+        "message": "Dispozitive"
+    },
+    "friends": {
+        "message": "Prieteni"
+    },
+    "following": {
+        "message": "Urmăriți"
+    },
+    "people": {
+        "message": "Oameni"
+    },
+    "pushing": {
+        "message": "Se trimite"
+    },
+    "channels": {
+        "message": "Canale"
+    },
+    "no_pushes": {
+        "message": "Niciun istoric recent"
+    },
+    "me": {
+        "message": "Eu"
+    },
+    "add_link_tooltip": {
+        "message": "Selectează link-ul paginii curente"
+    },
+    "remove_link_tooltip": {
+        "message": "Deselectează link-ul paginii curente"
+    },
+    "see_full_history": {
+        "message": "Vezi istoricul complet"
+    },
+    "cancel": {
+        "message": "Anulare"
+    },
+    "sms_recipient_placeholder": {
+        "message": "Contact sau număr de telefon"
+    },
+    "file_too_big": {
+        "message": "Fișier prea mare"
+    },
+    "sending": {
+        "message": "Se trimite..."
+    },
+    "pending": {
+        "message": "În aşteptare"
+    },
+    "now": {
+        "message": "Acum"
+    },
+    "phone": {
+        "message": "Telefon"
+    },
+    "new_sms_thread": {
+        "message": "Mesaj nou"
+    },
+    "encryption_password_needed_title": {
+        "message": "Date criptate primite"
+    },
+    "encryption_password_needed_body": {
+        "message": "Apasă aici pentru setarea parolei"
+    },
+    "decryption_failed_title": {
+        "message": "Decriptare eșuată"
+    },
+    "decryption_failed_body": {
+        "message": "Te rugăm să confirmi că parola ta se potrivește pe toate dispozitivele"
+    },
+    "end_to_end_encryption_label": {
+        "message": "Criptare end-to-end"
+    },
+    "end_to_end_password_label": {
+        "message": "Parolă de criptare end-to-end"
+    },
+    "end_to_end_password_desc": {
+        "message": "Dacă alegi să tastezi o parolă, aceasta va trebui să fie introdusă pe fiecare dintre dispozitivele tale."
+    },
+    "save": {
+        "message": "Salvează"
+    },
+    "option_automatically_attach_link": {
+        "message": "Ataşează automat fila curentă la mesajele spre un dispozitiv"
+    },
+    "option_automatically_attach_link_desc": {
+        "message": "Aceasta face trimiterea link-uri spre dispozitive mai repidă."
+    },
+    "learn_more": {
+        "message": "Află mai multe"
+    },
+    "pushbullet_pro_required": {
+        "message": "Este necesar Pushbullet Pro"
+    },
+    "pushbullet_pro_feature": {
+        "message": "Pentru activarea acestei posibilități este necesar Pushbullet Pro."
+    },
+    "reply_limit_warning": {
+        "message": "Ești aproape de limita de mesaje gratuite pentru această lună."
+    },
+    "reply_limit_reached": {
+        "message": "Ai atins limita de mesaje gratuite pentru această lună."
+    },
+    "reply_limit_upgrade": {
+        "message": "Achiziționează Pushbullet Pro pentru a trimite mesaje nelimitat."
+    }
+}

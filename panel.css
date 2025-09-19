@@ -1,0 +1,277 @@
+* {
+    outline: none;
+}
+html {
+    background-color: white;
+    height: 100%;
+}
+body {
+    width: 630px;
+    height: 471px;
+}
+body.popout {
+    height: 100%;
+    width: 100%;
+}
+#container {
+    height: 100%;
+}
+#header {
+    padding: 10px;
+}
+#logo {
+    background-size: 190px 36px;
+    width: 190px;
+    height: 36px;
+}
+.track {
+    display: inline-block;
+    margin: 0 10px;
+    width: 175px;
+    text-align: center;
+    vertical-align: top;
+    font-size: 15px;
+}
+#bullet {
+    width: 30px;
+    margin-left: 3px;
+    margin-right: 10px;
+    margin-top: 2px;
+}
+#bullet-link {
+    float: left;
+    cursor: pointer;
+    display: inline-block;
+}
+#popout-holder {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 48px;
+    color: #5c6868;
+    line-height: 48px;
+    text-align: center;
+    font-size: 24px;
+}
+#popout-holder:hover {
+    cursor: pointer;
+}
+#snooze-holder {
+    position: absolute;
+    top: 0;
+    right: 40px;
+    height: 48px;
+    padding: 0 10px;
+    color: #5c6868;
+    line-height: 48px;
+    text-align: center;
+}
+#snooze-holder:hover {
+    cursor: pointer;
+}
+#footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 51px;
+    box-shadow: 0 -1px 4px 0 rgba(0,0,0,0.25);
+}
+.tabs {
+    width: 100%;
+    height: 100%;
+    display: table;
+    table-layout: fixed;
+}
+.tab {
+    display: table-cell;
+    height: 100%;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    color: #5c6868;
+    fill: #5c6868;
+}
+.tab-icon {
+    display: block;
+    font-size: 22px;
+}
+.tab:hover {
+    cursor: pointer;
+}
+.tab.selected {
+    color: #4ab367;
+    fill: #4ab367;
+}
+#content {
+    position: absolute;
+    top: 0;
+    bottom: 51px;
+    left: 0;
+    right: 0;
+}
+.tab-content {
+    position: relative;
+    height: 420px;
+    overflow: hidden;
+}
+.top-tab {
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 4px solid transparent;
+}
+.top-tab.selected {
+    color: #4ab367;
+    border-bottom: 4px solid #4ab367;
+}
+.popout .tab-content {
+    height: 100%;
+}
+#notifications-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.25);
+}
+#notifications-holder {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ecf0f0;
+    overflow-y: scroll;
+    scrollbar-color: #cbd1d1 #fff;
+}
+#notifications-holder::scrollbar {
+    background-color: #ecf0f0;
+}
+#notifications-holder::scrollbar-thumb {
+    border: 4px solid #ecf0f0;
+}
+.fake-notification {
+    max-width: 390px;
+    margin: 15px auto;
+    box-shadow: 0 1px 6px 0 rgba(0,0,0,0.3);
+}
+#notifications-empty {
+    width: 100%;
+    height: 100%;
+    background-image: url(bg_sam.png);
+    background-size: 248px 186px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.mac #notifications-empty.desktop-app {
+    background-image: url(bg_apple.png);
+    background-size: 140px;
+}
+.windows #notifications-empty.desktop-app {
+    background-image: url(bg_windows.png);
+    background-size: 140px 140px;
+}
+#notifications-empty-text {
+    position: absolute;
+    bottom: 105px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #95a5a6;
+}
+#messaging-content-left {
+    position: absolute;
+    left: 0;
+    width: 240px;
+    top: 48px;
+    bottom: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-right: 1px solid #d0d0d0;
+}
+#messaging-content-right {
+    position: absolute;
+    left: 240px;
+    right: 0;
+    top: 48px;
+    bottom: 0;
+}
+.picker-label {
+    float: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 48px;
+    padding: 0 5px 0 15px;
+}
+#compose-input-holder {
+    border-top: 1px solid #d0d0d0;
+}
+#messaging-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+}
+#messaging-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.25);
+}
+#account-content {
+    text-align: center;
+}
+#account-top {
+    background-color: #4ab367;
+    color: white;
+}
+#account-holder {
+    position: relative;
+    display: inline-block;
+    background-color: white;
+    border-radius: 60px;
+    padding: 4px;
+}
+#account-image {
+    display: block;
+    height: 72px;
+    width: 72px;
+    border-radius: 60px;
+}
+#ribbon {
+    position: absolute;
+    top: 50px;
+    left: 60px;
+    width: 24px;
+    display: none;
+}
+#account-bottom {
+    margin: 20px;
+    display: inline-block;
+}
+.account-item {
+    font-size: 17px;
+    margin-bottom: 10px;
+    text-align: left;
+    line-height: 25px;
+}
+.account-item i {
+    font-size: 25px;
+    vertical-align: middle;
+    padding-bottom: 3px;
+}
+.account-item a {
+    color: #5c6868;
+}
+.account-item-label {
+    padding-left: 3px;
+}
+#account-ribbon {
+    background-image: url(ic_ribbon.png);
+}

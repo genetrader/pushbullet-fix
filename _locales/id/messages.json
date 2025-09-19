@@ -1,0 +1,326 @@
+{
+    "sign_in": {
+        "message": "Masuk"
+    },
+    "sign_out": {
+        "message": "Keluar"
+    },
+    "options": {
+        "message": "Pengaturan"
+    },
+    "title_placeholder": {
+        "message": "Judul"
+    },
+    "message_placeholder": {
+        "message": "Ketik pesan, tekan enter untuk mengirim"
+    },
+    "message_placeholder_link": {
+        "message": "Tulis pesan, tekan enter untuk mengirim"
+    },
+    "message_placeholder_files": {
+        "message": "Ketik pesan atau jatuhkan berkas"
+    },
+    "url_placeholder": {
+        "message": "Url tautan"
+    },
+    "devices_placeholder": {
+        "message": "Pilih perangkat"
+    },
+    "recipient_placeholder": {
+        "message": "Kepada"
+    },
+    "thanks_for_installing_title": {
+        "message": "Terima kasih telah memasang Pushbullet"
+    },
+    "thanks_for_installing_message": {
+        "message": "Klik di sini untuk masuk"
+    },
+    "updated_notif_title": {
+        "message": "Pushbullet telah diperbarui!"
+    },
+    "updated_notif_message": {
+        "message": "Klik di sini untuk melihat apa yang baru"
+    },
+    "dismiss": {
+        "message": "Abaikan"
+    },
+    "reply": {
+        "message": "Balas"
+    },
+    "mute": {
+        "message": "Bisukan"
+    },
+    "mute_app": {
+        "message": "Bisukan notifikasi $1"
+    },
+    "muted_app": {
+        "message": "$1 dibisukan"
+    },
+    "unmute_app": {
+        "message": "Bunyikan $1"
+    },
+    "mirror_context_message": {
+        "message": "$1 melalui Pushbullet pada $2"
+    },
+    "push_context_message": {
+        "message": "$1 pada pukul $2"
+    },
+    "from": {
+        "message": "Dari $1"
+    },
+    "go_to_link": {
+        "message": "Kunjungi tautan"
+    },
+    "snooze": {
+        "message": "Tunda 1 jam"
+    },
+    "unsnooze": {
+        "message": "Urung Menunda"
+    },
+    "all_of_my_devices": {
+        "message": "Semua perangkat saya"
+    },
+    "add_a_friend": {
+        "message": "Tambahkan teman"
+    },
+    "panel_sign_up": {
+        "message": "Daftar di Pushbullet.com →"
+    },
+    "panel_cant_sign_in": {
+        "message": "Tidak bisa masuk? Coba nonaktifkan sementara Adblock. Jika masih tidak bisa, Pushbullet mengharuskan kuki pihak ketiga diaktifkan untuk bisa masuk. Anda dapat menonaktifkannya lagi setelah masuk."
+    },
+    "panel_third_party_cookies": {
+        "message": "Klik di sini untuk cara mengganti pengaturan ini."
+    },
+    "general": {
+        "message": "Umum"
+    },
+    "notifications": {
+        "message": "Notifikasi"
+    },
+    "advanced": {
+        "message": "Lanjutan"
+    },
+    "how_to_unmute_app": {
+        "message": "Saya membisukan sebuah aplikasi, bagaimana cara saya membunyikannya lagi?"
+    },
+    "alert_desktop_app_notifications": {
+        "message": "Aplikasi desktop Pushbullet sedang mengelola notifikasi."
+    },
+    "option_background_permission": {
+        "message": "Biarkan Pushbullet tetap berjalan ketika peramban ditutup"
+    },
+    "option_background_permission_desc": {
+        "message": "Ini akan memungkinkan Anda melihat notifikasi tanpa harus membuat jendela peramban tetap terbuka."
+    },
+    "option_use_dark_icon": {
+        "message": "Gunakan ikon gelap"
+    },
+    "option_use_dark_icon_desc": {
+        "message": "Ini akan membuat ikon bilah alat berwarna abu-abu gelap."
+    },
+    "option_notification_duration": {
+        "message": "Sembunyikan notifikasi secara otomatis setelah"
+    },
+    "option_show_mirrors": {
+        "message": "Tampilkan notifikasi di komputer saya."
+    },
+    "option_show_mirrors_desc": {
+        "message": "Menghapus centang ini akan menghentikan Pushbullet menampilkan notifikasi (Anda masih bisa melihat jumlahnya di ikon bilah alat)."
+    },
+    "option_only_show_titles": {
+        "message": "Hanya tampilkan judul notifikasi."
+    },
+    "option_only_show_titles_desc": {
+        "message": "Ini akan membuat Pushbullet hanya menampilkan judul notifikasi, menjaga agar pesan tetap privat."
+    },
+    "option_play_sound": {
+        "message": "Bunyikan suara ketika notifikasi tiba."
+    },
+    "option_play_sound_desc": {
+        "message": "Ini akan membuat Pushbullet membunyikan suara ketika notifikasi tiba, memberitahu Anda tentang notifikasi tersebut."
+    },
+    "option_open_my_pushes_automatically": {
+        "message": "Buka semua yang saya kirimkan ke peramban ini secara otomatis."
+    },
+    "option_open_my_pushes_automatically_desc": {
+        "message": "Ini akan membuat Pushbullet secara otomatis membuka apapun yang Anda kirimkan ke peramban ini di tab baru."
+    },
+    "option_show_context_menu": {
+        "message": "Tampilkan Pushbullet di menu konteks peramban"
+    },
+    "option_show_context_menu_desc": {
+        "message": "Menampilkan Pushbullet di dalam daftar opsi menu klik kanan."
+    },
+    "option_allow_instant_push": {
+        "message": "Aktifkan pengiriman instan ke"
+    },
+    "option_allow_instant_push_desc": {
+        "message": "Kirim tab saat ini ke perangkat pilihan melalui cara pintas di keyboard."
+    },
+    "option_instant_push_shortcuts": {
+        "message": "Klik di sini untuk menetapkan (saat ini $1)."
+    },
+    "option_instant_push_shortcuts_not_set": {
+        "message": "belum diatur"
+    },
+    "num_new_messages": {
+        "message": "$1 pesan baru"
+    },
+    "unsubscribe_from_channel": {
+        "message": "Setop ikuti $1"
+    },
+    "unsubscribed_from_channel": {
+        "message": "Tidak lagi mengikuti $1"
+    },
+    "undo": {
+        "message": "Urungkan"
+    },
+    "done": {
+        "message": "Selesai"
+    },
+    "sms": {
+        "message": "SMS"
+    },
+    "sms_disclaimer": {
+        "message": "Telepon harus menyala dan memiliki koneksi internet agar teks bisa dikirimkan."
+    },
+    "changelog_tab": {
+        "message": "Apa yang Baru"
+    },
+    "no_notifications": {
+        "message": "Saat ini tidak ada notifikasi"
+    },
+    "option_clipboard_permission": {
+        "message": "Salin & tempel universal"
+    },
+    "option_clipboard_permission_desc": {
+        "message": "Salin teks di satu perangkat, lalu tempel di perangkat lainnya yang juga memiliki pengaturan ini diaktifkan."
+    },
+    "option_show_notification_count": {
+        "message": "Tampilkan jumlah notifikasi pada ikon bilah alat"
+    },
+    "option_show_notification_count_desc": {
+        "message": "Menampilkan jumlah notifikasi sekilas di bilah alat Anda."
+    },
+    "retry": {
+        "message": "Ulangi"
+    },
+    "clear": {
+        "message": "Kosongkan"
+    },
+    "send_failed": {
+        "message": "Gagal mengirim"
+    },
+    "devices": {
+        "message": "Perangkat"
+    },
+    "friends": {
+        "message": "Teman"
+    },
+    "following": {
+        "message": "Mengikuti"
+    },
+    "people": {
+        "message": "Orang"
+    },
+    "pushing": {
+        "message": "Kiriman"
+    },
+    "account": {
+        "message": "Akun"
+    },
+    "channels": {
+        "message": "Kanal"
+    },
+    "no_pushes": {
+        "message": "Tidak ada riwayat"
+    },
+    "me": {
+        "message": "Saya"
+    },
+    "add_link_tooltip": {
+        "message": "Link halaman saat ini"
+    },
+    "remove_link_tooltip": {
+        "message": "Batal taut halaman saat ini"
+    },
+    "see_full_history": {
+        "message": "Lihat seluruh riwayat"
+    },
+    "cancel": {
+        "message": "Batal"
+    },
+    "sms_recipient_placeholder": {
+        "message": "Kontak atau nomor telepon"
+    },
+    "file_too_big": {
+        "message": "Berkas terlalu besar"
+    },
+    "sending": {
+        "message": "Mengirim..."
+    },
+    "pending": {
+        "message": "Tertunda"
+    },
+    "now": {
+        "message": "Sekarang"
+    },
+    "phone": {
+        "message": "Telepon"
+    },
+    "new_sms_thread": {
+        "message": "Pesan teks baru"
+    },
+    "encryption_password_needed_title": {
+        "message": "Menerima data terenkripsi"
+    },
+    "encryption_password_needed_body": {
+        "message": "Klik di sini untuk memasukkan sandi"
+    },
+    "decryption_failed_title": {
+        "message": "Dekripsi gagal"
+    },
+    "decryption_failed_body": {
+        "message": "Harap konfirmasi sandi Anda sama di semua perangkat"
+    },
+    "end_to_end_encryption_label": {
+        "message": "Enkripsi ujung-ke-ujung"
+    },
+    "end_to_end_password_label": {
+        "message": "Sandi enkripsi ujung-ke-ujung"
+    },
+    "end_to_end_password_desc": {
+        "message": "Jika Anda memilih untuk memasukkan sandi, sandi ini perlu dimasukkan ke setiap perangkat Anda."
+    },
+    "save": {
+        "message": "Simpan"
+    },
+    "option_automatically_attach_link": {
+        "message": "Otomatis melampirkan tab saat ini ke pesan untuk perangkat"
+    },
+    "option_automatically_attach_link_desc": {
+        "message": "Hal ini membuat mengirim link ke perangkat lebih cepat."
+    },
+    "learn_more": {
+        "message": "Pelajari lebih lanjut"
+    },
+    "darkmode_label": {
+        "message": "Mode gelap"
+    },
+    "pushbullet_pro_required": {
+        "message": "Membutuhkan Pushbullet Pro"
+    },
+    "pushbullet_pro_feature": {
+        "message": "Membutuhkan Pushbullet Pro untuk mengaktifkan fitur ini."
+    },
+    "reply_limit_warning": {
+        "message": "Anda mendekati batas pesan gratis untuk bulan ini."
+    },
+    "reply_limit_reached": {
+        "message": "Anda telah mencapai batas pesan gratis untuk bulan ini."
+    },
+    "reply_limit_upgrade": {
+        "message": "Tingkatkan ke Pushbullet Pro untuk pengiriman pesan tidak terbatas."
+    }
+}
