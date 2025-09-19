@@ -91,7 +91,29 @@ window.pb = {
     },
 
     sendPush: function(push) {
-        return this.sendMessage('sendPush', push);
+        // If the push contains a file, we need to handle it specially
+        if (push.file) {
+            // For file uploads, we need to send the file data properly
+            const reader = new FileReader();
+            reader.onload = () => {
+                const fileData = {
+                    name: push.file.name,
+                    type: push.file.type,
+                    size: push.file.size,
+                    data: reader.result
+                };
+                const pushWithFile = { ...push, fileData: fileData };
+                delete pushWithFile.file;  // Remove the File object
+                return this.sendMessage('sendPush', pushWithFile);
+            };
+            reader.readAsArrayBuffer(push.file);
+        } else {
+            return this.sendMessage('sendPush', push);
+        }
+    },
+
+    pushFile: function(push) {
+        return this.sendMessage('pushFile', push);
     },
 
     clearActiveChat: function() {
@@ -251,28 +273,18 @@ window.pb = {
     },
 
     post: function(url, data, callback) {
-        // Wrap the XHR post request
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        if (this.local && this.local.apiKey) {
-            xhr.setRequestHeader('Access-Token', this.local.apiKey);
-        }
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        if (callback) callback(response);
-                    } catch (e) {
-                        if (callback) callback(null, e);
-                    }
-                } else {
-                    if (callback) callback(null, { status: xhr.status });
-                }
+        // For API calls that need authentication, send to background
+        return this.sendMessage('apiPost', { url: url, data: data }).then(response => {
+            if (callback) {
+                callback(response.data, response.error);
             }
-        };
-        xhr.send(JSON.stringify(data));
+            return response;
+        }).catch(error => {
+            if (callback) {
+                callback(null, error);
+            }
+            throw error;
+        });
     },
 
     maybeApi2: function() {

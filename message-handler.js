@@ -23,7 +23,19 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse({ success: true });
         return true;
     } else if (request.action === 'sendPush') {
+        // If the push contains file data, reconstruct the File object
+        if (request.data && request.data.fileData) {
+            const fileData = request.data.fileData;
+            const blob = new Blob([fileData.data], { type: fileData.type });
+            blob.name = fileData.name;
+            request.data.file = blob;
+            delete request.data.fileData;
+        }
         if (pb.sendPush) pb.sendPush(request.data);
+        sendResponse({ success: true });
+        return true;
+    } else if (request.action === 'pushFile') {
+        if (pb.pushFile) pb.pushFile(request.data);
         sendResponse({ success: true });
         return true;
     } else if (request.action === 'clearActiveChat') {
@@ -131,6 +143,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     } else if (request.action === 'updateContextMenu') {
         if (pb.updateContextMenu) pb.updateContextMenu();
         sendResponse({ success: true });
+        return true;
+    } else if (request.action === 'apiPost') {
+        // Handle API POST requests that need authentication
+        if (pb.post) {
+            pb.post(request.data.url, request.data.data, function(response, error) {
+                sendResponse({ data: response, error: error });
+            });
+        } else {
+            sendResponse({ data: null, error: 'pb.post not available' });
+        }
         return true;
     } else if (request.action === 'log') {
         pb.log(request.data);
