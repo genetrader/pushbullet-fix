@@ -23,16 +23,27 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse({ success: true });
         return true;
     } else if (request.action === 'sendPush') {
+        console.log('Background received sendPush:', request.data);
+
         // If the push contains file data, reconstruct the File object
         if (request.data && request.data.fileData) {
+            console.log('Reconstructing file from data');
             const fileData = request.data.fileData;
             const blob = new Blob([fileData.data], { type: fileData.type });
             blob.name = fileData.name;
             request.data.file = blob;
             delete request.data.fileData;
+            console.log('File reconstructed:', blob.name, blob.size);
         }
-        if (pb.sendPush) pb.sendPush(request.data);
-        sendResponse({ success: true });
+
+        if (pb.sendPush) {
+            console.log('Calling pb.sendPush');
+            pb.sendPush(request.data);
+            sendResponse({ success: true });
+        } else {
+            console.error('pb.sendPush not available');
+            sendResponse({ success: false, error: 'pb.sendPush not available' });
+        }
         return true;
     } else if (request.action === 'pushFile') {
         if (pb.pushFile) pb.pushFile(request.data);
