@@ -64,8 +64,21 @@ var setUpMessaging = function(tab) {
             handleSmsFile(file)
         } else {
             var target = getTargetStream()
+
+            // If no target selected, try to get the first available device
             if (!target) {
-                return
+                // Try to select "All Devices" if available
+                var allDevicesRow = document.getElementById('*')
+                if (allDevicesRow) {
+                    allDevicesRow.click()
+                    target = getTargetStream()
+                }
+
+                // If still no target, can't proceed
+                if (!target) {
+                    alert('Please select a device or friend to send the file to')
+                    return
+                }
             }
 
             var push = {
@@ -94,9 +107,24 @@ var setUpMessaging = function(tab) {
         } else {
             var target = getTargetStream()
             console.log('Target stream:', target);
+
+            // If no target selected, try to get the first available device
             if (!target) {
-                console.error('No target stream selected');
-                return
+                console.log('No target stream selected, looking for default target');
+                // Try to select "All Devices" if available
+                var allDevicesRow = document.getElementById('*')
+                if (allDevicesRow) {
+                    console.log('Selecting "All Devices" as default target');
+                    allDevicesRow.click()
+                    target = getTargetStream()
+                }
+
+                // If still no target, can't proceed
+                if (!target) {
+                    console.error('No target available for file upload');
+                    alert('Please select a device or friend to send the file to');
+                    return
+                }
             }
 
             var files = e.target.files
