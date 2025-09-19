@@ -83,11 +83,8 @@ var updatePushSendIcon = function() {
     var input = document.getElementById('push-input')
     var sendIcon = document.getElementById('push-send-icon')
 
-    if (input.value.length > 0 || document.getElementById('push-link-holder').style.display == 'block') {
-        sendIcon.className = 'pushfont-send'
-    } else {
-        sendIcon.className = 'pushfont-paperclip'
-    }
+    // Always show send icon, no attachment functionality
+    sendIcon.className = 'pushfont-send'
 }
 
 var setUpPushInput = function() {
@@ -162,11 +159,8 @@ var setUpPushInput = function() {
     }
 
     document.getElementById('push-send-holder').onclick = function() {
-        if (input.value.length == 0 && document.getElementById('push-link-holder').style.display != 'block') {
-            document.getElementById('file-input').click()
-        } else {
-            sendClicked()
-        }
+        // Only send text, no file attachment
+        sendClicked()
     }
 
     input.onkeydown = function(e) {
@@ -195,6 +189,24 @@ var addTarget = function(target, push) {
 }
 
 var setUpPushStreams = function() {
+    // Add "Open Pushbullet People" button at the top
+    var peopleButton = document.createElement('div')
+    peopleButton.className = 'stream-row'
+    peopleButton.style.backgroundColor = '#4ab367'
+    peopleButton.style.color = 'white'
+    peopleButton.style.textAlign = 'center'
+    peopleButton.style.cursor = 'pointer'
+    peopleButton.style.padding = '10px'
+    peopleButton.style.marginBottom = '5px'
+    peopleButton.innerHTML = '<i class="pushfont-person" style="margin-right: 8px;"></i>Open Pushbullet People'
+    peopleButton.onclick = function() {
+        if (window.chrome && chrome.tabs) {
+            chrome.tabs.create({ url: 'https://www.pushbullet.com/#people' })
+        } else {
+            window.open('https://www.pushbullet.com/#people', '_blank')
+        }
+    }
+    messagingLeft.appendChild(peopleButton)
     var latestMap = { }, latestSelfPush
     Object.keys(pb.local.pushes).forEach(function(iden) {
         var push = pb.local.pushes[iden]

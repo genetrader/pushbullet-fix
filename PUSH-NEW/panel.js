@@ -184,19 +184,14 @@ var setUpTabs = function() {
 
             setUpMessaging('sms')
         } else if (tab == pushingTab) {
-            // Show iframe for pushing tab
-            pushingIframeContent.style.display = 'block'
+            // Show messaging content for pushing tab (restore original functionality)
+            pushingIframeContent.style.display = 'none'
             notificationsContent.style.display = 'none'
-            messagingContent.style.display = 'none'
+            messagingContent.style.display = 'block'
             accountContent.style.display = 'none'
 
             tearDownMessaging()
-
-            // Refresh iframe if needed
-            var iframe = document.getElementById('pushbullet-people-iframe')
-            if (iframe && !iframe.src) {
-                iframe.src = 'people.html'
-            }
+            setUpMessaging('push')
         }
     }
 
