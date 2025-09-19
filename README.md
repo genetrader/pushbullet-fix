@@ -2,6 +2,8 @@
 
 A community-maintained version of the Pushbullet Chrome extension updated to work with Manifest V3.  This extension REQUIRES you have an account already with Pushbullet.com and I am NOT affiliated with them and you can sign up when you open the extension.
 
+IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A STAR AND I WILL START TO COMPILE MY DIRECTORY OF VIBE-CODED CHROME EXTENSIONS AND SHARE THEM!  I HAVE A BUNCH - THANKS.
+
 ## Background
 
 The original Pushbullet Chrome extension uses Manifest V2, which is no longer supported in newer versions of Chrome. This repository contains a modified version that works with Manifest V3, allowing you to continue using Pushbullet in modern Chrome browsers.
