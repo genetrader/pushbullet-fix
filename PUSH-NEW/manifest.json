@@ -69,7 +69,10 @@
         }
     },
     "web_accessible_resources": [{
-        "resources": ["*.png"],
+        "resources": ["*.png", "people-frame.html", "people.html"],
         "matches": ["<all_urls>"]
-    }]
+    }],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'; frame-src https://www.pushbullet.com/;"
+    }
 }

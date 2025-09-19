@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>People - Pushbullet</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: #4ab367;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4ab367;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: #666;
+            display: none;
+            max-width: 300px;
+        }
+
+        .error-message h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .error-message button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #4ab367;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .error-message button:hover {
+            background: #3da558;
+        }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Loading Pushbullet People...</p>
+    </div>
+
+    <div class="error-message" id="errorMessage">
+        <h3>Unable to Load People</h3>
+        <p>Please make sure you're signed in to Pushbullet.</p>
+        <button onclick="openPushbullet()">Open Pushbullet</button>
+    </div>
+
+    <iframe
+        id="pushbulletFrame"
+        src="https://www.pushbullet.com/"
+        onload="onFrameLoad()"
+        onerror="onFrameError()">
+    </iframe>
+
+    <script>
+        let frameLoaded = false;
+        let retryCount = 0;
+        const maxRetries = 3;
+
+        function onFrameLoad() {
+            const frame = document.getElementById('pushbulletFrame');
+            const loader = document.getElementById('loader');
+
+            // Try to inject CSS to hide everything except People section
+            try {
+                // This will only work if same-origin or CORS allows it
+                const frameDoc = frame.contentDocument || frame.contentWindow.document;
+
+                // Wait a bit for the page to fully render
+                setTimeout(() => {
+                    // Inject CSS to hide header, sidebar except People, and show only People content
+                    const style = frameDoc.createElement('style');
+                    style.textContent = `
+                        /* Hide header */
+                        .navbar, .header, nav { display: none !important; }
+
+                        /* Hide sidebar items except People */
+                        .sidebar > *:not([href*="people"]) { display: none !important; }
+
+                        /* Hide everything except the main content area */
+                        body > *:not(.main-container):not(.content-area) { display: none !important; }
+
+                        /* Adjust spacing */
+                        .main-container { padding-top: 0 !important; }
+                        .content-area { margin-top: 0 !important; }
+
+                        /* Hide unnecessary UI elements */
+                        .upgrade-banner, .pro-banner, .footer { display: none !important; }
+                    `;
+                    frameDoc.head.appendChild(style);
+
+                    // Navigate to People section if not already there
+                    if (!frame.src.includes('#people')) {
+                        frame.src = 'https://www.pushbullet.com/#people';
+                    }
+
+                    // Show frame, hide loader
+                    frame.style.display = 'block';
+                    loader.style.display = 'none';
+                    frameLoaded = true;
+                }, 2000);
+            } catch (e) {
+                // Cross-origin, try alternative approach
+                console.log('Cross-origin frame, using alternative approach');
+
+                // Just navigate to People section
+                if (!frame.src.includes('#people')) {
+                    frame.src = 'https://www.pushbullet.com/#people';
+                }
+
+                // Show frame anyway (will show full Pushbullet site)
+                setTimeout(() => {
+                    frame.style.display = 'block';
+                    loader.style.display = 'none';
+                    frameLoaded = true;
+                }, 2000);
+            }
+        }
+
+        function onFrameError() {
+            retryCount++;
+            if (retryCount < maxRetries) {
+                setTimeout(() => {
+                    document.getElementById('pushbulletFrame').src = 'https://www.pushbullet.com/#people';
+                }, 2000);
+            } else {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        }
+
+        function openPushbullet() {
+            if (window.chrome && chrome.tabs) {
+                chrome.tabs.create({ url: 'https://www.pushbullet.com/signin' });
+            } else {
+                window.open('https://www.pushbullet.com/signin', '_blank');
+            }
+        }
+
+        // Timeout fallback
+        setTimeout(() => {
+            if (!frameLoaded) {
+                const frame = document.getElementById('pushbulletFrame');
+                frame.style.display = 'block';
+                document.getElementById('loader').style.display = 'none';
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
