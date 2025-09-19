@@ -12,229 +12,62 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #f5f5f5;
+            background: white;
             color: #333;
             height: 100vh;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .container {
-            display: flex;
-            height: 100%;
-        }
-
-        .sidebar {
-            width: 260px;
-            background: white;
-            border-right: 1px solid #e0e0e0;
-            overflow-y: auto;
-        }
-
-        .main-content {
-            flex: 1;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .header {
-            padding: 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .header h2 {
-            font-size: 18px;
-            font-weight: 600;
-            color: #4ab367;
-        }
-
-        .add-friend-btn {
-            margin-top: 15px;
-            width: 100%;
-            padding: 10px;
-            background: #4ab367;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .add-friend-btn:hover {
-            background: #3da558;
-        }
-
-        .people-list {
-            padding: 10px;
-        }
-
-        .person-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .person-item:hover {
-            background: #f0f0f0;
-        }
-
-        .person-item.selected {
-            background: #e8f5e9;
-        }
-
-        .person-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #4ab367;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            margin-right: 12px;
-        }
-
-        .person-info {
-            flex: 1;
-        }
-
-        .person-name {
-            font-weight: 600;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .person-email {
-            font-size: 12px;
-            color: #666;
-            margin-top: 2px;
-        }
-
-        .empty-state {
             text-align: center;
-            color: #666;
-        }
-
-        .empty-state img {
-            width: 120px;
-            height: 120px;
-            opacity: 0.3;
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .empty-state p {
-            font-size: 14px;
-            line-height: 1.5;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-
-        .chat-view {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-        }
-
-        .chat-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #e0e0e0;
-            background: white;
-            display: flex;
-            align-items: center;
-        }
-
-        .chat-messages {
-            flex: 1;
             padding: 20px;
-            overflow-y: auto;
-            background: #fafafa;
         }
 
-        .chat-input {
-            padding: 15px;
-            border-top: 1px solid #e0e0e0;
-            background: white;
+        .container h2 {
+            color: #4ab367;
+            margin-bottom: 20px;
+            font-size: 24px;
         }
 
-        .input-group {
-            display: flex;
-            align-items: center;
+        .container p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
         }
 
-        .message-input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 20px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .send-btn {
-            margin-left: 10px;
-            padding: 8px 15px;
+        .open-pushbullet-btn {
+            display: inline-block;
+            padding: 12px 30px;
             background: #4ab367;
             color: white;
-            border: none;
-            border-radius: 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background 0.2s;
             cursor: pointer;
-            font-size: 14px;
+            border: none;
         }
 
-        .send-btn:hover {
+        .open-pushbullet-btn:hover {
             background: #3da558;
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            opacity: 0.3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="sidebar">
-            <div class="header">
-                <h2>People</h2>
-                <button class="add-friend-btn" id="addFriendBtn">
-                    + Add a Friend
-                </button>
-            </div>
-            <div class="people-list" id="peopleList">
-                <!-- People will be loaded here -->
-            </div>
-        </div>
-        <div class="main-content" id="mainContent">
-            <div class="empty-state">
-                <img src="chip_person.png" alt="People">
-                <h3>Connect with Friends</h3>
-                <p>Add friends to start sharing links, files, and messages instantly across all your devices.</p>
-            </div>
-            <div class="chat-view" id="chatView">
-                <div class="chat-header" id="chatHeader">
-                    <!-- Selected person info -->
-                </div>
-                <div class="chat-messages" id="chatMessages">
-                    <!-- Messages -->
-                </div>
-                <div class="chat-input">
-                    <div class="input-group">
-                        <input type="text" class="message-input" placeholder="Type a message..." id="messageInput">
-                        <button class="send-btn" id="sendBtn">Send</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <img src="chip_person.png" alt="People" class="icon">
+        <h2>Pushbullet People</h2>
+        <p>Manage your friends and contacts on the Pushbullet website.</p>
+        <button id="openPushbulletBtn" class="open-pushbullet-btn">Open Pushbullet People</button>
     </div>
 
     <script src="people.js"></script>
