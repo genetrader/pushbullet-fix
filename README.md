@@ -1,6 +1,6 @@
 # Pushbullet Chrome Extension (Manifest V3)
 
-A community-maintained version of the Pushbullet Chrome extension updated to work with Manifest V3.
+A community-maintained version of the Pushbullet Chrome extension updated to work with Manifest V3.  This extension REQUIRES you have an account already with Pushbullet.com and I am NOT affiliated with them.
 
 ## Background
 
