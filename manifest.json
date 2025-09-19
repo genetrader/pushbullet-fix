@@ -23,6 +23,7 @@
     "host_permissions": [
         "https://*.pushbullet.com/*",
         "http://*.pushbullet.com/*",
+        "https://*.pushbulletusercontent.com/*",
         "http://localhost:20807/*"
     ],
     "optional_host_permissions": [
