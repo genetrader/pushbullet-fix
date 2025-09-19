@@ -1,0 +1,74 @@
+{
+    "manifest_version": 3,
+    "name": "Pushbullet",
+    "version": "366",
+    "author": "Pushbullet",
+    "default_locale": "en",
+    "description": "Bringing together your devices, friends, and the things you care about.",
+    "icons": {
+        "16": "icon_16.png",
+        "48": "icon_48.png",
+        "128": "icon_128.png"
+    },
+    "homepage_url": "https://www.pushbullet.com",
+    "minimum_chrome_version": "88",
+    "permissions": [
+        "activeTab",
+        "contextMenus",
+        "cookies",
+        "notifications",
+        "idle",
+        "storage"
+    ],
+    "host_permissions": [
+        "https://*.pushbullet.com/*",
+        "http://*.pushbullet.com/*",
+        "http://localhost:20807/*"
+    ],
+    "optional_host_permissions": [
+        "https://*/*",
+        "http://*/*"
+    ],
+    "optional_permissions": [
+        "tabs"
+    ],
+    "action": {
+        "default_icon": {
+            "19": "icon_19.png",
+            "38": "icon_38.png"
+        },
+        "default_title": "Pushbullet",
+        "default_popup": "panel.html"
+    },
+    "options_page": "options.html",
+    "background": {
+        "service_worker": "background.js"
+    },
+    "commands": {
+        "dismiss-most-recent-notification": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+K",
+                "mac": "Command+Shift+K"
+            },
+            "description": "Dismiss the most recent notification"
+        },
+        "instant-push-current-tab": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+X",
+                "mac": "Command+Shift+X"
+            },
+            "description": "Instantly push the current tab (configure in Options)"
+        },
+        "pop-out-panel": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+E",
+                "mac": "Command+Shift+E"
+            },
+            "description": "Pop out the push panel"
+        }
+    },
+    "web_accessible_resources": [{
+        "resources": ["*.png"],
+        "matches": ["<all_urls>"]
+    }]
+}

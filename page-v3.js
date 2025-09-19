@@ -1,0 +1,422 @@
+'use strict'
+
+var focused = true, onFocusChanged
+window.addEventListener('focus', function() {
+    focused = true
+
+    if (onFocusChanged) {
+        onFocusChanged()
+    }
+
+    if (window.pb) {
+        pb.dispatchEvent('active')
+    }
+})
+window.addEventListener('blur', function() {
+    focused = false
+
+    if (onFocusChanged) {
+        onFocusChanged()
+    }
+})
+
+// Create a pb proxy object that communicates with the service worker
+window.pb = {
+    // Store for local data
+    local: {},
+    settings: {},
+    browser: 'chrome',
+    version: 366,
+
+    // Notifier object for notifications
+    notifier: {
+        active: {}
+    },
+
+    // Push queues
+    successfulPushes: [],
+    pushQueue: [],
+    fileQueue: [],
+    failedPushes: [],
+
+    // SMS related
+    smsQueue: [],
+    successfulSms: {},
+    threads: {},
+    thread: {},
+
+    // Event system
+    _listeners: {},
+
+    addEventListener: function(event, handler) {
+        if (!this._listeners[event]) {
+            this._listeners[event] = [];
+        }
+        this._listeners[event].push(handler);
+    },
+
+    removeEventListener: function(event, handler) {
+        if (this._listeners[event]) {
+            const index = this._listeners[event].indexOf(handler);
+            if (index > -1) {
+                this._listeners[event].splice(index, 1);
+            }
+        }
+    },
+
+    dispatchEvent: function(event, detail) {
+        if (this._listeners[event]) {
+            this._listeners[event].forEach(function(handler) {
+                handler({ type: event, detail: detail });
+            });
+        }
+    },
+
+    // Proxy methods that send messages to the service worker
+    sendMessage: function(action, data) {
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({ action: action, data: data }, function(response) {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve(response);
+                }
+            });
+        });
+    },
+
+    // Proxy common methods
+    track: function(data) {
+        this.sendMessage('track', data);
+    },
+
+    sendPush: function(push) {
+        return this.sendMessage('sendPush', push);
+    },
+
+    clearActiveChat: function() {
+        return this.sendMessage('clearActiveChat', {});
+    },
+
+    setActiveChat: function(chat) {
+        // If chat is just a string or doesn't have the expected structure, wrap it
+        const chatInfo = typeof chat === 'object' ? chat : { other: chat };
+        // Add default values if missing
+        if (!chatInfo.other) chatInfo.other = '';
+        if (!chatInfo.focused) chatInfo.focused = true;
+        if (!chatInfo.mode) chatInfo.mode = 'push';
+
+        return this.sendMessage('setActiveChat', chatInfo);
+    },
+
+    signOut: function() {
+        return this.sendMessage('signOut', {});
+    },
+
+    sendSms: function(data) {
+        return this.sendMessage('sendSms', data);
+    },
+
+    deletePush: function(iden) {
+        return this.sendMessage('deletePush', { iden: iden });
+    },
+
+    updateTicket: function(data) {
+        return this.sendMessage('updateTicket', data);
+    },
+
+    saveSettings: function() {
+        return this.sendMessage('saveSettings', this.settings);
+    },
+
+    loadSettings: function() {
+        return this.sendMessage('loadSettings', {});
+    },
+
+    openTab: function(url) {
+        chrome.tabs.create({ url: url });
+    },
+
+    setAwake: function(source, awake) {
+        return this.sendMessage('setAwake', { source: source, awake: awake });
+    },
+
+    snooze: function() {
+        return this.sendMessage('snooze', {});
+    },
+
+    unsnooze: function() {
+        return this.sendMessage('unsnooze', {});
+    },
+
+    isSnoozed: function() {
+        return localStorage.snoozedUntil > Date.now();
+    },
+
+    getThreads: function(deviceIden, callback) {
+        // Check if callback is provided, if not return a promise
+        if (typeof callback === 'function') {
+            this.sendMessage('getThreads', { deviceIden: deviceIden }).then(response => {
+                callback(response.threads || response);
+            }).catch(error => {
+                console.error('getThreads error:', error);
+                callback(null);
+            });
+        } else {
+            // If no callback, return the promise
+            return this.sendMessage('getThreads', { deviceIden: deviceIden });
+        }
+    },
+
+    getThread: function(deviceIden, threadId, callback) {
+        if (typeof callback === 'function') {
+            this.sendMessage('getThread', { deviceIden: deviceIden, threadId: threadId }).then(response => {
+                callback(response.thread || response);
+            }).catch(error => {
+                console.error('getThread error:', error);
+                callback(null);
+            });
+        } else {
+            return this.sendMessage('getThread', { deviceIden: deviceIden, threadId: threadId });
+        }
+    },
+
+    getPhonebook: function(deviceIden, callback) {
+        if (typeof callback === 'function') {
+            this.sendMessage('getPhonebook', { deviceIden: deviceIden }).then(response => {
+                callback(response.phonebook || response);
+            }).catch(error => {
+                console.error('getPhonebook error:', error);
+                callback(null);
+            });
+        } else {
+            return this.sendMessage('getPhonebook', { deviceIden: deviceIden });
+        }
+    },
+
+    popOutPanel: function() {
+        const url = chrome.runtime.getURL('panel.html') + '#popout';
+        chrome.windows.create({
+            url: url,
+            type: 'popup',
+            width: 420,
+            height: 550
+        });
+        window.close();
+    },
+
+    updateContextMenu: function() {
+        return this.sendMessage('updateContextMenu', {});
+    },
+
+    markDismissed: function(push) {
+        return this.sendMessage('markDismissed', push);
+    },
+
+    clearFailed: function(push) {
+        return this.sendMessage('clearFailed', push);
+    },
+
+    cancelUpload: function(push) {
+        return this.sendMessage('cancelUpload', push);
+    },
+
+    savePushes: function() {
+        return this.sendMessage('savePushes', {});
+    },
+
+    groupKey: function(push) {
+        // This is a local utility function
+        return push.iden || push.guid || '';
+    },
+
+    findChat: function(identifier) {
+        return this.sendMessage('findChat', { identifier: identifier });
+    },
+
+    openChat: function(type, identifier) {
+        return this.sendMessage('openChat', { type: type, identifier: identifier });
+    },
+
+    smsFile: function(sms) {
+        return this.sendMessage('smsFile', sms);
+    },
+
+    deleteText: function(iden) {
+        return this.sendMessage('deleteText', { iden: iden });
+    },
+
+    sendRefreshSms: function(device) {
+        return this.sendMessage('sendRefreshSms', device);
+    },
+
+    post: function(url, data, callback) {
+        // Wrap the XHR post request
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        if (this.local && this.local.apiKey) {
+            xhr.setRequestHeader('Access-Token', this.local.apiKey);
+        }
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (callback) callback(response);
+                    } catch (e) {
+                        if (callback) callback(null, e);
+                    }
+                } else {
+                    if (callback) callback(null, { status: xhr.status });
+                }
+            }
+        };
+        xhr.send(JSON.stringify(data));
+    },
+
+    maybeApi2: function() {
+        // Return the API endpoint
+        return this.api || 'https://api.pushbullet.com';
+    },
+
+    e2e: {
+        enabled: false,
+        encrypt: function(data) { return data; },
+        decrypt: function(data) { return data; }
+    },
+
+    log: function(message) {
+        console.log(message);
+        this.sendMessage('log', message);
+    }
+};
+
+// Initialize pb data from service worker
+async function initializePb() {
+    try {
+        // Get initial data from service worker
+        const response = await pb.sendMessage('getState', {});
+        if (response) {
+            pb.local = response.local || {};
+            pb.settings = response.settings || {};
+            pb.browser = response.browser || 'chrome';
+            pb.version = response.version || 366;
+            pb.browserVersion = response.browserVersion;
+            pb.userAgent = response.userAgent;
+
+            // Additional properties that might be needed
+            pb.www = response.www || 'https://www.pushbullet.com';
+            pb.api = response.api || 'https://api.pushbullet.com';
+
+            // Initialize notifier data
+            if (response.notifier) {
+                pb.notifier = response.notifier;
+            }
+
+            // Initialize push queues
+            pb.successfulPushes = response.successfulPushes || [];
+            pb.pushQueue = response.pushQueue || [];
+            pb.fileQueue = response.fileQueue || [];
+            pb.failedPushes = response.failedPushes || [];
+        }
+    } catch (error) {
+        console.error('Failed to initialize pb:', error);
+    }
+}
+
+// Listen for updates from service worker
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+    if (message.type === 'stateUpdate') {
+        // Update local state
+        if (message.data) {
+            Object.assign(pb.local, message.data.local || {});
+            Object.assign(pb.settings, message.data.settings || {});
+        }
+
+        // Dispatch event if specified
+        if (message.event) {
+            pb.dispatchEvent(message.event, message.data);
+        }
+    }
+    return true;
+});
+
+var onload = async function() {
+    onload = null
+
+    // Initialize pb proxy
+    await initializePb();
+
+    ready()
+}
+
+var ready = function() {
+    addBodyCssClasses()
+
+    if (window.init) {
+        window.init()
+    }
+
+    pb.dispatchEvent('active')
+}
+
+var addBodyCssClasses = function() {
+    if (pb.local && pb.local.user) {
+        document.body.classList.add('signed-in')
+    } else {
+        document.body.classList.add('not-signed-in')
+    }
+
+    if (pb.browser == 'chrome') {
+        document.body.classList.add('chrome')
+    } else {
+        document.body.classList.add('not-chrome')
+    }
+
+    if (pb.browser == 'edge') {
+        document.body.classList.add('edge')
+    } else {
+        document.body.classList.add('not-edge')
+    }
+
+    if (pb.browser == 'opera') {
+        document.body.classList.add('opera')
+    } else {
+        document.body.classList.add('not-opera')
+    }
+
+    if (pb.browser == 'safari') {
+        document.body.classList.add('safari')
+    } else {
+        document.body.classList.add('not-safari')
+    }
+
+    if (pb.browser == 'firefox') {
+        document.body.classList.add('firefox')
+    } else {
+        document.body.classList.add('not-firefox')
+    }
+
+    if (navigator.platform.indexOf('MacIntel') != -1) {
+        document.body.classList.add('mac')
+    } else {
+        document.body.classList.add('not-mac')
+    }
+
+    if (navigator.platform.toLowerCase().indexOf('win') != -1) {
+        document.body.classList.add('windows')
+    } else {
+        document.body.classList.add('not-windows')
+    }
+}
+
+document.addEventListener('DOMContentLoaded', onload)
+
+window.onerror = function(message, file, line, column, error) {
+    pb.track({
+        'name': 'error',
+        'stack': error ? error.stack : file + ':' + line + ':' + column,
+        'message': message
+    })
+}

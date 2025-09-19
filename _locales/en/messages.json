@@ -1,0 +1,380 @@
+{
+    "sign_in": {
+        "message": "Sign in"
+    },
+    "sign_out": {
+        "message": "Sign out"
+    },
+    "options": {
+        "message": "Settings"
+    },
+    "title_placeholder": {
+        "message": "Title"
+    },
+    "message_placeholder": {
+        "message": "Type a message, press enter to send"
+    },
+    "message_placeholder_link": {
+        "message": "Add a message, press enter to send"
+    },
+    "message_placeholder_files": {
+        "message": "Type a message or drop a file"
+    },
+    "url_placeholder": {
+        "message": "Link url"
+    },
+    "devices_placeholder": {
+        "message": "Select a device"
+    },
+    "recipient_placeholder": {
+        "message": "To"
+    },
+    "thanks_for_installing_title": {
+        "message": "Thanks for installing Pushbullet!"
+    },
+    "thanks_for_installing_message": {
+        "message": "Click here to get signed in"
+    },
+    "updated_notif_title": {
+        "message": "Pushbullet has updated!"
+    },
+    "updated_notif_message": {
+        "message": "Click here to see what's new"
+    },
+    "dismiss": {
+        "message": "Dismiss"
+    },
+    "reply": {
+        "message": "Reply"
+    },
+    "mute": {
+        "message": "Mute"
+    },
+    "mute_app": {
+        "message": "Mute $1 notifications"
+    },
+    "muted_app": {
+        "message": "Muted $1"
+    },
+    "unmute_app": {
+        "message": "Unmute $1"
+    },
+    "mirror_context_message": {
+        "message": "$1 via Pushbullet at $2"
+    },
+    "push_context_message": {
+        "message": "$1 at $2"
+    },
+    "from": {
+        "message": "From $1"
+    },
+    "go_to_link": {
+        "message": "Go to link"
+    },
+    "snooze": {
+        "message": "Snooze 1hr"
+    },
+    "unsnooze": {
+        "message": "Unsnooze"
+    },
+    "all_of_my_devices": {
+        "message": "All Devices"
+    },
+    "add_a_friend": {
+        "message": "Add a friend"
+    },
+    "explore_channels": {
+        "message": "Explore Channels"
+    },
+    "panel_sign_up": {
+        "message": "Sign up on Pushbullet.com →"
+    },
+    "panel_cant_sign_in": {
+        "message": "Can't get signed in? Try temporarily disabling Adblock. If that doesn't help, Pushbullet requires third-party cookies to be enabled to sign in. You can disable them again after getting signed-in."
+    },
+    "panel_third_party_cookies": {
+        "message": "Click here for how to change this setting."
+    },
+    "general": {
+        "message": "General"
+    },
+    "notifications": {
+        "message": "Notifications"
+    },
+    "advanced": {
+        "message": "Advanced"
+    },
+    "how_to_unmute_app": {
+        "message": "I muted an app, how do I unmute it?"
+    },
+    "how_to_unmute_app_answer": {
+        "message": "Open the Pushbullet Android app and tap on the 'Notification Mirroring' tab. Here, tap 'Choose which apps to enable', then re-enable the app."
+    },
+    "alert_desktop_app_notifications": {
+        "message": "The Pushbullet desktop app is managing notifications."
+    },
+    "option_background_permission": {
+        "message": "Keep Pushbullet running when my browser is closed"
+    },
+    "option_background_permission_desc": {
+        "message": "This will enable you to see your notifications without having to keep a browser window open."
+    },
+     "option_tabs_permission": {
+        "message": "Avoid opening multiple tabs for the same website when clicking notifications."
+    },
+    "option_tabs_permission_desc": {
+        "message": "Pushbullet needs an additional permission to do this."
+    },
+    "option_hosts_permission": {
+        "message": "Enable this if our right-click menu is not working on some websites."
+    },
+    "option_hosts_permission_desc": {
+        "message": "Pushbullet needs additional permissions to push images and files from some websites."
+    },
+    "option_use_dark_icon": {
+        "message": "Use dark icon"
+    },
+    "option_use_dark_icon_desc": {
+        "message": "This will make our toolbar icon a dark gray."
+    },
+    "option_notification_duration": {
+        "message": "Hide notifications automatically after"
+    },
+    "option_show_mirrors": {
+        "message": "Show notifications on my computer"
+    },
+    "option_show_mirrors_desc": {
+        "message": "Unchecking this will stop us from showing notifications (you can still see a count in our toolbar icon)."
+    },
+    "option_only_show_titles": {
+        "message": "Only show notification titles"
+    },
+    "option_only_show_titles_desc": {
+        "message": "This will make Pushbullet only show the title of notifications, keeping the message private."
+    },
+    "option_play_sound": {
+        "message": "Play a sound when a notification arrives"
+    },
+    "option_play_sound_desc": {
+        "message": "This will make Pushbullet play a short sound when a notification arrives, alerting you to it."
+    },
+    "option_open_my_pushes_automatically": {
+        "message": "Open things I push to this browser automatically"
+    },
+    "option_open_my_pushes_automatically_desc": {
+        "message": "This will make Pushbullet open anything you push to this browser automatically in a new tab."
+    },
+    "option_show_context_menu": {
+        "message": "Show Pushbullet in my browser context menu"
+    },
+    "option_show_context_menu_desc": {
+        "message": "Show Pushbullet in the list of right-click menu options."
+    },
+    "option_allow_instant_push": {
+        "message": "Enable instant pushing to"
+    },
+    "option_allow_instant_push_desc": {
+        "message": "Push the current tab to the chosen device via keyboard shortcut."
+    },
+    "option_instant_push_shortcuts": {
+        "message": "Click here to set (currently $1)."
+    },
+    "option_instant_push_shortcuts_not_set": {
+        "message": "not set"
+    },
+    "num_new_messages": {
+        "message": "$1 new messages"
+    },
+    "unsubscribe_from_channel": {
+        "message": "Unfollow $1"
+    },
+    "unsubscribed_from_channel": {
+        "message": "No longer following $1"
+    },
+    "undo": {
+        "message": "Undo"
+    },
+    "done": {
+        "message": "Done"
+    },
+    "sms": {
+        "message": "SMS"
+    },
+    "sms_disclaimer": {
+        "message": "Phone must be powered on and have an internet connection for the texts to send."
+    },
+    "changelog_tab": {
+        "message": "What's New"
+    },
+    "no_notifications": {
+        "message": "No notifications right now"
+    },
+    "option_clipboard_permission": {
+        "message": "Universal copy & paste"
+    },
+    "option_clipboard_permission_desc": {
+        "message": "Copy text on one device, then paste it on any other that also has this setting enabled."
+    },
+    "option_show_notification_count": {
+        "message": "Show notification count on toolbar icon"
+    },
+    "option_show_notification_count_desc": {
+        "message": "See your notification count at a glance in your toolbar."
+    },
+    "retry": {
+        "message": "Retry"
+    },
+    "clear": {
+        "message": "Clear"
+    },
+    "send_failed": {
+        "message": "Send failed"
+    },
+    "devices": {
+        "message": "Devices"
+    },
+    "friends": {
+        "message": "Friends"
+    },
+    "following": {
+        "message": "Following"
+    },
+    "people": {
+        "message": "People"
+    },
+    "pushing": {
+        "message": "Pushing"
+    },
+    "account": {
+        "message": "Account"
+    },
+    "channels": {
+        "message": "Channels"
+    },
+    "no_pushes": {
+        "message": "No recent history"
+    },
+    "me": {
+        "message": "Me"
+    },
+    "add_link_tooltip": {
+        "message": "Link current page"
+    },
+    "remove_link_tooltip": {
+        "message": "Un-link current page"
+    },
+    "see_full_history": {
+        "message": "See full history"
+    },
+    "cancel": {
+        "message": "Cancel"
+    },
+    "sms_recipient_placeholder": {
+        "message": "Contact or phone number"
+    },
+    "file_too_big": {
+        "message": "File too big"
+    },
+    "sending": {
+        "message": "Sending"
+    },
+    "pending": {
+        "message": "Pending"
+    },
+    "now": {
+        "message": "Now"
+    },
+    "phone": {
+        "message": "Phone"
+    },
+    "new_sms_thread": {
+        "message": "New text message"
+    },
+    "encryption_password_needed_title": {
+        "message": "Encrypted data received"
+    },
+    "encryption_password_needed_body": {
+        "message": "Click here to enter your password"
+    },
+    "decryption_failed_title": {
+        "message": "Decryption failed"
+    },
+    "decryption_failed_body": {
+        "message": "Please confirm your password matches on all devices"
+    },
+    "end_to_end_encryption_label": {
+        "message": "End-to-end encryption"
+    },
+    "end_to_end_encryption_desc": {
+        "message": "Add additional encryption to protect your personal information even more."
+    },
+    "end_to_end_password_label": {
+        "message": "End-to-end encryption password"
+    },
+    "end_to_end_password_desc": {
+        "message": "If you choose to enter a password, this password will need to be entered on each of your devices."
+    },
+    "save": {
+        "message": "Save"
+    },
+    "option_automatically_attach_link": {
+        "message": "Automatically attach the current tab to messages to a device"
+    },
+    "option_automatically_attach_link_desc": {
+        "message": "This makes sending links to devices faster."
+    },
+    "learn_more": {
+        "message": "Learn more"
+    },
+    "darkmode_label": {
+        "message": "Dark mode"
+    },
+    "darkmode_desc": {
+        "message": "An alternative color scheme with a dark background and lighter text."
+    },
+    "pushbullet_pro": {
+        "message": "Pushbullet Pro"
+    },
+    "pushbullet_pro_required": {
+        "message": "Pushbullet Pro Required"
+    },
+    "pushbullet_pro_feature": {
+        "message": "Pushbullet Pro is required to enable this feature."
+    },
+    "reply_limit_warning": {
+        "message": "You're getting close to the free message limit for this month."
+    },
+    "reply_limit_reached": {
+        "message": "You've reached the free message limit for this month."
+    },
+    "reply_limit_upgrade": {
+        "message": "Upgrade to Pushbullet Pro to send unlimited messages."
+    },
+    "stuck_pending": {
+        "message": "Stuck pending?"
+    },
+    "faqs": {
+        "message": "Frequently asked questions"
+    },
+    "sms_no_devices_text": {
+        "message": "No Android devices have SMS sync enabled. To enable SMS, open the Pushbullet Android app and enable the top option on the SMS tab."
+    },
+    "cookies_label": {
+        "message": "Cookies"
+    },
+    "cookies_desc": {
+        "message": "Allow Pushbullet to add cookies to your browser? They store your account and your other Pushbullet data. This is required for Pushbullet to work."
+    },
+    "analytics_label": {
+        "message": "Usage data"
+    },
+    "analytics_desc": {
+        "message": "Can we collect usage data for our extension? We use this data to identify and fix bugs as well as identify which features are used most. This data is never shared with anyone outside Pushbullet."
+    },
+    "heading_privacy": {
+        "message": "Please confirm these privacy settings before continuing:"
+    },
+    "cookies_required": {
+        "message": "Cookies are required for Pushbullet to sign in to your account. Please remove Pushbullet if cookies are not acceptable."
+    }
+}

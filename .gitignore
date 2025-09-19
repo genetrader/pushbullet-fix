@@ -1,0 +1,41 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies (if any are added later)
+node_modules/
+
+# Build output (if any build process is added)
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Personal data
+*.bak
+*.backup
+
+# Chrome extension development
+*.pem
+*.crx
+*.zip
