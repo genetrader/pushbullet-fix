@@ -135,6 +135,7 @@ var setUpTabs = function() {
 
     var tabs = [pushingTab, smsTab, notificationsTab, accountTab]
 
+    var pushingIframeContent = document.getElementById('pushing-iframe-content')
     var messagingContent = document.getElementById('messaging-content')
     var notificationsContent = document.getElementById('notifications-content')
     var accountContent = document.getElementById('account-content')
@@ -162,31 +163,39 @@ var setUpTabs = function() {
         }
 
         if (tab == notificationsTab) {
+            pushingIframeContent.style.display = 'none'
             notificationsContent.style.display = 'block'
             messagingContent.style.display = 'none'
             accountContent.style.display = 'none'
 
             tearDownMessaging()
         } else if (tab == accountTab) {
+            pushingIframeContent.style.display = 'none'
             notificationsContent.style.display = 'none'
             messagingContent.style.display = 'none'
             accountContent.style.display = 'block'
 
             tearDownMessaging()
-        } else {
+        } else if (tab == smsTab) {
+            pushingIframeContent.style.display = 'none'
             notificationsContent.style.display = 'none'
             messagingContent.style.display = 'block'
             accountContent.style.display = 'none'
 
-            if (tab == smsTab) {
-                setUpMessaging('sms')
-            } else {
-                var pushTab = document.getElementById(localStorage.activePushingTab + '-tab')
-                if (pushTab) {
-                    pushTab.onclick()
-                } else {
-                    meTab.onclick()
-                }
+            setUpMessaging('sms')
+        } else if (tab == pushingTab) {
+            // Show iframe for pushing tab
+            pushingIframeContent.style.display = 'block'
+            notificationsContent.style.display = 'none'
+            messagingContent.style.display = 'none'
+            accountContent.style.display = 'none'
+
+            tearDownMessaging()
+
+            // Refresh iframe if needed
+            var iframe = document.getElementById('pushbullet-people-iframe')
+            if (iframe && !iframe.src) {
+                iframe.src = 'people.html'
             }
         }
     }
@@ -197,6 +206,8 @@ var setUpTabs = function() {
         }
     })
 
+    // Push tabs are now replaced by iframe, so we comment out this functionality
+    /*
     var pushTabClick = function(tab) {
         pushTabs.forEach(function(tab) {
             tab.classList.remove('selected')
@@ -214,6 +225,7 @@ var setUpTabs = function() {
             pushTabClick(tab)
         }
     })
+    */
 
     if (localStorage.activePanelTab == 'notifications') {
         notificationsTab.click()
