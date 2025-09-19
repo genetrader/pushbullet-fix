@@ -129,26 +129,20 @@ var setUpDarkModeOption = function() {
 var setUpBackgroundPermission = function() {
     var backgroundPermissionCheckbox = document.getElementById('background-permission-checkbox')
 
-    var hasPermission, permission = { 'permissions': ['background'] }
+    // In Manifest V3, background permission doesn't exist anymore
+    // Service workers always have background capabilities
+    // Just show the checkbox as always checked and disabled
+    if (backgroundPermissionCheckbox) {
+        backgroundPermissionCheckbox.checked = true
+        backgroundPermissionCheckbox.disabled = true
+        backgroundPermissionCheckbox.title = 'Background permission is always enabled in this version'
 
-    var onPermissionUpdate = function(granted) {
-        hasPermission = !!granted
-        backgroundPermissionCheckbox.checked = hasPermission
+        // Remove click handler since it's not applicable
+        backgroundPermissionCheckbox.addEventListener('click', function(event) {
+            event.preventDefault()
+            return false
+        })
     }
-
-    chrome.permissions.contains(permission, onPermissionUpdate)
-
-    backgroundPermissionCheckbox.addEventListener('click', function(event) {
-        if (hasPermission) {
-            chrome.permissions.remove(permission,
-                function(removed) {
-                    onPermissionUpdate(!removed)
-                }
-            )
-        } else {
-            chrome.permissions.request(permission, onPermissionUpdate)
-        }
-    })
 }
 
 var setUpTabsPermission = function() {
