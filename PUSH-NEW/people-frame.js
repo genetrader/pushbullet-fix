@@ -5,78 +5,37 @@ let retryCount = 0;
 const maxRetries = 3;
 
 function onFrameLoad() {
+    console.log('Frame load event triggered');
     const frame = document.getElementById('pushbulletFrame');
     const loader = document.getElementById('loader');
 
-    // Try to inject CSS to hide everything except People section
-    try {
-        // This will only work if same-origin or CORS allows it
-        const frameDoc = frame.contentDocument || frame.contentWindow.document;
-
-        // Wait a bit for the page to fully render
-        setTimeout(() => {
-            // Inject CSS to hide header, sidebar except People, and show only People content
-            const style = frameDoc.createElement('style');
-            style.textContent = `
-                /* Hide header */
-                .navbar, .header, nav { display: none !important; }
-
-                /* Hide sidebar items except People */
-                .sidebar > *:not([href*="people"]) { display: none !important; }
-
-                /* Hide everything except the main content area */
-                body > *:not(.main-container):not(.content-area) { display: none !important; }
-
-                /* Adjust spacing */
-                .main-container { padding-top: 0 !important; }
-                .content-area { margin-top: 0 !important; }
-
-                /* Hide unnecessary UI elements */
-                .upgrade-banner, .pro-banner, .footer { display: none !important; }
-            `;
-            frameDoc.head.appendChild(style);
-
-            // Navigate to People section if not already there
-            if (!frame.src.includes('#people')) {
-                frame.src = 'https://www.pushbullet.com/#people';
-            }
-
-            // Show frame, hide loader
-            frame.style.display = 'block';
-            loader.style.display = 'none';
-            frameLoaded = true;
-        }, 2000);
-    } catch (e) {
-        // Cross-origin, try alternative approach
-        console.log('Cross-origin frame, using alternative approach');
-
-        // Just navigate to People section
-        if (!frame.src.includes('#people')) {
-            frame.src = 'https://www.pushbullet.com/#people';
-        }
-
-        // Show frame anyway (will show full Pushbullet site)
-        setTimeout(() => {
-            frame.style.display = 'block';
-            loader.style.display = 'none';
-            frameLoaded = true;
-        }, 2000);
-    }
+    // Always show the frame after a short delay
+    // We can't access cross-origin content, but the frame should still display
+    setTimeout(() => {
+        console.log('Showing iframe');
+        frame.style.display = 'block';
+        loader.style.display = 'none';
+        frameLoaded = true;
+    }, 1000);
 }
 
 function onFrameError() {
+    console.log('Frame error event triggered');
     retryCount++;
     if (retryCount < maxRetries) {
         setTimeout(() => {
+            console.log('Retrying frame load');
             document.getElementById('pushbulletFrame').src = 'https://www.pushbullet.com/#people';
         }, 2000);
     } else {
+        console.log('Max retries reached, showing error');
         document.getElementById('loader').style.display = 'none';
         document.getElementById('errorMessage').style.display = 'block';
     }
 }
 
 function openPushbullet() {
+    console.log('Opening Pushbullet in new tab');
     if (window.chrome && chrome.tabs) {
         chrome.tabs.create({ url: 'https://www.pushbullet.com/signin' });
     } else {
@@ -86,24 +45,38 @@ function openPushbullet() {
 
 // Set up event listeners when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, setting up iframe');
     const frame = document.getElementById('pushbulletFrame');
     const button = document.getElementById('openPushbulletBtn');
 
     if (frame) {
         frame.addEventListener('load', onFrameLoad);
         frame.addEventListener('error', onFrameError);
+
+        // Also trigger load immediately if iframe is already loaded
+        if (frame.contentWindow) {
+            console.log('Frame already has content window');
+            onFrameLoad();
+        }
     }
 
     if (button) {
         button.addEventListener('click', openPushbullet);
     }
 
-    // Timeout fallback
+    // Timeout fallback - always show iframe after 3 seconds
     setTimeout(() => {
         if (!frameLoaded) {
+            console.log('Timeout reached, forcing iframe display');
             const frame = document.getElementById('pushbulletFrame');
-            frame.style.display = 'block';
-            document.getElementById('loader').style.display = 'none';
+            const loader = document.getElementById('loader');
+            if (frame) {
+                frame.style.display = 'block';
+            }
+            if (loader) {
+                loader.style.display = 'none';
+            }
+            frameLoaded = true;
         }
-    }, 5000);
+    }, 3000);
 });

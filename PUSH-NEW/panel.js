@@ -195,7 +195,7 @@ var setUpTabs = function() {
             // Refresh iframe if needed
             var iframe = document.getElementById('pushbullet-people-iframe')
             if (iframe && !iframe.src) {
-                iframe.src = 'people-frame.html'
+                iframe.src = 'people-simple.html'
             }
         }
     }
