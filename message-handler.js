@@ -189,3 +189,21 @@ pb.broadcastStateUpdate = function(event, data) {
         // Ignore errors if no listeners
     });
 };
+
+// Forward events from background to UI pages
+if (typeof pb.addEventListener === 'function') {
+    // Forward sms_changed events to UI pages
+    pb.addEventListener('sms_changed', function(e) {
+        pb.broadcastStateUpdate('sms_changed', e.detail);
+    });
+
+    // Forward locals_changed events to UI pages
+    pb.addEventListener('locals_changed', function(e) {
+        pb.broadcastStateUpdate('locals_changed', e.detail);
+    });
+
+    // Forward stream_message events to UI pages
+    pb.addEventListener('stream_message', function(e) {
+        pb.broadcastStateUpdate('stream_message', e.detail);
+    });
+}

@@ -38,9 +38,15 @@ var setUpSmsMessaging = function() {
     clearInterval(updateSmsChatInterval)
     updateSmsChatInterval = setInterval(function() {
         if (window && smsInput && smsInput.thread && smsInput.messages) {
-            smsLocalsChangedListener()
+            // Refresh the current thread to get latest messages
+            pb.getThread(smsDeviceInput.target.iden, smsInput.thread.id, function(response) {
+                if (response && smsInput.thread && smsInput.thread.id === smsInput.thread.id) {
+                    smsInput.messages = response.thread
+                    smsLocalsChangedListener()
+                }
+            })
         }
-    }, 60 * 1000)
+    }, 5 * 1000)
 }
 
 var tearDownSmsMessaging = function() {
@@ -154,6 +160,16 @@ var smsChangedListener = function() {
                     } else {
                         setUpThreads()
                     }
+
+                    // If we have a current thread open, refresh its messages
+                    if (smsInput.thread) {
+                        pb.getThread(device.iden, smsInput.thread.id, function(threadResponse) {
+                            if (threadResponse && smsInput.thread) {
+                                smsInput.messages = threadResponse.thread
+                                smsLocalsChangedListener()
+                            }
+                        })
+                    }
                 }
             })
             document.getElementById('sms-update-required').style.display = 'none'
@@ -242,11 +258,27 @@ var setUpInput = function() {
             return recipient.address
         })
 
+        var sentMessage = {
+            'body': smsInput.value,
+            'direction': 'outgoing',
+            'status': 'queued',
+            'type': 'sms',
+            'addresses': addresses,
+            'timestamp': Date.now() / 1000,
+            'guid': 'temp_' + Date.now()
+        }
+
         pb.sendSms({
             'target_device_iden': smsDeviceInput.target.iden,
             'addresses': addresses,
             'body': smsInput.value
         })
+
+        // Add sent message to the messages array for immediate display
+        if (smsInput.messages) {
+            smsInput.messages.push(sentMessage)
+            updateSmsChat(smsDeviceInput.target, smsInput.thread, smsInput.messages)
+        }
 
         smsInput.value = ''
         updateSmsSendIcon()
@@ -454,6 +486,13 @@ var selectCompose = function(row) {
         })
 
         composeInput.value = ''
+        recipient.value = ''
+        delete recipient.target
+
+        // After sending from compose, refresh threads to show the new conversation
+        setTimeout(function() {
+            smsChangedListener()
+        }, 1000)
 
         scrollPushChat()
 

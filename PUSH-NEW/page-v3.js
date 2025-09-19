@@ -357,8 +357,19 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.type === 'stateUpdate') {
         // Update local state
         if (message.data) {
-            Object.assign(pb.local, message.data.local || {});
-            Object.assign(pb.settings, message.data.settings || {});
+            // Only update local/settings if they are present
+            if (message.data.local) {
+                Object.assign(pb.local, message.data.local);
+            }
+            if (message.data.settings) {
+                Object.assign(pb.settings, message.data.settings);
+            }
+
+            // Clear SMS caches when sms_changed event occurs
+            if (message.event === 'sms_changed') {
+                pb.thread = {};
+                pb.threads = {};
+            }
         }
 
         // Dispatch event if specified
