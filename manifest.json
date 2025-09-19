@@ -69,7 +69,7 @@
         }
     },
     "web_accessible_resources": [{
-        "resources": ["*.png"],
+        "resources": ["*.png", "people-frame.html", "people.html", "people-frame.js", "people-simple.html", "people-simple.js", "people.js"],
         "matches": ["<all_urls>"]
     }]
 }

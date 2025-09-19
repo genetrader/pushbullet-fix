@@ -73,6 +73,13 @@
             <div class="signed-in">
                 <div id="content">
                     <div style="height:100%;">
+                        <!-- Iframe for People section -->
+                        <div id="pushing-iframe-content" class="tab-content" style="display:none;height:100%;">
+                            <iframe id="pushbullet-people-iframe"
+                                    src="people.html"
+                                    style="width:100%; height:100%; border:none; background:white;">
+                            </iframe>
+                        </div>
                         <div id="messaging-content" class="tab-content" style="display:none;">
                             <div id="messaging-content-left"></div>
                             <div id="messaging-content-right">
@@ -162,7 +169,7 @@
                                 <div id="messaging-banner"></div>
                             </div>
                             <div id="messaging-top">
-                                <div id="push-top" style="height:100%;">
+                                <div id="push-top" style="height:100%; display:none;">
                                     <div style="margin:0 120px;height:100%;">
                                         <div class="tabs">
                                             <span id="friends-tab" class="tab top-tab"></span>
