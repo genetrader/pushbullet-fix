@@ -23,10 +23,11 @@ var textMappings = {
 
 var tabId
 window.init = function() {
-    if (pb.settings.needsDataApproval) {
-        pb.openTab('welcome.html')
-        window.close()
-        return
+    if (pb.settings && pb.settings.needsDataApproval) {
+        // Clear the needsDataApproval flag to prevent infinite redirects
+        pb.settings.needsDataApproval = false
+        pb.saveSettings()
+        // Don't redirect, just continue to show the panel
     }
 
     if (!location.hash) {
