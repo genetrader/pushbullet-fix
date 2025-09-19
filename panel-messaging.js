@@ -80,32 +80,41 @@ var setUpMessaging = function(tab) {
 
     var fileInput = document.getElementById('file-input')
     fileInput.addEventListener('change', function(e) {
+        console.log('File input changed, files:', e.target.files);
+        console.log('Active messaging tab:', activeMessagingTab);
+
         if (activeMessagingTab == 'sms') {
             var file = e.target.files[0]
             if (!file) {
+                console.log('No file selected for SMS');
                 return
             }
 
             handleSmsFile(file)
         } else {
             var target = getTargetStream()
+            console.log('Target stream:', target);
             if (!target) {
+                console.error('No target stream selected');
                 return
             }
 
             var files = e.target.files
             if (!files || files.length == 0) {
+                console.log('No files selected');
                 return
             }
 
             for (var i = 0; i < files.length; i++) {
                 var file = files[i]
+                console.log('Processing file:', file.name, file.type, file.size);
 
                 var push = {
                     'file': file
                 }
 
                 addTarget(target, push)
+                console.log('Sending push with file:', push);
 
                 pb.sendPush(push)
             }

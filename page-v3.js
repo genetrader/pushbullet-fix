@@ -91,11 +91,16 @@ window.pb = {
     },
 
     sendPush: function(push) {
+        console.log('pb.sendPush called with:', push);
+
         // If the push contains a file, we need to handle it specially
         if (push.file) {
+            console.log('Push contains file:', push.file.name, push.file.type, push.file.size);
+
             // For file uploads, we need to send the file data properly
             const reader = new FileReader();
             reader.onload = () => {
+                console.log('File read complete, sending to background');
                 const fileData = {
                     name: push.file.name,
                     type: push.file.type,
@@ -104,10 +109,20 @@ window.pb = {
                 };
                 const pushWithFile = { ...push, fileData: fileData };
                 delete pushWithFile.file;  // Remove the File object
-                return this.sendMessage('sendPush', pushWithFile);
+
+                this.sendMessage('sendPush', pushWithFile).then(response => {
+                    console.log('sendPush response:', response);
+                }).catch(error => {
+                    console.error('sendPush error:', error);
+                });
+            };
+            reader.onerror = (error) => {
+                console.error('FileReader error:', error);
             };
             reader.readAsArrayBuffer(push.file);
+            return; // Return early for file pushes
         } else {
+            console.log('Regular push (no file)');
             return this.sendMessage('sendPush', push);
         }
     },
