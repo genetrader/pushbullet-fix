@@ -97,35 +97,6 @@ var setUpPushInput = function() {
     input.placeholder = location.hash ? chrome.i18n.getMessage('message_placeholder_files') : chrome.i18n.getMessage('message_placeholder')
     delete input.stream
 
-    // Add a dedicated file attachment button next to the link button
-    var attachButton = document.getElementById('push-attach-file')
-    if (!attachButton) {
-        attachButton = document.createElement('div')
-        attachButton.id = 'push-attach-file'
-        attachButton.style.cssText = 'float: left; font-size: 38px; padding: 15px 10px 10px 10px; color: #95a5a6; cursor: pointer;'
-        attachButton.innerHTML = '<i class="pushfont-paperclip"></i>'
-        attachButton.title = 'Attach file'
-
-        // Insert the attachment button before the input holder
-        var inputHolder = document.getElementById('push-input-holder')
-        if (inputHolder && inputHolder.parentNode) {
-            inputHolder.parentNode.insertBefore(attachButton, inputHolder)
-        }
-    }
-
-    attachButton.onclick = function() {
-        console.log('Attachment button clicked - triggering file input')
-        document.getElementById('file-input').click()
-    }
-
-    // Add hover effect
-    attachButton.onmouseover = function() {
-        attachButton.style.color = '#4ab367'
-    }
-    attachButton.onmouseout = function() {
-        attachButton.style.color = '#95a5a6'
-    }
-
     input.addEventListener('input', function(e) {
         reportAwake()
         updatePushSendIcon()
@@ -136,6 +107,9 @@ var setUpPushInput = function() {
 
         var target = getTargetStream()
         if (!target) {
+            return
+        }
+        if (target.channel || target.client) {
             return
         }
 
@@ -174,21 +148,6 @@ var setUpPushInput = function() {
             return
         }
 
-        // Track the push send event
-        if (target.channel || target.client) {
-            pb.track({
-                'name': 'push_send',
-                'channel': true,
-                'window': location.hash ? 'popout' : 'panel'
-            })
-        } else {
-            pb.track({
-                'name': 'push_send',
-                'chat': !!target.with,
-                'window': location.hash ? 'popout' : 'panel'
-            })
-        }
-
         addTarget(target, push)
 
         pb.sendPush(push)
@@ -217,8 +176,9 @@ var setUpPushInput = function() {
         }
     }
 
-    // Adjust margin for the input holder to accommodate the attachment button
-    document.getElementById('push-input-holder').style.marginLeft = '90px'
+    if (location.hash) {
+        document.getElementById('push-input-holder').style.marginLeft = '15px'
+    }
 }
 
 var getTargetStream = function() {
