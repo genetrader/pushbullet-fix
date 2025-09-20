@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Pushbullet Test</title>
+    <style>
+        body {
+            width: 400px;
+            height: 500px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #4ab367;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pushbullet Extension</h1>
+    <p>This is a test panel to verify the extension is working.</p>
+    <p>If you see this, the popup is loading correctly.</p>
+    <button id="open-real-panel">Open Real Panel</button>
+    <script>
+        console.log('Test panel loaded');
+        document.getElementById('open-real-panel').onclick = function() {
+            window.location.href = 'panel.html';
+        };
+    </script>
+</body>
+</html>

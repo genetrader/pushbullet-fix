@@ -39,7 +39,7 @@
             "38": "icon_38.png"
         },
         "default_title": "Pushbullet",
-        "default_popup": "panel.html"
+        "default_popup": "test-panel.html"
     },
     "options_page": "options.html",
     "background": {
