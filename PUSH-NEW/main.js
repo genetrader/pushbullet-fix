@@ -15,16 +15,24 @@ var main = function() {
 
     transitionLocalStorage(lastVersion)
 
-    if (!lastVersion && pb.browser == 'firefox') {
-        pb.settings.needsDataApproval = true
+    // Disable data approval for Firefox to prevent redirects
+    // if (!lastVersion && pb.browser == 'firefox') {
+    //     pb.settings.needsDataApproval = true
+    //     pb.saveSettings()
+    // }
+
+    // Always clear needsDataApproval to prevent any redirects
+    if (pb.settings.needsDataApproval) {
+        pb.settings.needsDataApproval = false
         pb.saveSettings()
     }
 
     localStorage.lastVersion = pb.version
 
-    if (pb.settings.needsDataApproval) {
-        pb.openTab('/welcome.html')
-    }
+    // Disable welcome page redirect to prevent opening pushbullet.com
+    // if (pb.settings.needsDataApproval) {
+    //     pb.openTab('/welcome.html')
+    // }
 
     getApiKey(function(apiKey) {
         pb.local.apiKey = apiKey
