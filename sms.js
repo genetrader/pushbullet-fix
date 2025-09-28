@@ -235,6 +235,18 @@ pb.sendSms = function(data) {
 
     pb.dispatchEvent('locals_changed')
 
+    // Broadcast to all tabs/windows that SMS queue has been updated
+    chrome.runtime.sendMessage({
+        type: 'stateUpdate',
+        event: 'locals_changed',
+        data: {
+            smsQueue: pb.smsQueue,
+            successfulSms: pb.successfulSms
+        }
+    }).catch(function() {
+        // Ignore errors if no listeners
+    })
+
     processSmsQueue()
 
     return sms

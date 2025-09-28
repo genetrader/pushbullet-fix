@@ -293,11 +293,20 @@ var handleSmsFile = function(file) {
             return recipient.address
         })
 
-        pb.sendSms({
+        var smsPromise = pb.sendSms({
             'target_device_iden': device.iden,
             'addresses': addresses,
             'file': blob
         })
+
+        // Handle promise if it exists (Manifest V3)
+        if (smsPromise && typeof smsPromise.then === 'function') {
+            smsPromise.then(function() {
+                // Success
+            }).catch(function(error) {
+                console.error('Failed to send SMS with file:', error)
+            })
+        }
 
         pb.track({
             'name': 'sms_send',

@@ -42,22 +42,45 @@ var drawSmsChat = function(device, thread, messages) {
         }
     })
 
+    // Remove pending messages that match any sent text
+    var sentMessages = texts.map(function(text) {
+        return text.data.message
+    })
+
     var pending = utils.asArray(pb.successfulSms).concat(pb.smsQueue).filter(function(pending) {
         if (pending.target_device_iden != device.iden) {
             return false
         }
 
-        if (thread.recipients.length == pending.addresses.length && thread.recipients.filter(function(recipient) {
-            return pending.addresses.indexOf(recipient.address) != -1
-        }).length != thread.recipients.length) {
+        // Check if addresses match the thread recipients
+        var addressesMatch = true
+        if (thread.recipients.length != pending.addresses.length) {
+            addressesMatch = false
+        } else {
+            for (var i = 0; i < thread.recipients.length; i++) {
+                var recipientAddress = thread.recipients[i].address
+                if (pending.addresses.indexOf(recipientAddress) == -1) {
+                    addressesMatch = false
+                    break
+                }
+            }
+        }
+
+        if (!addressesMatch) {
             return false
         }
 
+        // Check for duplicate by GUID
         for (var i = 0; i < texts.length; i++) {
             var text = texts[i]
             if (text.data.guid == pending.guid) {
                 return false
             }
+        }
+
+        // Check if this pending message matches any sent message by content
+        if (sentMessages.indexOf(pending.body) !== -1) {
+            return false
         }
 
         return true

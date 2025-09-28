@@ -15,7 +15,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             api: pb.api,
             api2: pb.api2,
             websocket: pb.websocket,
-            notifier: pb.notifier || { active: {} }
+            notifier: pb.notifier || { active: {} },
+            smsQueue: pb.smsQueue || [],
+            successfulSms: pb.successfulSms || {}
         });
         return true;
     } else if (request.action === 'track') {
@@ -76,8 +78,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse({ success: true });
         return true;
     } else if (request.action === 'sendSms') {
-        if (pb.sendSms) pb.sendSms(request.data);
-        sendResponse({ success: true });
+        if (pb.sendSms) {
+            var result = pb.sendSms(request.data);
+            sendResponse({ success: true, result: result });
+        } else {
+            sendResponse({ success: false, error: 'pb.sendSms not available' });
+        }
         return true;
     } else if (request.action === 'deletePush') {
         if (pb.deletePush) pb.deletePush(request.data.iden);

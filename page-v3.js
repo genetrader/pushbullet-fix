@@ -346,6 +346,10 @@ async function initializePb() {
             pb.pushQueue = response.pushQueue || [];
             pb.fileQueue = response.fileQueue || [];
             pb.failedPushes = response.failedPushes || [];
+
+            // Initialize SMS queues
+            pb.smsQueue = response.smsQueue || [];
+            pb.successfulSms = response.successfulSms || {};
         }
     } catch (error) {
         console.error('Failed to initialize pb:', error);
@@ -359,6 +363,14 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         if (message.data) {
             Object.assign(pb.local, message.data.local || {});
             Object.assign(pb.settings, message.data.settings || {});
+
+            // Update SMS queues if provided
+            if (message.data.smsQueue !== undefined) {
+                pb.smsQueue = message.data.smsQueue;
+            }
+            if (message.data.successfulSms !== undefined) {
+                pb.successfulSms = message.data.successfulSms;
+            }
         }
 
         // Dispatch event if specified

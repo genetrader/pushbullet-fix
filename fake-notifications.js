@@ -80,7 +80,9 @@ var makeButton = function(button, onclose) {
     var div = document.createElement('div')
     div.className = 'fake-notification-button fake-notification-bottom-border'
     div.onclick = function() {
-        button.onclick()
+        if (button.onclick && typeof button.onclick === 'function') {
+            button.onclick()
+        }
         if (onclose) {
             onclose()
         }

@@ -164,7 +164,7 @@ var smsChangedListener = function() {
 }
 
 var smsLocalsChangedListener = function() {
-    if (!smsInput.thread || !smsInput.messages) {
+    if (!smsInput || !smsInput.thread || !smsInput.messages || !smsDeviceInput || !smsDeviceInput.target) {
         return
     }
 
@@ -242,14 +242,78 @@ var setUpInput = function() {
             return recipient.address
         })
 
-        pb.sendSms({
-            'target_device_iden': smsDeviceInput.target.iden,
-            'addresses': addresses,
-            'body': smsInput.value
-        })
+        // Store message body before clearing
+        var messageBody = smsInput.value
 
+        // Clear input immediately for better UX
         smsInput.value = ''
         updateSmsSendIcon()
+
+        var smsPromise = pb.sendSms({
+            'target_device_iden': smsDeviceInput.target.iden,
+            'addresses': addresses,
+            'body': messageBody
+        })
+
+        // Store the original message for matching later
+        var originalMessage = messageBody
+
+        // Force multiple refreshes to catch the message at different stages
+        var refreshCount = 0
+        var refreshInterval = setInterval(function() {
+            if (smsInput && smsInput.thread && smsInput.messages) {
+                // Re-fetch the thread to get latest messages
+                pb.getThread(smsDeviceInput.target.iden, smsInput.thread.id, function(response) {
+                    if (response && smsInput.thread) {
+                        var messages = response.thread
+                        smsInput.messages = messages
+
+                        // Check if our message now exists in the real messages
+                        var foundSent = false
+                        for (var i = 0; i < messages.length; i++) {
+                            if (messages[i].body === originalMessage &&
+                                messages[i].direction === 'outgoing' &&
+                                messages[i].status !== 'queued') {
+                                foundSent = true
+                                break
+                            }
+                        }
+
+                        // If we found the sent message, clear it from the queue
+                        if (foundSent && pb.smsQueue) {
+                            pb.smsQueue = pb.smsQueue.filter(function(sms) {
+                                return sms.body !== originalMessage
+                            })
+                        }
+
+                        smsLocalsChangedListener()
+                    }
+                })
+            }
+
+            refreshCount++
+            if (refreshCount >= 10) { // Stop after 10 attempts (10 seconds)
+                clearInterval(refreshInterval)
+            }
+        }, 1000) // Check every second
+
+        // Handle promise if it exists (Manifest V3)
+        if (smsPromise && typeof smsPromise.then === 'function') {
+            smsPromise.then(function(response) {
+                // Initial quick refresh
+                setTimeout(function() {
+                    smsLocalsChangedListener()
+                }, 100)
+            }).catch(function(error) {
+                console.error('Failed to send SMS:', error)
+                clearInterval(refreshInterval)
+            })
+        } else {
+            // For non-promise version, also force update
+            setTimeout(function() {
+                smsLocalsChangedListener()
+            }, 100)
+        }
 
         pb.track({
             'name': 'sms_send',
@@ -447,15 +511,29 @@ var selectCompose = function(row) {
         var addresses = []
         addresses.push((recipient.target && recipient.target.phone) || recipient.value)
 
-        pb.sendSms({
+        var smsPromise = pb.sendSms({
             'target_device_iden': smsDeviceInput.target.iden,
             'addresses': addresses,
             'body': composeInput.value
         })
 
+        // Handle promise if it exists (Manifest V3)
+        if (smsPromise && typeof smsPromise.then === 'function') {
+            smsPromise.then(function() {
+                // Success - message sent
+            }).catch(function(error) {
+                console.error('Failed to send SMS:', error)
+            })
+        }
+
         composeInput.value = ''
 
         scrollPushChat()
+
+        // Force refresh to show new conversation
+        setTimeout(function() {
+            smsChangedListener()
+        }, 500)
 
         pb.track({
             'name': 'sms_send',
