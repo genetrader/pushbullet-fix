@@ -1,5 +1,23 @@
 'use strict'
 
+// Listen for state updates from the background script
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.type === 'stateUpdate') {
+        if (request.event === 'sms_changed') {
+            // SMS data has changed, refresh if we're in SMS tab
+            if (activeMessagingTab === 'sms' && typeof smsChangedListener === 'function') {
+                smsChangedListener()
+            }
+        } else if (request.event === 'locals_changed') {
+            // Local state has changed, refresh if we're in SMS tab
+            if (activeMessagingTab === 'sms' && typeof smsLocalsChangedListener === 'function') {
+                smsLocalsChangedListener()
+            }
+        }
+    }
+    return false
+})
+
 onFocusChanged = function() {
     if (activeMessagingTab == 'sms') {
         updateActiveSmsChat()

@@ -37,10 +37,33 @@ var setUpSmsMessaging = function() {
 
     clearInterval(updateSmsChatInterval)
     updateSmsChatInterval = setInterval(function() {
-        if (window && smsInput && smsInput.thread && smsInput.messages) {
-            smsLocalsChangedListener()
+        if (window && smsInput && smsInput.thread && smsInput.messages && smsDeviceInput && smsDeviceInput.target) {
+            // Refresh the current thread to get latest messages
+            var currentThreadId = smsInput.thread.id
+            var device = smsDeviceInput.target
+
+            // Clear cached thread messages
+            var threadKey = device.iden + '_thread_' + currentThreadId
+            delete pb.thread[threadKey]
+
+            // Re-fetch the thread
+            pb.getThread(device.iden, currentThreadId, function(response) {
+                if (response && smsInput.thread && smsInput.thread.id === currentThreadId) {
+                    var messages = response.thread
+                    smsInput.messages = messages
+                    smsLocalsChangedListener()
+                }
+            })
+
+            // Also refresh the thread list to catch any new conversations
+            delete pb.threads[device.iden]
+            pb.getThreads(device.iden, function(response) {
+                if (response && device == smsDeviceInput.target) {
+                    setUpThreads(response.threads)
+                }
+            })
         }
-    }, 60 * 1000)
+    }, 10 * 1000) // Check every 10 seconds for updates
 }
 
 var tearDownSmsMessaging = function() {
@@ -147,10 +170,38 @@ var smsChangedListener = function() {
     var device = smsDeviceInput.target
     if (device) {
         if (device.app_version >= 256) {
+            // Clear the cached threads to force a refresh
+            delete pb.threads[device.iden]
+
             pb.getThreads(device.iden, function(response) {
                 if (device == smsDeviceInput.target) {
                     if (response) {
                         setUpThreads(response.threads)
+
+                        // If we have an active thread, refresh it too
+                        if (smsInput && smsInput.thread) {
+                            var currentThreadId = smsInput.thread.id
+                            // Find the updated thread data
+                            var updatedThread = response.threads.find(function(t) {
+                                return t.id === currentThreadId
+                            })
+
+                            if (updatedThread) {
+                                // Clear cached thread messages
+                                var threadKey = device.iden + '_thread_' + currentThreadId
+                                delete pb.thread[threadKey]
+
+                                // Refresh the current thread messages
+                                pb.getThread(device.iden, currentThreadId, function(threadResponse) {
+                                    if (threadResponse && smsInput.thread && smsInput.thread.id === currentThreadId) {
+                                        var messages = threadResponse.thread
+                                        smsInput.messages = messages
+                                        smsInput.thread = updatedThread
+                                        smsLocalsChangedListener()
+                                    }
+                                })
+                            }
+                        }
                     } else {
                         setUpThreads()
                     }
@@ -340,6 +391,12 @@ var setUpInput = function() {
 }
 
 var setUpThreads = function(threads) {
+    // Store currently selected thread ID before clearing
+    var currentSelectedThreadId = null
+    if (smsInput && smsInput.thread) {
+        currentSelectedThreadId = smsInput.thread.id
+    }
+
     while (threadsHolder.hasChildNodes()) {
         threadsHolder.removeChild(threadsHolder.lastChild)
     }
@@ -384,7 +441,11 @@ var setUpThreads = function(threads) {
                 selectThread(thread)
             }
 
-            if (thread.id == localStorage['lastTheadId_' + smsDeviceInput.target.iden]) {
+            // Preserve the currently selected thread
+            if (currentSelectedThreadId && thread.id == currentSelectedThreadId) {
+                selectedThread = thread
+                row.classList.add('selected')
+            } else if (!currentSelectedThreadId && thread.id == localStorage['lastTheadId_' + smsDeviceInput.target.iden]) {
                 selectedThread = thread
             }
 
@@ -394,11 +455,17 @@ var setUpThreads = function(threads) {
 
     threadsHolder.appendChild(fragment)
 
+    // Don't auto-select if we're preserving a selection
     if (selectedThread) {
-        selectThread(selectedThread)
-    } else if (threads && threads.length > 0 && document.getElementById('sms-compose-right').style.display != 'block') {
+        // Update the thread data but don't re-select (which would refresh everything)
+        if (smsInput && smsInput.thread && smsInput.thread.id === selectedThread.id) {
+            smsInput.thread = selectedThread
+        } else {
+            selectThread(selectedThread)
+        }
+    } else if (!currentSelectedThreadId && threads && threads.length > 0 && document.getElementById('sms-compose-right').style.display != 'block') {
         selectThread(threads[0])
-    } else {
+    } else if (!currentSelectedThreadId) {
         selectCompose(composeRow)
     }
 }

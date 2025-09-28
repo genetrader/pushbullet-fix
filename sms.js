@@ -31,8 +31,23 @@ pb.addEventListener('signed_in', function(e) {
     })
 
     pb.addEventListener('sms_changed', function(e) {
+        // Clear caches to force refresh
         pb.thread = {}
         pb.threads = {}
+
+        // Broadcast the sms_changed event to all UI pages
+        if (pb.broadcastStateUpdate) {
+            pb.broadcastStateUpdate('sms_changed', e.detail)
+        }
+
+        // Also send a direct message to trigger UI updates
+        chrome.runtime.sendMessage({
+            type: 'stateUpdate',
+            event: 'sms_changed',
+            data: e.detail
+        }).catch(function() {
+            // Ignore errors if no listeners
+        })
 
         if (!e.detail || !e.detail.notifications) {
             return
