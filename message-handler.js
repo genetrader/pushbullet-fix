@@ -179,6 +179,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         // Handle loopback requests for tab ID
         sendResponse({ tabId: sender.tab ? sender.tab.id : null });
         return true;
+    } else if (request.action === 'dismissNotification') {
+        // Handle notification dismissal from UI pages
+        if (pb.notifier && pb.notifier.dismiss) {
+            pb.notifier.dismiss(request.key);
+        } else if (pb.notifier && pb.notifier.active) {
+            // Fallback: directly remove from active notifications
+            delete pb.notifier.active[request.key];
+            pb.dispatchEvent('notifications_changed');
+        }
+        sendResponse({ success: true });
+        return true;
     }
 
     // Handle other specific requests as needed

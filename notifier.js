@@ -183,6 +183,11 @@ pb.notifier.dismiss = function(key) {
         pb.log('Dismissed ' + key)
         delete pb.notifier.active[key]
         pb.dispatchEvent('notifications_changed')
+
+        // Update the icon badge count
+        if (pb.updateIcon) {
+            pb.updateIcon()
+        }
     })
 
     var moreWindow = moreWindows[key]

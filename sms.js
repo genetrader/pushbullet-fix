@@ -35,19 +35,10 @@ pb.addEventListener('signed_in', function(e) {
         pb.thread = {}
         pb.threads = {}
 
-        // Broadcast the sms_changed event to all UI pages
+        // Broadcast the sms_changed event to all UI pages (only if function exists)
         if (pb.broadcastStateUpdate) {
             pb.broadcastStateUpdate('sms_changed', e.detail)
         }
-
-        // Also send a direct message to trigger UI updates
-        chrome.runtime.sendMessage({
-            type: 'stateUpdate',
-            event: 'sms_changed',
-            data: e.detail
-        }).catch(function() {
-            // Ignore errors if no listeners
-        })
 
         if (!e.detail || !e.detail.notifications) {
             return
@@ -250,17 +241,13 @@ pb.sendSms = function(data) {
 
     pb.dispatchEvent('locals_changed')
 
-    // Broadcast to all tabs/windows that SMS queue has been updated
-    chrome.runtime.sendMessage({
-        type: 'stateUpdate',
-        event: 'locals_changed',
-        data: {
+    // Broadcast to all tabs/windows that SMS queue has been updated (only if broadcastStateUpdate exists)
+    if (pb.broadcastStateUpdate) {
+        pb.broadcastStateUpdate('locals_changed', {
             smsQueue: pb.smsQueue,
             successfulSms: pb.successfulSms
-        }
-    }).catch(function() {
-        // Ignore errors if no listeners
-    })
+        })
+    }
 
     processSmsQueue()
 

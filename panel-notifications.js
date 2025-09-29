@@ -55,6 +55,15 @@ var clearNotification = function(options) {
     chrome.notifications.clear(options.key, function(wasCleared) {
         delete pb.notifier.active[options.key]
         pb.dispatchEvent('notifications_changed')
+
+        // Send message to background script to ensure dismissal is synced
+        chrome.runtime.sendMessage({
+            action: 'dismissNotification',
+            key: options.key
+        }).catch(function() {
+            // Ignore errors if background script is not available
+        })
+
         if (options.onclose) {
             options.onclose()
         }
