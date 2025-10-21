@@ -375,8 +375,15 @@ var setUpInput = function() {
     }
 
     document.getElementById('sms-send-holder').onclick = function() {
+        console.log('SMS send holder clicked, input length:', smsInput.value.length);
         if (smsInput.value.length == 0) {
-            document.getElementById('file-input').click()
+            console.log('Triggering file input click for SMS');
+            var fileInput = document.getElementById('file-input');
+            if (fileInput) {
+                fileInput.click();
+            } else {
+                console.error('file-input element not found!');
+            }
         } else {
             sendClicked()
         }

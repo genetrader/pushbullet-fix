@@ -9,6 +9,13 @@ pb.pushFile = function(push) {
 
     pb.dispatchEvent('locals_changed')
 
+    // Broadcast to all tabs/windows
+    if (pb.broadcastStateUpdate) {
+        pb.broadcastStateUpdate('locals_changed', {
+            fileQueue: pb.fileQueue
+        })
+    }
+
     startUpload()
 }
 
@@ -18,6 +25,13 @@ pb.smsFile = function(sms) {
     pb.fileQueue.push(sms)
 
     pb.dispatchEvent('locals_changed')
+
+    // Broadcast to all tabs/windows
+    if (pb.broadcastStateUpdate) {
+        pb.broadcastStateUpdate('locals_changed', {
+            fileQueue: pb.fileQueue
+        })
+    }
 
     startUpload()
 }
@@ -57,6 +71,13 @@ var startUpload = function() {
 
             pb.dispatchEvent('locals_changed')
 
+            // Broadcast to all tabs/windows
+            if (pb.broadcastStateUpdate) {
+                pb.broadcastStateUpdate('locals_changed', {
+                    fileQueue: pb.fileQueue
+                })
+            }
+
             startUpload()
         }
 
@@ -71,6 +92,13 @@ var startUpload = function() {
 
             pb.sendSms(data)
 
+            // Broadcast to all tabs/windows
+            if (pb.broadcastStateUpdate) {
+                pb.broadcastStateUpdate('locals_changed', {
+                    fileQueue: pb.fileQueue
+                })
+            }
+
             startUpload()
         }
     } else {
@@ -82,6 +110,14 @@ var startUpload = function() {
             pb.failedPushes.push(data)
 
             pb.dispatchEvent('locals_changed')
+
+            // Broadcast to all tabs/windows
+            if (pb.broadcastStateUpdate) {
+                pb.broadcastStateUpdate('locals_changed', {
+                    fileQueue: pb.fileQueue,
+                    failedPushes: pb.failedPushes
+                })
+            }
 
             startUpload()
         }
@@ -97,6 +133,13 @@ var startUpload = function() {
             data.file_type = response.file_type
             data.file_url = response.file_url
             pb.sendPush(data)
+
+            // Broadcast to all tabs/windows
+            if (pb.broadcastStateUpdate) {
+                pb.broadcastStateUpdate('locals_changed', {
+                    fileQueue: pb.fileQueue
+                })
+            }
 
             startUpload()
         }
@@ -157,15 +200,24 @@ var uploadFile = function(data, onsuccess, onfail) {
                 xhr.open("POST", task.url, true)
 
                 var lastUpdate = Date.now()
-                xhr.upload.onprogress = function(e) {
-                    var percent = e.loaded / e.total
-                    var percentInRemainingTasks = tasks.length / response.piece_urls.length
-                    data.progress = (1 - percentInRemainingTasks) * percent + ((response.piece_urls.length - (tasks.length + 1)) / response.piece_urls.length)
 
-                    if (Date.now() - lastUpdate > 900) {
-                        pb.dispatchEvent('locals_changed')
-                        lastUpdate = Date.now()
+                // Check if xhr.upload exists (not available in service worker polyfill)
+                if (xhr.upload) {
+                    xhr.upload.onprogress = function(e) {
+                        var percent = e.loaded / e.total
+                        var percentInRemainingTasks = tasks.length / response.piece_urls.length
+                        data.progress = (1 - percentInRemainingTasks) * percent + ((response.piece_urls.length - (tasks.length + 1)) / response.piece_urls.length)
+
+                        if (Date.now() - lastUpdate > 900) {
+                            pb.dispatchEvent('locals_changed')
+                            lastUpdate = Date.now()
+                        }
                     }
+                } else {
+                    // Fallback: estimate progress without upload events
+                    pb.log('xhr.upload not available, using estimated progress')
+                    data.progress = ((response.piece_urls.length - (tasks.length + 1)) / response.piece_urls.length)
+                    pb.dispatchEvent('locals_changed')
                 }
 
                 xhr.onload = function () {

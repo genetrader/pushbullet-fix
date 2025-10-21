@@ -31,11 +31,52 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.data && request.data.fileData) {
             console.log('Reconstructing file from data');
             const fileData = request.data.fileData;
-            const blob = new Blob([fileData.data], { type: fileData.type });
-            blob.name = fileData.name;
-            request.data.file = blob;
-            delete request.data.fileData;
-            console.log('File reconstructed:', blob.name, blob.size);
+            console.log('Received fileData:', fileData.name, fileData.type, fileData.size);
+
+            // Convert base64 back to binary
+            let binaryData;
+            if (fileData.dataBase64) {
+                console.log('Converting from base64, length:', fileData.dataBase64.length);
+                const binaryString = atob(fileData.dataBase64);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                binaryData = bytes.buffer;
+                console.log('Converted to ArrayBuffer, byteLength:', binaryData.byteLength);
+            } else if (fileData.data) {
+                // Fallback for old ArrayBuffer format
+                console.log('Using ArrayBuffer format');
+                binaryData = fileData.data;
+            }
+
+            // Create a proper File object (not just a Blob)
+            // File constructor: new File(bits, name, options)
+            try {
+                const file = new File([binaryData], fileData.name, {
+                    type: fileData.type,
+                    lastModified: fileData.lastModified || Date.now()
+                });
+                request.data.file = file;
+                delete request.data.fileData;
+                console.log('File reconstructed:', file.name, file.type, file.size);
+            } catch (e) {
+                // Fallback for browsers that don't support File constructor
+                console.log('File constructor not supported, using Blob with metadata');
+                const blob = new Blob([binaryData], { type: fileData.type });
+                // Add properties that look like a File object
+                Object.defineProperty(blob, 'name', {
+                    value: fileData.name,
+                    writable: false
+                });
+                Object.defineProperty(blob, 'lastModified', {
+                    value: fileData.lastModified || Date.now(),
+                    writable: false
+                });
+                request.data.file = blob;
+                delete request.data.fileData;
+                console.log('Blob with file properties created:', blob.name, blob.size);
+            }
         }
 
         if (pb.sendPush) {
@@ -78,6 +119,34 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse({ success: true });
         return true;
     } else if (request.action === 'sendSms') {
+        // If the SMS contains file data, reconstruct the Blob
+        if (request.data && request.data.fileData) {
+            console.log('Reconstructing SMS file (Blob) from data');
+            const fileData = request.data.fileData;
+            console.log('Received SMS fileData:', fileData.type, fileData.size);
+
+            // Convert base64 back to binary
+            let binaryData;
+            if (fileData.dataBase64) {
+                console.log('Converting from base64, length:', fileData.dataBase64.length);
+                const binaryString = atob(fileData.dataBase64);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                binaryData = bytes.buffer;
+                console.log('Converted to ArrayBuffer, byteLength:', binaryData.byteLength);
+            } else if (fileData.data) {
+                // Fallback for old format
+                binaryData = fileData.data;
+            }
+
+            const blob = new Blob([binaryData], { type: fileData.type });
+            request.data.file = blob;
+            delete request.data.fileData;
+            console.log('SMS Blob reconstructed:', blob.type, blob.size);
+        }
+
         if (pb.sendSms) {
             var result = pb.sendSms(request.data);
             sendResponse({ success: true, result: result });

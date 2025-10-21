@@ -20,6 +20,14 @@ pb.sendPush = function(push) {
 
     pb.dispatchEvent('locals_changed')
 
+    // Broadcast to all tabs/windows that push queue has been updated
+    if (pb.broadcastStateUpdate) {
+        pb.broadcastStateUpdate('locals_changed', {
+            pushQueue: pb.pushQueue,
+            successfulPushes: pb.successfulPushes
+        })
+    }
+
     processPushQueue()
 }
 
@@ -31,6 +39,13 @@ pb.clearFailed = function(push) {
     })
 
     pb.dispatchEvent('locals_changed')
+
+    // Broadcast to all tabs/windows
+    if (pb.broadcastStateUpdate) {
+        pb.broadcastStateUpdate('locals_changed', {
+            failedPushes: pb.failedPushes
+        })
+    }
 }
 
 var processingPush = false
@@ -79,6 +94,16 @@ var processPushQueue = function() {
         }
 
         pb.dispatchEvent('locals_changed')
+
+        // Broadcast to all tabs/windows
+        if (pb.broadcastStateUpdate) {
+            pb.broadcastStateUpdate('locals_changed', {
+                pushQueue: pb.pushQueue,
+                successfulPushes: pb.successfulPushes,
+                failedPushes: pb.failedPushes,
+                local: { pushes: pb.local.pushes }
+            })
+        }
 
         processPushQueue()
     })

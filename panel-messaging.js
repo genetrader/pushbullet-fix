@@ -110,7 +110,15 @@ var setUpMessaging = function(tab) {
     })
 
     var fileInput = document.getElementById('file-input')
-    fileInput.addEventListener('change', function(e) {
+
+    // Remove old listener if exists
+    var oldListener = fileInput.onFileInputChange
+    if (oldListener) {
+        fileInput.removeEventListener('change', oldListener)
+    }
+
+    // Define the new listener
+    var fileInputChangeHandler = function(e) {
         console.log('File input changed, files:', e.target.files);
         console.log('Active messaging tab:', activeMessagingTab);
 
@@ -167,7 +175,11 @@ var setUpMessaging = function(tab) {
         }
 
         fileInput.value = null
-    }, false)
+    }
+
+    // Store reference and add listener
+    fileInput.onFileInputChange = fileInputChangeHandler
+    fileInput.addEventListener('change', fileInputChangeHandler, false)
 }
 
 var tearDownMessaging = function() {
@@ -261,6 +273,27 @@ var handleSmsFile = function(file) {
     var device = smsDeviceInput.target
     var thread = smsInput.thread
 
+    // Validation checks with user feedback
+    if (!device) {
+        alert('Please select a phone device first')
+        return
+    }
+
+    if (!thread) {
+        alert('Please select a conversation first')
+        return
+    }
+
+    if (!device.has_mms) {
+        alert('This device does not support MMS. Please enable MMS on your phone or select a different device.')
+        return
+    }
+
+    if (!file.type || file.type.indexOf('image/') !== 0) {
+        alert('Only image files are supported for MMS. Please select a JPG, PNG, or other image file.')
+        return
+    }
+
     var img = document.createElement("img")
     img.onload = function() {
         var canvas = document.createElement('canvas')
@@ -321,8 +354,10 @@ var handleSmsFile = function(file) {
         if (smsPromise && typeof smsPromise.then === 'function') {
             smsPromise.then(function() {
                 // Success
+                console.log('MMS image sent successfully')
             }).catch(function(error) {
                 console.error('Failed to send SMS with file:', error)
+                alert('Failed to send MMS image. Please try again.')
             })
         }
 
@@ -335,12 +370,18 @@ var handleSmsFile = function(file) {
         })
     }
 
+    img.onerror = function() {
+        alert('Failed to load the image. Please try a different file.')
+    }
+
     var reader = new FileReader()
     reader.onload = function(e) {
         img.src = e.target.result
     }
 
-    if (file.type && file.type.indexOf('image/') == 0 && device && device.has_mms && thread) {
-        reader.readAsDataURL(file)
+    reader.onerror = function() {
+        alert('Failed to read the file. Please try again.')
     }
+
+    reader.readAsDataURL(file)
 }

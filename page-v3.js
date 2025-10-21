@@ -98,28 +98,40 @@ window.pb = {
             console.log('Push contains file:', push.file.name, push.file.type, push.file.size);
 
             // For file uploads, we need to send the file data properly
+            // Use base64 encoding instead of ArrayBuffer for reliable transfer
             const reader = new FileReader();
             reader.onload = () => {
-                console.log('File read complete, sending to background');
+                console.log('File read complete as base64, length:', reader.result.length);
                 const fileData = {
                     name: push.file.name,
                     type: push.file.type,
                     size: push.file.size,
-                    data: reader.result
+                    lastModified: push.file.lastModified || Date.now(),
+                    dataBase64: reader.result.split(',')[1]  // Remove data URL prefix
                 };
-                const pushWithFile = { ...push, fileData: fileData };
-                delete pushWithFile.file;  // Remove the File object
+                console.log('FileData prepared:', fileData.name, fileData.type, fileData.size, 'base64 length:', fileData.dataBase64.length);
+
+                // Create new push object without the file
+                const pushWithFile = {};
+                for (let key in push) {
+                    if (key !== 'file') {
+                        pushWithFile[key] = push[key];
+                    }
+                }
+                pushWithFile.fileData = fileData;
 
                 this.sendMessage('sendPush', pushWithFile).then(response => {
                     console.log('sendPush response:', response);
                 }).catch(error => {
                     console.error('sendPush error:', error);
+                    alert('Failed to send file. Please try again.');
                 });
             };
             reader.onerror = (error) => {
                 console.error('FileReader error:', error);
+                alert('Failed to read file. Please try again.');
             };
-            reader.readAsArrayBuffer(push.file);
+            reader.readAsDataURL(push.file);
             return; // Return early for file pushes
         } else {
             console.log('Regular push (no file)');
@@ -151,7 +163,41 @@ window.pb = {
     },
 
     sendSms: function(data) {
-        return this.sendMessage('sendSms', data);
+        // If the SMS contains a file (Blob), we need to serialize it
+        if (data.file && data.file instanceof Blob) {
+            console.log('SMS contains file (Blob):', data.file.type, data.file.size);
+
+            const reader = new FileReader();
+            return new Promise((resolve, reject) => {
+                reader.onload = () => {
+                    console.log('SMS file read complete as base64, length:', reader.result.length);
+                    const fileData = {
+                        type: data.file.type,
+                        size: data.file.size,
+                        dataBase64: reader.result.split(',')[1]  // Remove data URL prefix
+                    };
+                    console.log('SMS FileData prepared:', fileData.type, fileData.size, 'base64 length:', fileData.dataBase64.length);
+
+                    // Create new SMS object without the file
+                    const smsWithFile = {};
+                    for (let key in data) {
+                        if (key !== 'file') {
+                            smsWithFile[key] = data[key];
+                        }
+                    }
+                    smsWithFile.fileData = fileData;
+
+                    this.sendMessage('sendSms', smsWithFile).then(resolve).catch(reject);
+                };
+                reader.onerror = (error) => {
+                    console.error('FileReader error for SMS:', error);
+                    reject(error);
+                };
+                reader.readAsDataURL(data.file);
+            });
+        } else {
+            return this.sendMessage('sendSms', data);
+        }
     },
 
     deletePush: function(iden) {
