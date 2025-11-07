@@ -355,8 +355,45 @@ window.pb = {
 
     e2e: {
         enabled: false,
-        encrypt: function(data) { return data; },
-        decrypt: function(data) { return data; }
+        key: null,
+
+        setPassword: function(password) {
+            // Send password to service worker
+            return pb.sendMessage('e2eSetPassword', { password: password }).then(response => {
+                if (response.success) {
+                    pb.e2e.enabled = response.enabled;
+                    pb.e2e.key = response.key;
+                    pb.dispatchEvent('devices_ready');
+                    pb.dispatchEvent('locals_changed');
+                }
+                return response;
+            }).catch(error => {
+                console.error('Failed to set e2e password:', error);
+                throw error;
+            });
+        },
+
+        init: function() {
+            // Get current e2e state from service worker
+            return pb.sendMessage('e2eGetState', {}).then(response => {
+                pb.e2e.enabled = response.enabled || false;
+                pb.e2e.key = response.key || null;
+                return response;
+            }).catch(error => {
+                console.error('Failed to get e2e state:', error);
+                pb.e2e.enabled = false;
+                pb.e2e.key = null;
+                throw error;
+            });
+        },
+
+        encrypt: function(data) {
+            return data;
+        },
+
+        decrypt: function(data) {
+            return data;
+        }
     },
 
     log: function(message) {
@@ -397,6 +434,9 @@ async function initializePb() {
             pb.smsQueue = response.smsQueue || [];
             pb.successfulSms = response.successfulSms || {};
         }
+
+        // Initialize e2e state (await it to ensure it's loaded before UI renders)
+        await pb.e2e.init();
     } catch (error) {
         console.error('Failed to initialize pb:', error);
     }

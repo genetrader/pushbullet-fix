@@ -289,31 +289,58 @@ var setUpNotificationDurationOption = function() {
 var setUpEndToEndOption = function() {
     var checkbox = document.getElementById('e2e-checkbox')
     var configuration = document.getElementById('e2e-configuration')
+    var input = document.getElementById('e2e-password')
+    var save = document.getElementById('e2e-save')
+    var clear = document.getElementById('e2e-clear')
 
-    checkbox.onclick = function() {
+    // Function to update UI with current e2e state
+    var updateE2EUI = function() {
+        console.log('updateE2EUI called, enabled:', pb.e2e.enabled, 'key:', pb.e2e.key ? 'present' : 'null')
+        checkbox.checked = pb.e2e.enabled
         if (checkbox.checked) {
             configuration.style.display = 'block'
         } else {
+            configuration.style.display = 'none'
+        }
+        input.value = pb.e2e.enabled && pb.e2e.key ? btoa(pb.e2e.key) : ''
+    }
+
+    checkbox.onclick = function() {
+        console.log('Checkbox clicked, checked:', checkbox.checked)
+        if (checkbox.checked) {
+            configuration.style.display = 'block'
+            // If enabling, focus on password input
+            setTimeout(function() { input.focus() }, 100)
+        } else {
+            // If disabling, clear the password
             clear.onclick()
             configuration.style.display = 'none'
         }
     }
 
-    checkbox.checked = pb.e2e.enabled
-    if (checkbox.checked) {
-        configuration.style.display = 'block'
-    } else {
-        configuration.style.display = 'none'
-    }
-
-    var input = document.getElementById('e2e-password')
-    var save = document.getElementById('e2e-save')
-    var clear = document.getElementById('e2e-clear')
-
-    input.value = pb.e2e.enabled ? btoa(pb.e2e.key) : ''
-
     save.onclick = function() {
-        pb.e2e.setPassword(input.value)
+        var password = input.value
+        if (!password && checkbox.checked) {
+            // If checkbox is checked but no password, user wants to enable e2e
+            alert('Please enter a password for encryption')
+            return
+        }
+
+        // Save button feedback
+        save.textContent = 'Saving...'
+        save.disabled = true
+
+        pb.e2e.setPassword(password).then(function() {
+            save.textContent = chrome.i18n.getMessage('save') || 'Save'
+            save.disabled = false
+            // Update UI to reflect new state
+            updateE2EUI()
+        }).catch(function(error) {
+            save.textContent = chrome.i18n.getMessage('save') || 'Save'
+            save.disabled = false
+            console.error('Failed to save password:', error)
+            alert('Failed to save password. Check console for details.')
+        })
     }
 
     clear.onclick = function() {
@@ -324,12 +351,21 @@ var setUpEndToEndOption = function() {
     input.onkeypress = function(e) {
         if (e.keyCode == 13) {
             pb.e2e.setPassword(input.value)
+            // Update UI after a short delay
+            setTimeout(updateE2EUI, 100)
         }
     }
 
     input.onfocus = function(e) {
         input.value = ''
     }
+
+    // Update UI with current e2e state (already initialized in page-v3.js)
+    updateE2EUI()
+
+    // Also listen for e2e state changes
+    pb.addEventListener('devices_ready', updateE2EUI)
+    pb.addEventListener('locals_changed', updateE2EUI)
 }
 
 var optionChanged = function(key, value) {

@@ -259,6 +259,26 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         }
         sendResponse({ success: true });
         return true;
+    } else if (request.action === 'e2eSetPassword') {
+        // Handle encryption password setting
+        if (pb.e2e && pb.e2e.setPassword) {
+            pb.e2e.setPassword(request.data.password);
+            sendResponse({ success: true, enabled: pb.e2e.enabled, key: pb.e2e.key });
+        } else {
+            sendResponse({ success: false, error: 'pb.e2e not available' });
+        }
+        return true;
+    } else if (request.action === 'e2eGetState') {
+        // Get current e2e state
+        if (pb.e2e) {
+            sendResponse({
+                enabled: pb.e2e.enabled,
+                key: pb.e2e.key
+            });
+        } else {
+            sendResponse({ enabled: false, key: null });
+        }
+        return true;
     }
 
     // Handle other specific requests as needed
