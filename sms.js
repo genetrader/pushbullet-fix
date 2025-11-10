@@ -248,9 +248,15 @@ pb.sendSms = function(data) {
         })
     }
 
+    // Create a promise that resolves when SMS is sent
+    var promise = new Promise(function(resolve, reject) {
+        sms._sendResolve = resolve
+        sms._sendReject = reject
+    })
+
     processSmsQueue()
 
-    return sms
+    return promise
 }
 
 pb.deleteText = function(iden) {
@@ -305,8 +311,16 @@ var processSmsQueue = function() {
         processingSms = false
 
         if (response) {
+            // Resolve the promise if it exists
+            if (sms._sendResolve) {
+                sms._sendResolve(response)
+            }
         } else {
             delete pb.successfulSms[sms.guid]
+            // Reject the promise if it exists
+            if (sms._sendReject) {
+                sms._sendReject(error || new Error('SMS send failed'))
+            }
         }
 
         pb.dispatchEvent('locals_changed')
