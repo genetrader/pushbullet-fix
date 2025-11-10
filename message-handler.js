@@ -17,7 +17,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             websocket: pb.websocket,
             notifier: pb.notifier || { active: {} },
             smsQueue: pb.smsQueue || [],
-            successfulSms: pb.successfulSms || {}
+            successfulSms: pb.successfulSms || {},
+            pushQueue: pb.pushQueue || [],
+            fileQueue: pb.fileQueue || [],
+            failedPushes: pb.failedPushes || [],
+            successfulPushes: pb.successfulPushes || {}
         });
         return true;
     } else if (request.action === 'track') {
