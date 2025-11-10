@@ -103,11 +103,25 @@ var startUpload = function() {
             data.file_url = response.file_url
             data.file_type = response.file_type
 
-            pb.sendSms(data)
+            // Send the SMS and wait for it to complete before resolving our promise
+            var smsResult = pb.sendSms(data)
 
-            // Resolve the promise if it exists
-            if (data._uploadResolve) {
-                data._uploadResolve(response)
+            // If pb.sendSms returns a promise, wait for it
+            if (smsResult && typeof smsResult.then === 'function') {
+                smsResult.then(function() {
+                    if (data._uploadResolve) {
+                        data._uploadResolve(response)
+                    }
+                }).catch(function(error) {
+                    if (data._uploadReject) {
+                        data._uploadReject(error)
+                    }
+                })
+            } else {
+                // No promise, resolve immediately
+                if (data._uploadResolve) {
+                    data._uploadResolve(response)
+                }
             }
 
             // Broadcast to all tabs/windows
