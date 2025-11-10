@@ -9,9 +9,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 smsChangedListener()
             }
         } else if (request.event === 'locals_changed') {
-            // Local state has changed, refresh if we're in SMS tab
+            // Local state has changed, refresh active tab
             if (activeMessagingTab === 'sms' && typeof smsLocalsChangedListener === 'function') {
                 smsLocalsChangedListener()
+            } else if (activeMessagingTab && typeof pushesLocalsChangedListener === 'function') {
+                // Update push tab (me, friends, following)
+                pushesLocalsChangedListener()
             }
         }
     }
