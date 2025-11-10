@@ -368,6 +368,13 @@ var handleSmsFile = function(file) {
 
                     pb.sendMessage('getState', {}).then(function(response) {
                         if (response) {
+                            // Debug: log what we got
+                            console.log('Refresh attempt ' + refreshAttempts + ':',
+                                'successfulSms keys:', Object.keys(response.successfulSms || {}).length,
+                                'smsQueue length:', (response.smsQueue || []).length,
+                                'texts count:', Object.keys(response.local.texts || {}).length
+                            )
+
                             // Update local queues
                             pb.successfulSms = response.successfulSms || {}
                             pb.smsQueue = response.smsQueue || []
