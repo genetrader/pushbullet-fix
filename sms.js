@@ -230,8 +230,7 @@ pb.sendSms = function(data) {
 
     if (data.file) {
         sms.file = data.file
-        pb.smsFile(sms)
-        return
+        return pb.smsFile(sms)  // Return the promise from pb.smsFile
     } else if (data.file_url) {
         sms.file_url = data.file_url
         sms.file_type = data.file_type

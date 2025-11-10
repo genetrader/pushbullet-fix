@@ -33,7 +33,15 @@ pb.smsFile = function(sms) {
         })
     }
 
+    // Create a promise that resolves when upload completes
+    var promise = new Promise(function(resolve, reject) {
+        sms._uploadResolve = resolve
+        sms._uploadReject = reject
+    })
+
     startUpload()
+
+    return promise
 }
 
 pb.cancelUpload = function(push) {
@@ -69,6 +77,11 @@ var startUpload = function() {
             uploading = false
             pb.fileQueue.shift()
 
+            // Reject the promise if it exists
+            if (data._uploadReject) {
+                data._uploadReject(new Error('MMS upload failed'))
+            }
+
             pb.dispatchEvent('locals_changed')
 
             // Broadcast to all tabs/windows
@@ -91,6 +104,11 @@ var startUpload = function() {
             data.file_type = response.file_type
 
             pb.sendSms(data)
+
+            // Resolve the promise if it exists
+            if (data._uploadResolve) {
+                data._uploadResolve(response)
+            }
 
             // Broadcast to all tabs/windows
             if (pb.broadcastStateUpdate) {
