@@ -379,7 +379,11 @@ var handleSmsFile = function(file) {
                             pb.successfulSms = response.successfulSms || {}
                             pb.smsQueue = response.smsQueue || []
                             pb.fileQueue = response.fileQueue || []
-                            pb.local = response.local || pb.local
+
+                            // Only update texts, don't replace entire pb.local
+                            if (response.local && response.local.texts) {
+                                pb.local.texts = response.local.texts
+                            }
 
                             // Trigger locals_changed event to update UI
                             pb.dispatchEvent('locals_changed')
