@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Pushbullet",
-    "version": "376",
+    "version": "377",
     "author": "Pushbullet",
     "default_locale": "en",
     "description": "Bringing together your devices, friends, and the things you care about.",

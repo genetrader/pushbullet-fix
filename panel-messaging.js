@@ -375,9 +375,10 @@ var handleSmsFile = function(file) {
                                 'texts count:', Object.keys(response.local.texts || {}).length
                             )
 
-                            // Update local queues
+                            // Update local queues (including fileQueue to remove completed uploads)
                             pb.successfulSms = response.successfulSms || {}
                             pb.smsQueue = response.smsQueue || []
+                            pb.fileQueue = response.fileQueue || []
                             pb.local = response.local || pb.local
 
                             // Trigger locals_changed event to update UI
