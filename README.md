@@ -6,7 +6,27 @@ REPORT ERRORS AND I WILL GET THEM FIXED.  PLEASE PROVIDE ALL CONSOLE ERROR CODE 
 
 IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A STAR AND I WILL START TO COMPILE MY DIRECTORY OF VIBE-CODED CHROME EXTENSIONS AND SHARE THEM!  I HAVE A BUNCH - THANKS.
 
-** UPDATE 10/21 - FILE UPLOAD IS WORKING.  MMS IMAGE AND FILE SEND IS WORKING.  NOTIFICATIONS ALL WORKING. **
+** UPDATE 11/10 - v378 - FILE UPLOAD IS WORKING.  MMS IMAGE AND FILE SEND IS WORKING.  NOTIFICATIONS ALL WORKING. **
+
+## ⚠️ CRITICAL: MMS REQUIRES ENCRYPTION TO BE DISABLED ⚠️
+
+**IMPORTANT CAVEAT:** MMS (multimedia messages with images) **WILL NOT WORK** if end-to-end encryption is enabled in settings.
+
+### **Why MMS Doesn't Work With Encryption:**
+- The Pushbullet server automatically **deletes MMS messages** when encryption is active
+- This is a **server-side limitation**, not a bug in the extension
+- Regular SMS text messages work fine with encryption
+- Only MMS (image/multimedia messages) are affected
+
+### **To Use MMS:**
+1. Open Pushbullet Settings
+2. **Disable End-to-End Encryption**
+3. Send MMS images normally
+4. ⚠️ Re-enabling encryption will break MMS again
+
+**You must choose:** MMS functionality (encryption OFF) OR End-to-end encryption (no MMS)
+
+---
 
 ## Background
 
@@ -61,8 +81,17 @@ cd pushbullet-chrome-v3
 
 ## Known Issues
 
+### ⚠️ MMS + Encryption Incompatibility (CRITICAL)
+- **MMS messages WILL NOT WORK if end-to-end encryption is enabled**
+- The server deletes MMS messages when encryption is active
+- You must disable encryption in Settings to use MMS
+- This is a server-side limitation, not an extension bug
+- Regular SMS works fine with encryption - only MMS is affected
+
+### Other Issues
 - Initial load may take a moment as the service worker initializes
 - Some features may require re-authentication after browser restart
+- Old MMS images from Backblaze may show 404 errors (handled gracefully)
 
 ## Contributing
 
