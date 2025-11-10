@@ -356,8 +356,11 @@ var handleSmsFile = function(file) {
         // Handle promise if it exists (Manifest V3)
         if (smsPromise && typeof smsPromise.then === 'function') {
             smsPromise.then(function() {
-                // Success
+                // Success - refresh SMS UI to clear pending state
                 console.log('MMS image sent successfully')
+                if (typeof smsLocalsChangedListener === 'function') {
+                    smsLocalsChangedListener()
+                }
             }).catch(function(error) {
                 console.error('Failed to send SMS with file:', error)
                 alert('Failed to send MMS image. Please try again.')
