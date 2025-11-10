@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test E2E Storage</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        pre { background: #f0f0f0; padding: 10px; border-radius: 5px; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Pushbullet E2E Encryption Test</h2>
+    
+    <button onclick="checkStorage()">Check if Password is Saved</button>
+    <button onclick="clearStorage()">Clear Password (Test)</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function checkStorage() {
+            const result = document.getElementById('result');
+            
+            try {
+                const data = await chrome.storage.local.get(['e2eKey']);
+                
+                if (data.e2eKey) {
+                    result.innerHTML = `
+                        <div class="success">✅ ENCRYPTION PASSWORD IS SAVED!</div>
+                        <p><strong>Encrypted Key:</strong></p>
+                        <pre>${data.e2eKey.substring(0, 50)}... (truncated for security)</pre>
+                        <p><strong>Key Length:</strong> ${data.e2eKey.length} characters</p>
+                        <p>This confirms the password has been successfully stored and encrypted.</p>
+                    `;
+                } else {
+                    result.innerHTML = `
+                        <div class="error">❌ NO ENCRYPTION PASSWORD FOUND</div>
+                        <p>The password was not saved. Please try setting it again in the extension options.</p>
+                    `;
+                }
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="error">❌ ERROR: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function clearStorage() {
+            if (confirm('This will clear the encryption password. Continue?')) {
+                await chrome.storage.local.remove('e2eKey');
+                document.getElementById('result').innerHTML = `
+                    <div>Password cleared. Click "Check if Password is Saved" to verify.</div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

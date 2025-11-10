@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Notification Settings</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .test { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        pre { background: #fff; padding: 10px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h2>Pushbullet Notification Settings Test</h2>
+    
+    <div class="test">
+        <h3>Test 1: Check Settings</h3>
+        <button onclick="checkSettings()">Check Notification Settings</button>
+        <div id="settings-result"></div>
+    </div>
+
+    <div class="test">
+        <h3>Test 2: Check Active Notifications</h3>
+        <button onclick="checkActiveNotifications()">Check Active Notifications</button>
+        <div id="notifications-result"></div>
+    </div>
+
+    <div class="test">
+        <h3>Test 3: Force Sync</h3>
+        <button onclick="forceSync()">Force Sync</button>
+        <div id="sync-result"></div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="page-v3.js"></script>
+    <script>
+        async function checkSettings() {
+            const result = document.getElementById('settings-result');
+            
+            try {
+                const state = await pb.sendMessage('getState', {});
+                
+                result.innerHTML = `
+                    <h4>Settings:</h4>
+                    <pre>${JSON.stringify({
+                        showMirrors: state.settings.showMirrors,
+                        playSound: state.settings.playSound,
+                        onlyShowTitles: state.settings.onlyShowTitles,
+                        showNotificationCount: state.settings.showNotificationCount
+                    }, null, 2)}</pre>
+                    ${state.settings.showMirrors ? 
+                        '<div class="success">✅ Notifications are ENABLED</div>' : 
+                        '<div class="error">❌ Notifications are DISABLED</div>'}
+                `;
+            } catch (error) {
+                result.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        async function checkActiveNotifications() {
+            const result = document.getElementById('notifications-result');
+            
+            try {
+                const state = await pb.sendMessage('getState', {});
+                const active = state.notifier.active || {};
+                const count = Object.keys(active).length;
+                
+                result.innerHTML = `
+                    <h4>Active Notifications: ${count}</h4>
+                    <pre>${JSON.stringify(active, null, 2)}</pre>
+                `;
+            } catch (error) {
+                result.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        async function forceSync() {
+            const result = document.getElementById('sync-result');
+            result.innerHTML = '<div>Syncing... check background console for logs</div>';
+            
+            try {
+                // This will trigger a sync in the background
+                await pb.sendMessage('apiPost', {
+                    url: 'https://api.pushbullet.com/v2/sync',
+                    data: {}
+                });
+                
+                result.innerHTML = '<div class="success">Sync initiated. Check background console.</div>';
+            } catch (error) {
+                result.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Auto-check on load
+        window.addEventListener('DOMContentLoaded', async () => {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            checkSettings();
+        });
+    </script>
+</body>
+</html>

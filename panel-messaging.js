@@ -356,11 +356,16 @@ var handleSmsFile = function(file) {
         // Handle promise if it exists (Manifest V3)
         if (smsPromise && typeof smsPromise.then === 'function') {
             smsPromise.then(function() {
-                // Success - force refresh by reloading state from service worker
+                // Success - wait for server to sync before refreshing UI
                 console.log('MMS image sent successfully')
 
-                // Wait a moment for service worker to sync, then refresh UI
-                setTimeout(function() {
+                // Wait longer for server sync (2-3 seconds), then refresh multiple times
+                var refreshAttempts = 0
+                var maxAttempts = 5
+
+                var attemptRefresh = function() {
+                    refreshAttempts++
+
                     pb.sendMessage('getState', {}).then(function(response) {
                         if (response) {
                             // Update local queues
@@ -370,12 +375,20 @@ var handleSmsFile = function(file) {
 
                             // Trigger locals_changed event to update UI
                             pb.dispatchEvent('locals_changed')
-                            console.log('SMS UI refresh triggered')
+                            console.log('SMS UI refresh triggered (attempt ' + refreshAttempts + ')')
+
+                            // Keep refreshing for a few seconds to catch the sync
+                            if (refreshAttempts < maxAttempts) {
+                                setTimeout(attemptRefresh, 1000)
+                            }
                         }
                     }).catch(function(error) {
                         console.error('Failed to refresh SMS state:', error)
                     })
-                }, 500)
+                }
+
+                // Start refreshing after 1 second, then every second for 5 seconds
+                setTimeout(attemptRefresh, 1000)
             }).catch(function(error) {
                 console.error('Failed to send SMS with file:', error)
                 alert('Failed to send MMS image. Please try again.')
