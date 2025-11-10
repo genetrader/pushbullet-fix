@@ -356,11 +356,26 @@ var handleSmsFile = function(file) {
         // Handle promise if it exists (Manifest V3)
         if (smsPromise && typeof smsPromise.then === 'function') {
             smsPromise.then(function() {
-                // Success - refresh SMS UI to clear pending state
+                // Success - force refresh by reloading state from service worker
                 console.log('MMS image sent successfully')
-                if (typeof smsLocalsChangedListener === 'function') {
-                    smsLocalsChangedListener()
-                }
+
+                // Wait a moment for service worker to sync, then refresh UI
+                setTimeout(function() {
+                    pb.sendMessage('getState', {}).then(function(response) {
+                        if (response) {
+                            // Update local queues
+                            pb.successfulSms = response.successfulSms || {}
+                            pb.smsQueue = response.smsQueue || []
+                            pb.local = response.local || pb.local
+
+                            // Trigger locals_changed event to update UI
+                            pb.dispatchEvent('locals_changed')
+                            console.log('SMS UI refresh triggered')
+                        }
+                    }).catch(function(error) {
+                        console.error('Failed to refresh SMS state:', error)
+                    })
+                }, 500)
             }).catch(function(error) {
                 console.error('Failed to send SMS with file:', error)
                 alert('Failed to send MMS image. Please try again.')
