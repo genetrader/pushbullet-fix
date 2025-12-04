@@ -1,12 +1,38 @@
 # Pushbullet Chrome Extension UNOFFICIAL (Manifest V3)
 
 A community-maintained version of the Pushbullet Chrome extension updated to work with Manifest V3.  This extension REQUIRES you have an account already with Pushbullet.com and I am NOT affiliated with them and you can sign up when you open the extension.
-co_speechnotes_plugin_fab_id:1974,113
-REPORT ERRORS AND I WILL GET THEM FIXED.  PLEASE PROVIDE ALL CONSOLE ERROR CODE WHEN YOU REPORT.
+
+**REPORT ERRORS AND I WILL GET THEM FIXED.  PLEASE PROVIDE ALL CONSOLE ERROR CODE WHEN YOU REPORT.**
 
 IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A STAR AND I WILL START TO COMPILE MY DIRECTORY OF VIBE-CODED CHROME EXTENSIONS AND SHARE THEM!  I HAVE A BUNCH - THANKS.
 
-** UPDATE 11/10 - v378 - FILE UPLOAD IS WORKING.  MMS IMAGE AND FILE SEND IS WORKING.  NOTIFICATIONS ALL WORKING. **
+---
+
+## 🎉 LATEST UPDATE - v379 (December 2025)
+
+### Major Manifest V3 Fixes and Improvements
+- ✅ **Settings now persist** after browser restart (dark mode, auto-open, etc.)
+- ✅ **Notification sounds working** in Manifest V3 (Offscreen Documents API)
+- ✅ **Background notifications** work when browser is closed (Chrome Alarms API with 1-minute intervals)
+- ✅ **SMS notifications** reliable with 90-second fetch window
+- ✅ **Chat windows and SMS** now load properly (page-v3.js compatibility)
+- ✅ **Automatic update checker** - Get notified in settings when new version available
+
+---
+
+## 🔔 How You'll Get Updates
+
+**IMPORTANT:** This is a community fix and **CANNOT be uploaded to the Chrome Web Store** (it's a modified/unofficial version).
+
+### Automatic Update Notifications
+- The extension now includes an **automatic GitHub release checker**
+- Every 24 hours, it checks for new releases from this repository
+- When a new version is available, you'll see a **green notification banner** in the extension settings
+- Click the download link to get the latest version
+
+**This is the ONLY way you'll be notified of updates** - please check your settings page occasionally or watch this repository for releases!
+
+---
 
 ## ⚠️ CRITICAL: MMS REQUIRES ENCRYPTION TO BE DISABLED ⚠️
 
@@ -39,28 +65,38 @@ The original Pushbullet Chrome extension uses Manifest V2, which is no longer su
 - 📎 File sharing
 - 🔔 Notification mirroring
 - 🔒 End-to-end encryption support
+- 🔔 **Notification sounds** work in Manifest V3 (Offscreen Documents API)
+- ⏰ **Background notifications** when browser closed (Chrome Alarms API)
+- 🔄 **Automatic update checker** - get notified of new releases
+- 💾 **Persistent settings** - dark mode, auto-open, and other settings save properly
+- 📋 **Release notes** visible in settings page
+- 💬 **Support & feedback section** with issue reporting
 - ✨ All original Pushbullet features preserved
 
 ## Installation
 
-### Method 1: Load Unpacked (Developer Mode)
+### Recommended: Download Latest Release
 
-1. Download or clone this repository
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" in the top right corner
-4. Click "Load unpacked"
-5. Select the directory containing this extension
-6. Sign in to your Pushbullet account when prompted
+1. Go to the [Releases page](https://github.com/genetrader/pushbullet-fix/releases)
+2. Download the latest `pushbullet-v###-final.zip` file
+3. Extract the zip file to a permanent location on your computer
+4. Open Chrome and navigate to `chrome://extensions/`
+5. Enable "Developer mode" in the top right corner
+6. Click "Load unpacked"
+7. Select the extracted folder
+8. Sign in to your Pushbullet account when prompted
 
-### Method 2: Build from Source
+### Alternative: Clone from Source
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/pushbullet-chrome-v3.git
-cd pushbullet-chrome-v3
+git clone https://github.com/genetrader/pushbullet-fix.git
+cd pushbullet-fix
 
 # No build process required - load directly in Chrome
 ```
+
+**Important:** Keep the extension folder in a permanent location. If you delete it, the extension will stop working.
 
 ## Differences from Original
 
@@ -78,6 +114,10 @@ cd pushbullet-chrome-v3
 - `page-v3.js` - Updated page script for UI communication
 - `context-menu-v3.js` - Updated context menu implementation
 - `message-handler.js` - Message passing handler
+- `offscreen-manager.js` - Manages offscreen document for audio playback (v379)
+- `offscreen.html` / `offscreen.js` - Audio playback in MV3 service workers (v379)
+- `service-worker-keepalive.js` - Chrome Alarms API keepalive system (v379)
+- `update-checker.js` - GitHub release monitoring and notifications (v379)
 
 ## Known Issues
 
@@ -88,10 +128,17 @@ cd pushbullet-chrome-v3
 - This is a server-side limitation, not an extension bug
 - Regular SMS works fine with encryption - only MMS is affected
 
-### Other Issues
+### Other Notes
 - Initial load may take a moment as the service worker initializes
-- Some features may require re-authentication after browser restart
 - Old MMS images from Backblaze may show 404 errors (handled gracefully)
+- Background notifications have up to 1-minute delay when browser is closed (Chrome Alarms API limitation)
+
+### Fixed in v379
+- ✅ Settings now persist after browser restart
+- ✅ Notification sounds work properly
+- ✅ Background notifications work when browser closed
+- ✅ SMS notifications appear reliably
+- ✅ Chat windows and SMS load correctly
 
 ## Contributing
 
