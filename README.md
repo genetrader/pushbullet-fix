@@ -30,6 +30,8 @@ IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A 
 - When a new version is available, you'll see a **green notification banner** in the extension settings
 - Click the download link to get the latest version
 
+![Update Notification Banner](update-notification-screenshot.png)
+
 **This is the ONLY way you'll be notified of updates** - please check your settings page occasionally or watch this repository for releases!
 
 ---
