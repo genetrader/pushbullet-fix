@@ -117,7 +117,7 @@
         "message": "Keep Pushbullet running when my browser is closed"
     },
     "option_background_permission_desc": {
-        "message": "This will enable you to see your notifications without having to keep a browser window open."
+        "message": "Always enabled in Manifest V3 - notifications work even when browser is closed."
     },
      "option_tabs_permission": {
         "message": "Avoid opening multiple tabs for the same website when clicking notifications."

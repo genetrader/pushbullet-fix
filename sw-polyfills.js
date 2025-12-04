@@ -279,7 +279,8 @@ const localStorage = new Proxy({}, {
 });
 
 // Initialize localStorage cache on service worker start
-localStoragePolyfill._init();
+// Export a promise that resolves when initialization is complete
+self.localStorageReady = localStoragePolyfill._init();
 
 // Make them globally available
 self.XMLHttpRequest = XMLHttpRequest;

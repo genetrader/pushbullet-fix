@@ -68,6 +68,8 @@ window.init = function() {
     }
 
     setUpOptions()
+    setUpUpdateChecker()
+    setUpSupportLinks()
 
     pb.track({
         'name': 'goto',
@@ -127,28 +129,14 @@ var setUpDarkModeOption = function() {
 }
 
 var setUpBackgroundPermission = function() {
+    // In Manifest V3, background running is built-in via service workers
+    // The 'background' permission no longer exists - service workers automatically
+    // run in the background when needed. The keepalive mechanism in background.js
+    // ensures the service worker stays active.
+    // The checkbox is now shown as always enabled with an explanatory message.
     var backgroundPermissionCheckbox = document.getElementById('background-permission-checkbox')
-
-    var hasPermission, permission = { 'permissions': ['background'] }
-
-    var onPermissionUpdate = function(granted) {
-        hasPermission = !!granted
-        backgroundPermissionCheckbox.checked = hasPermission
-    }
-
-    chrome.permissions.contains(permission, onPermissionUpdate)
-
-    backgroundPermissionCheckbox.addEventListener('click', function(event) {
-        if (hasPermission) {
-            chrome.permissions.remove(permission,
-                function(removed) {
-                    onPermissionUpdate(!removed)
-                }
-            )
-        } else {
-            chrome.permissions.request(permission, onPermissionUpdate)
-        }
-    })
+    backgroundPermissionCheckbox.checked = true
+    backgroundPermissionCheckbox.disabled = true
 }
 
 var setUpTabsPermission = function() {
@@ -405,4 +393,54 @@ var showProPrompt = function() {
 
 var hideProPrompt = function() {
     document.getElementById('overlay').style.display = 'none'
+}
+
+var setUpUpdateChecker = function() {
+    // Check if there's a stored update
+    var latestVersionStr = localStorage.latestVersion
+    if (!latestVersionStr) {
+        return
+    }
+
+    try {
+        var updateInfo = JSON.parse(latestVersionStr)
+        var currentVersion = parseInt(pb.version) || 0
+        var latestVersion = parseInt(updateInfo.version.replace(/^v/, '')) || 0
+
+        // Check if update is dismissed
+        if (localStorage['dismissedUpdate_' + updateInfo.version] === 'true') {
+            return
+        }
+
+        if (latestVersion > currentVersion) {
+            // Show update banner
+            var banner = document.getElementById('update-banner')
+            var message = document.getElementById('update-message')
+            var downloadLink = document.getElementById('update-download-link')
+            var dismissBtn = document.getElementById('update-dismiss')
+
+            message.textContent = ' Version ' + updateInfo.version + ' is now available.'
+            downloadLink.href = updateInfo.url
+            banner.style.display = 'block'
+
+            dismissBtn.onclick = function() {
+                localStorage['dismissedUpdate_' + updateInfo.version] = 'true'
+                banner.style.display = 'none'
+            }
+        }
+    } catch (e) {
+        console.error('Error parsing update info:', e)
+    }
+}
+
+var setUpSupportLinks = function() {
+    // Set up donation/support link
+    // You can customize this URL to your preferred donation platform
+    var supportLink = document.getElementById('support-link')
+
+    // Default to GitHub Sponsors page for the repo owner
+    // You can change this to PayPal, Ko-fi, Buy Me a Coffee, etc.
+    var donationUrl = localStorage.donationUrl || 'https://github.com/sponsors/genetrader'
+
+    supportLink.href = donationUrl
 }

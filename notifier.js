@@ -151,7 +151,12 @@ var notify = function(options) {
         var notificationCreated = function() {
             pb.notifier.active[options.key] = options
             if (pb.settings.playSound) {
-                pb.alertSound.play()
+                // Use offscreen document for audio in Manifest V3
+                if (pb.offscreen && pb.offscreen.playSound) {
+                    pb.offscreen.playSound()
+                } else if (pb.alertSound && pb.alertSound.play) {
+                    pb.alertSound.play()
+                }
             }
         }
 

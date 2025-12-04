@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Pushbullet",
-    "version": "378",
+    "version": "379",
     "author": "Pushbullet",
     "default_locale": "en",
     "description": "Bringing together your devices, friends, and the things you care about.",
@@ -14,11 +14,13 @@
     "minimum_chrome_version": "88",
     "permissions": [
         "activeTab",
+        "alarms",
         "contextMenus",
         "cookies",
         "notifications",
         "idle",
-        "storage"
+        "storage",
+        "offscreen"
     ],
     "host_permissions": [
         "https://*.pushbullet.com/*",

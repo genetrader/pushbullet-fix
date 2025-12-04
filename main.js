@@ -4,7 +4,10 @@ pb.addEventListener('signed_out', function(e) {
     main()
 })
 
-var main = function() {
+var main = async function() {
+    // Wait for localStorage to be fully initialized from chrome.storage
+    await self.localStorageReady;
+
     if (!localStorage.client_id) {
         localStorage.client_id = utils.guid()
     }

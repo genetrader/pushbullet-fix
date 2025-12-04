@@ -104,6 +104,19 @@
         </div>
         <div style="position:relative;height:100%;">
             <div class="inner" style="margin-bottom:100px;">
+                <!-- Update notification banner -->
+                <div id="update-banner" style="display:none;background-color:#4CAF50;color:white;padding:12px 15px;margin:10px 15px;border-radius:4px;position:relative;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="flex:1;">
+                            <strong id="update-title">Update Available!</strong>
+                            <span id="update-message"></span>
+                        </div>
+                        <div style="display:flex;gap:10px;align-items:center;">
+                            <a id="update-download-link" href="#" target="_blank" style="color:white;text-decoration:underline;font-weight:bold;">Download</a>
+                            <button id="update-dismiss" style="background:rgba(255,255,255,0.2);color:white;border:1px solid white;border-radius:3px;cursor:pointer;padding:4px 10px;font-size:12px;">Dismiss</button>
+                        </div>
+                    </div>
+                </div>
                 <div id="options">
                     <div id="category-general">
                         <p id="heading-general" class="section-heading"></p>
@@ -119,14 +132,14 @@
                             <div id="darkmode-desc" class="option-desc"></div>
                         </div>
                         <div class="option chrome windows">
-                            <label class="option-label">
-                                <div class="switch">
-                                    <input type="checkbox" id="background-permission-checkbox">
-                                    <span class="slider round"></span>
+                            <label class="option-label" style="opacity:0.6;cursor:default;">
+                                <div class="switch" style="pointer-events:none;">
+                                    <input type="checkbox" id="background-permission-checkbox" checked disabled>
+                                    <span class="slider round" style="opacity:0.5;"></span>
                                 </div>
-                                <span id="background-permission-label" class="option-title"></span>
+                                <span id="background-permission-label" class="option-title" style="color:#999;"></span>
                             </label>
-                            <div id="background-permission-desc" class="option-desc"></div>
+                            <div id="background-permission-desc" class="option-desc" style="color:#666;font-weight:bold;font-style:italic;"></div>
                         </div>
                         <div class="option">
                             <label class="option-label">
@@ -279,6 +292,84 @@
                         <div id="question1" class="option-label" style="padding-bottom:4px;"></div>
                         <div id="answer1"></div>
                     </div>
+                </div>
+                <div id="category-changelog" style="margin-top:24px;padding:15px;background-color:#e8f5e9;border-radius:4px;border:1px solid #4CAF50;">
+                    <p style="font-weight:bold;font-size:16px;margin-bottom:12px;color:#2E7D32;">📋 Release Notes</p>
+
+                    <div style="max-height:200px;overflow-y:auto;padding-right:10px;">
+                        <div style="margin-bottom:16px;">
+                            <p style="font-weight:bold;font-size:14px;color:#1B5E20;margin-bottom:8px;">Version 379 - December 2025</p>
+                            <ul style="margin:0;padding-left:20px;line-height:1.8;">
+                                <li><strong>Fixed:</strong> Settings not persisting after browser restart (dark mode, auto-open, etc.)</li>
+                                <li><strong>Fixed:</strong> Background permission toggle error</li>
+                                <li><strong>Fixed:</strong> Notification sounds now working in Manifest V3 (Offscreen Documents API)</li>
+                                <li><strong>Fixed:</strong> Chat windows and SMS not loading (page-v3.js compatibility)</li>
+                                <li><strong>Improved:</strong> Background notifications via Chrome Alarms API (1-minute delay when browser closed)</li>
+                                <li><strong>Improved:</strong> SMS notification handling with 90-second fetch window</li>
+                                <li><strong>Added:</strong> GitHub update checker - alerts when new version available</li>
+                                <li><strong>Added:</strong> Support & Feedback section with links to report issues</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-bottom:16px;">
+                            <p style="font-weight:bold;font-size:14px;color:#1B5E20;margin-bottom:8px;">Version 378</p>
+                            <ul style="margin:0;padding-left:20px;line-height:1.8;">
+                                <li>Add prominent MMS + encryption incompatibility warnings</li>
+                                <li>Fix thread disappearing during MMS send</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p style="font-weight:bold;font-size:14px;color:#1B5E20;margin-bottom:8px;">Version 377</p>
+                            <ul style="margin:0;padding-left:20px;line-height:1.8;">
+                                <li>Fix greyed out MMS preview</li>
+                                <li>Handle 404 errors gracefully</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="category-support" style="margin-top:24px;padding:15px;background-color:#f5f5f5;border-radius:4px;">
+                    <p style="font-weight:bold;font-size:14px;margin-bottom:12px;">Support & Feedback</p>
+                    <table style="width:100%;border-spacing:0;">
+                        <tr>
+                            <td style="width:25%;padding:8px;text-align:center;vertical-align:top;">
+                                <a href="https://github.com/genetrader/pushbullet-fix/issues" target="_blank" style="color:#4CAF50;text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                                    </svg>
+                                    Report an Issue
+                                </a>
+                                <div style="font-size:11px;color:#888;margin-top:4px;">Found a bug?</div>
+                            </td>
+                            <td style="width:25%;padding:8px;text-align:center;vertical-align:top;">
+                                <a href="https://github.com/genetrader/pushbullet-fix" target="_blank" style="color:#4CAF50;text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                                    </svg>
+                                    View on GitHub
+                                </a>
+                                <div style="font-size:11px;color:#888;margin-top:4px;">Check out the code</div>
+                            </td>
+                            <td style="width:25%;padding:8px;text-align:center;vertical-align:top;">
+                                <a id="support-link" href="#" target="_blank" style="color:#FF9800;text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
+                                    </svg>
+                                    Show Gene Some Love
+                                </a>
+                                <div style="font-size:11px;color:#888;margin-top:4px;font-style:italic;">Appreciated but not obligated!</div>
+                            </td>
+                            <td style="width:25%;padding:8px;text-align:center;vertical-align:top;">
+                                <a href="mailto:genetrader@gmail.com?subject=Code Work Request" target="_blank" style="color:#2196F3;text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                    </svg>
+                                    Hire Gene
+                                </a>
+                                <div style="font-size:11px;color:#888;margin-top:4px;font-style:italic;">Cheap and easy!</div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div id="overlay" style="display:none;">
