@@ -165,3 +165,11 @@ The original extension can be found on the [Chrome Web Store](https://chrome.goo
 ## License
 
 This project maintains the same license as the original Pushbullet extension. See LICENSE file for details.
+
+---
+
+## 📬 Note to Pushbullet Product Developer
+
+I've tried to reach out to you several times and would happily hand this code over to you or work with you to get this loaded for your product on Chrome. I am not looking to make money - just to help fix a tool I love and use and would help you too, if you want it.
+
+Feel free to contact me at genetrader@gmail.com if you'd like to collaborate or take over this work.
