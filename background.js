@@ -44,7 +44,18 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('activate', function(event) {
     console.log('Pushbullet service worker activated');
-    event.waitUntil(clients.claim());
+    event.waitUntil(
+        Promise.all([
+            clients.claim(),
+            (async () => {
+                // Initialize offscreen document for sound playback
+                if (pb.offscreen && pb.offscreen.setupDocument) {
+                    await pb.offscreen.setupDocument();
+                    pb.log('Offscreen document initialized on service worker activation');
+                }
+            })()
+        ])
+    );
 });
 
 // Keep service worker alive
