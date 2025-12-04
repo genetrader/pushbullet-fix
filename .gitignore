@@ -39,3 +39,6 @@ build/
 *.pem
 *.crx
 *.zip
+
+# Claude Code configuration
+.claude/
