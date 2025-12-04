@@ -34,6 +34,14 @@ IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A 
 
 **This is the ONLY way you'll be notified of updates** - please check your settings page occasionally or watch this repository for releases!
 
+### How to Update When Notified
+1. Download the new version zip file from the release page
+2. Extract the zip file contents
+3. Copy all extracted files and **overwrite** your existing extension folder (the one you're using with "Load unpacked")
+4. Go to `chrome://extensions/`
+5. Click the **refresh icon** on the Pushbullet extension card
+6. Your extension is now updated - settings and login are preserved!
+
 ---
 
 ## ⚠️ CRITICAL: MMS REQUIRES ENCRYPTION TO BE DISABLED ⚠️
