@@ -91,7 +91,7 @@ The original Pushbullet Chrome extension uses Manifest V2, which is no longer su
 ### Recommended: Download Latest Release
 
 1. Go to the [Releases page](https://github.com/genetrader/pushbullet-fix/releases)
-2. Download the latest `pushbullet-v###-final.zip` file
+2. Download the latest `pushbullet-fix-v###.zip` file
 3. Extract the zip file to a permanent location on your computer
 4. Open Chrome and navigate to `chrome://extensions/`
 5. Enable "Developer mode" in the top right corner
@@ -145,6 +145,18 @@ cd pushbullet-fix
 - Initial load may take a moment as the service worker initializes
 - Old MMS images from Backblaze may show 404 errors (handled gracefully)
 - Background notifications have up to 1-minute delay when browser is closed (Chrome Alarms API limitation)
+
+### Fixed in v381
+- GitHub update checks now have explicit manifest host permissions
+- Update banners now link directly to the uploaded extension zip
+- Startup and install-time update checks were added
+
+### Fixed in v380
+- MMS image sending works again from the Chrome extension
+- SMS image uploads preserve filenames for Pushbullet upload metadata
+- Service worker file reconstruction now produces File-like objects with name, size, type, and slice
+- Uploads now fail cleanly if a chunk upload returns an error
+- Test HTML files are excluded from the release zip
 
 ### Fixed in v379
 - ✅ Settings now persist after browser restart

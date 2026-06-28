@@ -420,7 +420,7 @@ var setUpUpdateChecker = function() {
             var dismissBtn = document.getElementById('update-dismiss')
 
             message.textContent = ' Version ' + updateInfo.version + ' is now available.'
-            downloadLink.href = updateInfo.url
+            downloadLink.href = updateInfo.downloadUrl || updateInfo.url
             banner.style.display = 'block'
 
             dismissBtn.onclick = function() {
