@@ -8,18 +8,23 @@ IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A 
 
 ---
 
-## 🎉 LATEST UPDATE - v380 (June 2026)
+## LATEST UPDATE - v382 (June 2026)
+
+### Settings Page and Version Sync Fix
+- Restored the in-extension settings page sections from the GitHub release description
+- Added v380 and v381 release notes inside the extension settings page
+- Synced the local unpacked workspace with the released extension version
 
 ### Major Manifest V3 Fixes and Improvements
-- ✅ **MMS image sending fixed** after Chrome message serialization broke file handoff
-- ✅ **SMS image uploads preserve filenames** so Pushbullet `/v3/start-upload` receives valid file metadata
-- ✅ **Upload failures now stop cleanly** instead of finishing broken chunks
-- ✅ **Settings now persist** after browser restart (dark mode, auto-open, etc.)
-- ✅ **Notification sounds working** in Manifest V3 (Offscreen Documents API)
-- ✅ **Background notifications** work when browser is closed (Chrome Alarms API with 1-minute intervals)
-- ✅ **SMS notifications** reliable with 90-second fetch window
-- ✅ **Chat windows and SMS** now load properly (page-v3.js compatibility)
-- ✅ **Automatic update checker** - Get notified in settings when new version available
+- MMS image sending fixed after Chrome message serialization broke file handoff
+- SMS image uploads preserve filenames so Pushbullet `/v3/start-upload` receives valid file metadata
+- Upload failures now stop cleanly instead of finishing broken chunks
+- Settings now persist after browser restart (dark mode, auto-open, etc.)
+- Notification sounds work in Manifest V3 (Offscreen Documents API)
+- Background notifications work when browser is closed (Chrome Alarms API with 1-minute intervals)
+- SMS notifications are reliable with a 90-second fetch window
+- Chat windows and SMS now load properly (page-v3.js compatibility)
+- Automatic update checker shows new versions in settings
 
 ---
 

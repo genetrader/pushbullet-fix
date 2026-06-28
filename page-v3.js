@@ -26,7 +26,7 @@ window.pb = {
     local: {},
     settings: {},
     browser: 'chrome',
-    version: parseInt(chrome.runtime.getManifest().version) || 380,
+    version: parseInt(chrome.runtime.getManifest().version) || 382,
 
     // Notifier object for notifications
     notifier: {
@@ -413,7 +413,7 @@ async function initializePb() {
             pb.local = response.local || {};
             pb.settings = response.settings || {};
             pb.browser = response.browser || 'chrome';
-            pb.version = response.version || 380;
+            pb.version = response.version || 382;
             pb.browserVersion = response.browserVersion;
             pb.userAgent = response.userAgent;
 
