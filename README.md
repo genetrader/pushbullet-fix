@@ -8,9 +8,12 @@ IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A 
 
 ---
 
-## 🎉 LATEST UPDATE - v379 (December 2025)
+## 🎉 LATEST UPDATE - v380 (June 2026)
 
 ### Major Manifest V3 Fixes and Improvements
+- ✅ **MMS image sending fixed** after Chrome message serialization broke file handoff
+- ✅ **SMS image uploads preserve filenames** so Pushbullet `/v3/start-upload` receives valid file metadata
+- ✅ **Upload failures now stop cleanly** instead of finishing broken chunks
 - ✅ **Settings now persist** after browser restart (dark mode, auto-open, etc.)
 - ✅ **Notification sounds working** in Manifest V3 (Offscreen Documents API)
 - ✅ **Background notifications** work when browser is closed (Chrome Alarms API with 1-minute intervals)

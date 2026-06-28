@@ -183,10 +183,22 @@ var startUpload = function() {
 }
 
 var uploadFile = function(data, onsuccess, onfail) {
+    if (!data.file || !data.file.name || !data.file.size || !data.file.slice) {
+        pb.log('Upload failed before start: invalid file object')
+        pb.log({
+            name: data.file && data.file.name,
+            type: data.file && data.file.type,
+            size: data.file && data.file.size,
+            hasSlice: !!(data.file && data.file.slice)
+        })
+        onfail()
+        return
+    }
+
     pb.post(pb.api + '/v3/start-upload', {
         'name': data.file.name,
         'size': data.file.size,
-        'suggested_type': data.file.type
+        'type': data.file.type
     }, function(response, error) {
         if (!response) {
             onfail(error)
@@ -254,6 +266,12 @@ var uploadFile = function(data, onsuccess, onfail) {
 
                 xhr.onload = function () {
                     delete xhrs[data]
+
+                    if (xhr.status < 200 || xhr.status >= 300) {
+                        pb.log('Upload chunk failed with status ' + xhr.status + ' ' + xhr.statusText)
+                        onfail()
+                        return
+                    }
 
                     var next = tasks.shift()
                     if (next) {

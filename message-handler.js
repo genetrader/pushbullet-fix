@@ -145,10 +145,28 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 binaryData = fileData.data;
             }
 
-            const blob = new Blob([binaryData], { type: fileData.type });
-            request.data.file = blob;
-            delete request.data.fileData;
-            console.log('SMS Blob reconstructed:', blob.type, blob.size);
+            try {
+                const file = new File([binaryData], fileData.name || 'file', {
+                    type: fileData.type,
+                    lastModified: fileData.lastModified || Date.now()
+                });
+                request.data.file = file;
+                delete request.data.fileData;
+                console.log('SMS File reconstructed:', file.name, file.type, file.size);
+            } catch (e) {
+                const blob = new Blob([binaryData], { type: fileData.type });
+                Object.defineProperty(blob, 'name', {
+                    value: fileData.name || 'file',
+                    writable: false
+                });
+                Object.defineProperty(blob, 'lastModified', {
+                    value: fileData.lastModified || Date.now(),
+                    writable: false
+                });
+                request.data.file = blob;
+                delete request.data.fileData;
+                console.log('SMS Blob with file properties reconstructed:', blob.name, blob.type, blob.size);
+            }
         }
 
         if (pb.sendSms) {

@@ -26,7 +26,7 @@ window.pb = {
     local: {},
     settings: {},
     browser: 'chrome',
-    version: 366,
+    version: parseInt(chrome.runtime.getManifest().version) || 380,
 
     // Notifier object for notifications
     notifier: {
@@ -171,12 +171,14 @@ window.pb = {
             return new Promise((resolve, reject) => {
                 reader.onload = () => {
                     console.log('SMS file read complete as base64, length:', reader.result.length);
+                    var fileName = data.file.name || data.file_name || 'image.' + ((data.file.type || 'image/png').split('/')[1] || 'png');
                     const fileData = {
+                        name: fileName,
                         type: data.file.type,
                         size: data.file.size,
                         dataBase64: reader.result.split(',')[1]  // Remove data URL prefix
                     };
-                    console.log('SMS FileData prepared:', fileData.type, fileData.size, 'base64 length:', fileData.dataBase64.length);
+                    console.log('SMS FileData prepared:', fileData.name, fileData.type, fileData.size, 'base64 length:', fileData.dataBase64.length);
 
                     // Create new SMS object without the file
                     const smsWithFile = {};
@@ -411,7 +413,7 @@ async function initializePb() {
             pb.local = response.local || {};
             pb.settings = response.settings || {};
             pb.browser = response.browser || 'chrome';
-            pb.version = response.version || 366;
+            pb.version = response.version || 380;
             pb.browserVersion = response.browserVersion;
             pb.userAgent = response.userAgent;
 
