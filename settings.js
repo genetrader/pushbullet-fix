@@ -16,7 +16,7 @@ pb.loadSettings = function() {
         'useDarkIcon': localStorage['useDarkIcon'] === 'true',
         'playSound': localStorage['playSound'] === 'true',
         'showMirrors': localStorage['showMirrors'] !== 'false',
-        'showContextMenu': localStorage['showContextMenu'] !== 'false',
+        'showContextMenu': true,
         'notificationDuration': parseInt(localStorage['notificationDuration']) || 0,
         'snoozedUntil': localStorage['snoozedUntil'] ? parseInt(localStorage['snoozedUntil']) || 0 : 0,
         'showNotificationCount': localStorage['showNotificationCount'] !== 'false',

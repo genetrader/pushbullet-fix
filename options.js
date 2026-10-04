@@ -11,8 +11,6 @@ var textMappings = {
     'background-permission-desc': 'option_background_permission_desc',
     'tabs-permission-label': 'option_tabs_permission',
     'tabs-permission-desc': 'option_tabs_permission_desc',
-    'hosts-permission-label': 'option_hosts_permission',
-    'hosts-permission-desc': 'option_hosts_permission_desc',
     'dark-icon-label': 'option_use_dark_icon',
     'dark-icon-desc': 'option_use_dark_icon_desc',
     'notification-count-label': 'option_show_notification_count',
@@ -28,8 +26,6 @@ var textMappings = {
     'titles-only-desc': 'option_only_show_titles_desc',
     'play-sound-label': 'option_play_sound',
     'play-sound-desc': 'option_play_sound_desc',
-    'context-menu-label': 'option_show_context_menu',
-    'context-menu-desc': 'option_show_context_menu_desc',
     'instant-push-label': 'option_allow_instant_push',
     'instant-push-desc': 'option_allow_instant_push_desc',
     'e2e-label': 'end_to_end_encryption_label',
@@ -95,7 +91,6 @@ var setUpOptions = function() {
     basicOption('show-notifications-checkbox', 'showMirrors')
     basicOption('titles-only-checkbox', 'onlyShowTitles')
     basicOption('play-sound-checkbox', 'playSound')
-    basicOption('context-menu-checkbox', 'showContextMenu')
 
     if (pb.browser == 'chrome') {
         setUpBackgroundPermission()
@@ -103,7 +98,6 @@ var setUpOptions = function() {
     }
 
     setUpTabsPermission()
-    setUpHostsPermission()
 
     // setUpNotificationDurationOption()
     setUpEndToEndOption()
@@ -152,31 +146,6 @@ var setUpTabsPermission = function() {
     chrome.permissions.contains(permission, onPermissionUpdate)
 
     tabsPermissionCheckbox.addEventListener('click', function(event) {
-        if (hasPermission) {
-            chrome.permissions.remove(permission,
-                function(removed) {
-                    onPermissionUpdate(!removed)
-                }
-            )
-        } else {
-            chrome.permissions.request(permission, onPermissionUpdate)
-        }
-    })
-}
-
-var setUpHostsPermission = function() {
-    var hostsPermissionCheckbox = document.getElementById('hosts-permission-checkbox')
-
-    var hasPermission, permission = { 'origins': ['http://*/*', 'https://*/*'] }
-
-    var onPermissionUpdate = function(granted) {
-        hasPermission = !!granted
-        hostsPermissionCheckbox.checked = hasPermission
-    }
-
-    chrome.permissions.contains(permission, onPermissionUpdate)
-
-    hostsPermissionCheckbox.addEventListener('click', function(event) {
         if (hasPermission) {
             chrome.permissions.remove(permission,
                 function(removed) {

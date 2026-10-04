@@ -29,9 +29,7 @@
         "https://*.pushbulletusercontent2.com/*",
         "https://api.github.com/*",
         "https://github.com/genetrader/pushbullet-fix/releases/*",
-        "http://localhost:20807/*"
-    ],
-    "optional_host_permissions": [
+        "http://localhost:20807/*",
         "https://*/*",
         "http://*/*"
     ],
@@ -73,9 +71,14 @@
             "description": "Pop out the push panel"
         }
     },
-    "web_accessible_resources": [{
-        "resources": ["*.png"],
-        "matches": ["<all_urls>"]
-    }]
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "*.png"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ]
 }
-
