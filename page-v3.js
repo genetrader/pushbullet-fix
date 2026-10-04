@@ -26,7 +26,7 @@ window.pb = {
     local: {},
     settings: {},
     browser: 'chrome',
-    version: parseInt(chrome.runtime.getManifest().version) || 382,
+    version: parseInt(chrome.runtime.getManifest().version) || 0,
 
     // Notifier object for notifications
     notifier: {
@@ -296,6 +296,10 @@ window.pb = {
         return this.sendMessage('updateContextMenu', {});
     },
 
+    checkForUpdates: function() {
+        return this.sendMessage('checkForUpdates', {});
+    },
+
     markDismissed: function(push) {
         return this.sendMessage('markDismissed', push);
     },
@@ -415,7 +419,7 @@ async function initializePb() {
             pb.local = response.local || {};
             pb.settings = response.settings || {};
             pb.browser = response.browser || 'chrome';
-            pb.version = response.version || 382;
+            pb.version = response.version || parseInt(chrome.runtime.getManifest().version) || 0;
             pb.browserVersion = response.browserVersion;
             pb.userAgent = response.userAgent;
 

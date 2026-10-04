@@ -2,6 +2,25 @@
 
 var pendingGroups = {}
 
+pb.notifier.registerDismissalHandler('push-group', function(dismissal) {
+    if (!pb.local.apiKey || !dismissal.pushIdens) {
+        return false
+    }
+
+    var pushes = pb.local.pushes || {}
+    dismissal.pushIdens.forEach(function(iden) {
+        var push = pushes[iden] || { iden: iden }
+        push.dismissed = true
+        delete push.awake_app_guids
+        pb.markDismissed(push)
+    })
+
+    if (pb.local.pushes) {
+        pb.savePushes()
+    }
+    return true
+})
+
 pb.addEventListener('signed_in', function() {
     pb.visibleGroups = {}
 
@@ -122,7 +141,11 @@ var updateNotifications = function(groups) {
 
         var options = {
             'key': key,
-            'buttons': []
+            'buttons': [],
+            'dismissal': {
+                'type': 'push-group',
+                'pushIdens': desired.map(function(push) { return push.iden })
+            }
         }
 
         if (visible && visible.length >= desired.length) {

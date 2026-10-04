@@ -109,7 +109,10 @@ var readContextMenuState = async function() {
     return {
         devices: devices || {},
         chats: chats || {},
-        snoozed: snoozedUntil > Date.now()
+        snoozed: snoozedUntil > Date.now(),
+        showContextMenu: pb.settings && typeof pb.settings.showContextMenu != 'undefined'
+            ? pb.settings.showContextMenu
+            : stored.showContextMenu !== 'false'
     }
 }
 
@@ -131,55 +134,56 @@ pb.updateContextMenu = async function() {
             var contexts = ['page', 'link', 'selection', 'image']
             var desiredItems = []
 
-            // The page context menu is core Pushbullet behavior and is always
-            // present. "All of my devices" does not require a device cache, so
-            // the menu still exists during a cold start or initial sync.
-            desiredItems.push({
-                id: CONTEXT_MENU_ALL,
-                title: chrome.i18n.getMessage('all_of_my_devices'),
-                contexts: contexts
-            })
-
-            var devices = utils.asArray(state.devices).sort(function(a, b) {
-                return (b.created || 0) - (a.created || 0)
-            })
-
-            devices.forEach(function(target) {
-                if (!target || !target.iden) {
-                    return
-                }
-
+            if (state.showContextMenu) {
+                // "All of my devices" does not require a device cache, so the
+                // menu can still exist during a cold start or initial sync.
                 desiredItems.push({
-                    id: CONTEXT_MENU_DEVICE_PREFIX + encodeMenuTarget(target.iden),
-                    title: utils.streamDisplayName(target),
+                    id: CONTEXT_MENU_ALL,
+                    title: chrome.i18n.getMessage('all_of_my_devices'),
                     contexts: contexts
                 })
-            })
 
-            var chats = utils.asArray(state.chats)
-            utils.alphabetizeChats(chats)
+                var devices = utils.asArray(state.devices).sort(function(a, b) {
+                    return (b.created || 0) - (a.created || 0)
+                })
 
-            var chatItems = []
-            chats.forEach(function(target) {
-                var email = target && target.with && (target.with.email_normalized || target.with.email)
-                if (!email) {
-                    return
+                devices.forEach(function(target) {
+                    if (!target || !target.iden) {
+                        return
+                    }
+
+                    desiredItems.push({
+                        id: CONTEXT_MENU_DEVICE_PREFIX + encodeMenuTarget(target.iden),
+                        title: utils.streamDisplayName(target),
+                        contexts: contexts
+                    })
+                })
+
+                var chats = utils.asArray(state.chats)
+                utils.alphabetizeChats(chats)
+
+                var chatItems = []
+                chats.forEach(function(target) {
+                    var email = target && target.with && (target.with.email_normalized || target.with.email)
+                    if (!email) {
+                        return
+                    }
+
+                    chatItems.push({
+                        id: CONTEXT_MENU_CHAT_PREFIX + encodeMenuTarget(email),
+                        title: utils.streamDisplayName(target),
+                        contexts: contexts
+                    })
+                })
+
+                if (chatItems.length > 0) {
+                    desiredItems.push({
+                        id: CONTEXT_MENU_SEPARATOR,
+                        type: 'separator',
+                        contexts: contexts
+                    })
+                    desiredItems = desiredItems.concat(chatItems)
                 }
-
-                chatItems.push({
-                    id: CONTEXT_MENU_CHAT_PREFIX + encodeMenuTarget(email),
-                    title: utils.streamDisplayName(target),
-                    contexts: contexts
-                })
-            })
-
-            if (chatItems.length > 0) {
-                desiredItems.push({
-                    id: CONTEXT_MENU_SEPARATOR,
-                    type: 'separator',
-                    contexts: contexts
-                })
-                desiredItems = desiredItems.concat(chatItems)
             }
 
             // Preserve the extension-icon snooze menu as separate action-menu
@@ -244,13 +248,11 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 
     if (menuId == CONTEXT_MENU_SNOOZE) {
         pb.snooze()
-        pb.updateContextMenu()
         return
     }
 
     if (menuId == CONTEXT_MENU_UNSNOOZE) {
         pb.unsnooze()
-        pb.updateContextMenu()
         return
     }
 
@@ -298,7 +300,7 @@ chrome.storage.onChanged.addListener(function(changes, areaName) {
         return
     }
 
-    if (changes.devices || changes.chats || changes.snoozedUntil) {
+    if (changes.devices || changes.chats || changes.snoozedUntil || changes.showContextMenu) {
         pb.updateContextMenu()
     }
 })

@@ -36,7 +36,7 @@ pb.updateChecker.checkForUpdates = async function() {
         const response = await fetch(pb.updateChecker.GITHUB_API);
         if (!response.ok) {
             pb.log('Failed to check for updates: ' + response.status);
-            return null;
+            return { success: false, error: 'GitHub returned HTTP ' + response.status };
         }
 
         const release = await response.json();
@@ -59,15 +59,27 @@ pb.updateChecker.checkForUpdates = async function() {
             localStorage.lastUpdateCheck = Date.now();
 
             pb.log('Update available: v' + latestVersion + ' (current: v' + currentVersion + ')');
-            return updateInfo;
+            return {
+                success: true,
+                updateAvailable: true,
+                currentVersion: currentVersion,
+                latestVersion: latestVersion,
+                updateInfo: updateInfo
+            };
         } else {
             pb.log('No updates available (current: v' + currentVersion + ')');
             localStorage.lastUpdateCheck = Date.now();
-            return null;
+            delete localStorage.latestVersion;
+            return {
+                success: true,
+                updateAvailable: false,
+                currentVersion: currentVersion,
+                latestVersion: latestVersion
+            };
         }
     } catch (e) {
         pb.log('Error checking for updates: ' + e.message);
-        return null;
+        return { success: false, error: e.message };
     }
 };
 

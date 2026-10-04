@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Pushbullet",
-    "version": "383",
+    "version": "384",
     "author": "Pushbullet",
     "default_locale": "en",
     "description": "Bringing together your devices, friends, and the things you care about.",
@@ -29,7 +29,9 @@
         "https://*.pushbulletusercontent2.com/*",
         "https://api.github.com/*",
         "https://github.com/genetrader/pushbullet-fix/releases/*",
-        "http://localhost:20807/*",
+        "http://localhost:20807/*"
+    ],
+    "optional_host_permissions": [
         "https://*/*",
         "http://*/*"
     ],

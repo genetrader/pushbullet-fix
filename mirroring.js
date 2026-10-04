@@ -2,6 +2,14 @@
 
 var pendingMirrors = {}
 
+pb.notifier.registerDismissalHandler('mirror', function(dismissal) {
+    if (!pb.local.apiKey || !dismissal.mirror) {
+        return false
+    }
+    dismissRemote(dismissal.mirror)
+    return true
+})
+
 pb.addEventListener('signed_in', function(e) {
     pb.addEventListener('stream_message', function(e) {
         var message = e.detail
@@ -51,6 +59,16 @@ var showMirror = function(mirror) {
     }
 
     options.key = notificationKey(mirror)
+    options.dismissal = {
+        type: 'mirror',
+        mirror: {
+            source_user_iden: mirror.source_user_iden,
+            package_name: mirror.package_name,
+            notification_id: mirror.notification_id,
+            notification_tag: mirror.notification_tag,
+            conversation_iden: mirror.conversation_iden
+        }
+    }
     options.iconUrl = 'data:image/jpeg;base64,' + mirror.icon
     options.title = mirror.application_name + ': ' + (mirror.title || '')
     options.message = mirror.body || ''

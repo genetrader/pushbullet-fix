@@ -1,10 +1,94 @@
 'use strict'
 
 pb.notifier = {
-    'active': {}
+    'active': {},
+    'dismissalHandlers': {},
+    'DISMISSAL_STATE_KEY': 'notificationDismissalStateV1'
 }
 
 var listenersSetUp
+var dismissalStateMutation = Promise.resolve()
+
+var readDismissalState = async function() {
+    var stored = await chrome.storage.local.get(pb.notifier.DISMISSAL_STATE_KEY)
+    var state = stored[pb.notifier.DISMISSAL_STATE_KEY]
+    if (typeof state == 'string') {
+        try {
+            state = JSON.parse(state)
+        } catch (e) {
+            state = {}
+        }
+    }
+    return state || {}
+}
+
+var mutateDismissalState = function(mutator) {
+    dismissalStateMutation = dismissalStateMutation.then(async function() {
+        var state = await readDismissalState()
+        mutator(state)
+        var update = {}
+        update[pb.notifier.DISMISSAL_STATE_KEY] = state
+        await chrome.storage.local.set(update)
+        return state
+    }).catch(function(error) {
+        pb.log('Unable to persist notification dismissal state: ' + error.message)
+        return {}
+    })
+    return dismissalStateMutation
+}
+
+pb.notifier.rememberDismissal = function(key, dismissal) {
+    if (!dismissal) {
+        return Promise.resolve()
+    }
+    return mutateDismissalState(function(state) {
+        state[key] = {
+            pending: false,
+            dismissal: dismissal
+        }
+    })
+}
+
+pb.notifier.forgetDismissal = function(key) {
+    return mutateDismissalState(function(state) {
+        delete state[key]
+    })
+}
+
+pb.notifier.queuePersistedDismissal = function(key) {
+    return mutateDismissalState(function(state) {
+        if (state[key]) {
+            state[key].pending = true
+        }
+    }).then(function() {
+        return pb.notifier.processPendingDismissals()
+    })
+}
+
+pb.notifier.registerDismissalHandler = function(type, handler) {
+    pb.notifier.dismissalHandlers[type] = handler
+    pb.notifier.processPendingDismissals()
+}
+
+pb.notifier.processPendingDismissals = function() {
+    return mutateDismissalState(function(state) {
+        Object.keys(state).forEach(function(key) {
+            var entry = state[key]
+            if (!entry || !entry.pending || !entry.dismissal) {
+                return
+            }
+
+            var handler = pb.notifier.dismissalHandlers[entry.dismissal.type]
+            if (handler && handler(entry.dismissal) !== false) {
+                delete state[key]
+            }
+        })
+    })
+}
+
+pb.addEventListener('signed_in', function() {
+    pb.notifier.processPendingDismissals()
+})
 
 try {
     pb.alertSound = new Audio('alert.ogg')
@@ -137,46 +221,52 @@ var notify = function(options) {
         })
     }
 
-    var moreWindow = moreWindows[options.key]
-    if (moreWindow) {
-        chrome.windows.remove(moreWindow)
-    }
+    var dismissalReady = options.dismissal
+        ? pb.notifier.rememberDismissal(options.key, options.dismissal)
+        : Promise.resolve()
 
-    var existing = pb.notifier.active[options.key]
+    dismissalReady.then(function() {
+        var moreWindow = moreWindows[options.key]
+        if (moreWindow) {
+            chrome.windows.remove(moreWindow)
+        }
 
-    if (existing && pb.browser != 'firefox' && ((Date.now() - existing.created < timeOnScreen(existing)) || options.collapse)) {
-        pb.notifier.active[options.key] = options
-        chrome.notifications.update(options.key, spec, function() { })
-    } else {
-        var notificationCreated = function() {
+        var existing = pb.notifier.active[options.key]
+
+        if (existing && pb.browser != 'firefox' && ((Date.now() - existing.created < timeOnScreen(existing)) || options.collapse)) {
             pb.notifier.active[options.key] = options
-            if (pb.settings.playSound) {
-                // Use offscreen document for audio in Manifest V3
-                if (pb.offscreen && pb.offscreen.playSound) {
-                    pb.offscreen.playSound()
-                } else if (pb.alertSound && pb.alertSound.play) {
-                    pb.alertSound.play()
+            chrome.notifications.update(options.key, spec, function() { })
+        } else {
+            var notificationCreated = function() {
+                pb.notifier.active[options.key] = options
+                if (pb.settings.playSound) {
+                    // Use offscreen document for audio in Manifest V3
+                    if (pb.offscreen && pb.offscreen.playSound) {
+                        pb.offscreen.playSound()
+                    } else if (pb.alertSound && pb.alertSound.play) {
+                        pb.alertSound.play()
+                    }
                 }
             }
-        }
 
-        var createNotification = function() {
-            chrome.notifications.create(options.key, spec, function() {
-                if (chrome.runtime.lastError) {
-                    pb.log(chrome.runtime.lastError)
-                }
-                notificationCreated()
+            var createNotification = function() {
+                chrome.notifications.create(options.key, spec, function() {
+                    if (chrome.runtime.lastError) {
+                        pb.log(chrome.runtime.lastError)
+                    }
+                    notificationCreated()
+                })
+            }
+
+            if (existing) {
+                existing.onclose = null
+            }
+
+            chrome.notifications.clear(options.key, function() {
+                createNotification()
             })
         }
-
-        if (existing) {
-            existing.onclose = null
-        }
-
-        chrome.notifications.clear(options.key, function() {
-            createNotification()
-        })
-    }
+    })
 }
 
 var timeOnScreen = function(options) {
@@ -184,6 +274,7 @@ var timeOnScreen = function(options) {
 }
 
 pb.notifier.dismiss = function(key) {
+    pb.notifier.forgetDismissal(key)
     chrome.notifications.clear(key, function(wasCleared) {
         pb.log('Dismissed ' + key)
         delete pb.notifier.active[key]
@@ -199,6 +290,22 @@ pb.notifier.dismiss = function(key) {
     if (moreWindow) {
         chrome.windows.remove(moreWindow)
     }
+}
+
+pb.notifier.dismissByUser = function(key) {
+    var notification = pb.notifier.active[key]
+    if (notification && notification.onclose) {
+        notification.onclose()
+        pb.notifier.forgetDismissal(key)
+    } else {
+        // This also handles mirrored Android notifications, whose dismissal is
+        // represented by serialized metadata instead of an onclose callback.
+        pb.notifier.queuePersistedDismissal(key)
+    }
+
+    delete pb.notifier.active[key]
+    chrome.notifications.clear(key, function() { })
+    pb.dispatchEvent('notifications_changed')
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,6 +330,7 @@ var setUpNotificationListeners = function() {
                 }
 
                 delete pb.notifier.active[key]
+                pb.notifier.forgetDismissal(key)
                 pb.dispatchEvent('notifications_changed')
             }
 
@@ -246,10 +354,17 @@ var setUpNotificationListeners = function() {
             if (notification && byUser) {
                 if (notification.onclose) {
                     notification.onclose()
+                    pb.notifier.forgetDismissal(key)
+                } else {
+                    pb.notifier.queuePersistedDismissal(key)
                 }
 
                 delete pb.notifier.active[key]
                 pb.dispatchEvent('notifications_changed')
+            } else if (byUser) {
+                // The browser can keep a notification visible after terminating
+                // the MV3 worker. Recover its serialized dismissal action.
+                pb.notifier.queuePersistedDismissal(key)
             }
         })
     })
@@ -271,6 +386,7 @@ var setUpNotificationListeners = function() {
                 }
 
                 delete pb.notifier.active[key]
+                pb.notifier.forgetDismissal(key)
                 pb.dispatchEvent('notifications_changed')
             }
 
@@ -279,6 +395,12 @@ var setUpNotificationListeners = function() {
         })
     })
 }
+
+// Register browser listeners on every service-worker start. Waiting until the
+// next notification is displayed misses closes for notifications that survived
+// a previous worker instance.
+setUpNotificationListeners()
+listenersSetUp = true
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////

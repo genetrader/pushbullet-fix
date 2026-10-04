@@ -8,7 +8,16 @@ IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A 
 
 ---
 
-## LATEST UPDATE - v383 (October 2026)
+## LATEST UPDATE - v384 (October 2026)
+
+### Manifest V3 Lifecycle and Updater Fixes
+- Settings now displays the installed manifest version and performs a fresh GitHub release check whenever it opens
+- The update banner reads its result directly from the service worker and remains visible until the user installs the release
+- Notification dismissal metadata is persisted so closes survive service-worker termination and restart
+- Mirrored Android notification closes now send the required remote dismissal instead of only hiding the Windows notification
+- Context-menu targets persist across worker restarts while optional website permissions and the context-menu preference remain user-controlled
+
+### Included from v383
 
 ### SMS Sync Recovery Fix
 - Fixed SMS conversations becoming permanently stale when Chrome's Manifest V3 service worker missed a WebSocket `sms_changed` event

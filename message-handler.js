@@ -258,6 +258,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (pb.updateContextMenu) pb.updateContextMenu();
         sendResponse({ success: true });
         return true;
+    } else if (request.action === 'checkForUpdates') {
+        if (pb.updateChecker && pb.updateChecker.checkForUpdates) {
+            pb.updateChecker.checkForUpdates().then(function(result) {
+                sendResponse(result);
+            }).catch(function(error) {
+                sendResponse({ success: false, error: error.message || String(error) });
+            });
+        } else {
+            sendResponse({ success: false, error: 'Update checker unavailable' });
+        }
+        return true;
     } else if (request.action === 'apiPost') {
         // Handle API POST requests that need authentication
         if (pb.post) {
@@ -278,8 +289,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         return true;
     } else if (request.action === 'dismissNotification') {
         // Handle notification dismissal from UI pages
-        if (pb.notifier && pb.notifier.dismiss) {
-            pb.notifier.dismiss(request.key);
+        if (pb.notifier && pb.notifier.dismissByUser) {
+            pb.notifier.dismissByUser(request.key);
         } else if (pb.notifier && pb.notifier.active) {
             // Fallback: directly remove from active notifications
             delete pb.notifier.active[request.key];

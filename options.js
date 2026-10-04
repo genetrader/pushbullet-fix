@@ -11,6 +11,8 @@ var textMappings = {
     'background-permission-desc': 'option_background_permission_desc',
     'tabs-permission-label': 'option_tabs_permission',
     'tabs-permission-desc': 'option_tabs_permission_desc',
+    'hosts-permission-label': 'option_hosts_permission',
+    'hosts-permission-desc': 'option_hosts_permission_desc',
     'dark-icon-label': 'option_use_dark_icon',
     'dark-icon-desc': 'option_use_dark_icon_desc',
     'notification-count-label': 'option_show_notification_count',
@@ -26,6 +28,8 @@ var textMappings = {
     'titles-only-desc': 'option_only_show_titles_desc',
     'play-sound-label': 'option_play_sound',
     'play-sound-desc': 'option_play_sound_desc',
+    'context-menu-label': 'option_show_context_menu',
+    'context-menu-desc': 'option_show_context_menu_desc',
     'instant-push-label': 'option_allow_instant_push',
     'instant-push-desc': 'option_allow_instant_push_desc',
     'e2e-label': 'end_to_end_encryption_label',
@@ -49,6 +53,7 @@ window.init = function() {
 
     document.getElementById('logo-link').href = pb.www
     document.getElementById('version').textContent = 'v' + pb.version
+    document.getElementById('installed-version').textContent = 'v' + pb.version
 
     if (pb.local && pb.local.user) {
         document.getElementById('account-holder').style.display = 'block'
@@ -91,6 +96,7 @@ var setUpOptions = function() {
     basicOption('show-notifications-checkbox', 'showMirrors')
     basicOption('titles-only-checkbox', 'onlyShowTitles')
     basicOption('play-sound-checkbox', 'playSound')
+    basicOption('context-menu-checkbox', 'showContextMenu')
 
     if (pb.browser == 'chrome') {
         setUpBackgroundPermission()
@@ -98,6 +104,7 @@ var setUpOptions = function() {
     }
 
     setUpTabsPermission()
+    setUpHostsPermission()
 
     // setUpNotificationDurationOption()
     setUpEndToEndOption()
@@ -364,42 +371,52 @@ var hideProPrompt = function() {
     document.getElementById('overlay').style.display = 'none'
 }
 
-var setUpUpdateChecker = function() {
-    // Check if there's a stored update
-    var latestVersionStr = localStorage.latestVersion
-    if (!latestVersionStr) {
-        return
-    }
+var setUpUpdateChecker = async function() {
+    var banner = document.getElementById('update-banner')
+    banner.style.display = 'none'
 
     try {
-        var updateInfo = JSON.parse(latestVersionStr)
-        var currentVersion = parseInt(pb.version) || 0
-        var latestVersion = parseInt(updateInfo.version.replace(/^v/, '')) || 0
-
-        // Check if update is dismissed
-        if (localStorage['dismissedUpdate_' + updateInfo.version] === 'true') {
+        // Always ask the service worker for a fresh result when Settings opens.
+        // The worker owns chrome.storage.local; extension-page localStorage is a
+        // separate store under Manifest V3 and cannot reliably carry this state.
+        var result = await pb.checkForUpdates()
+        if (!result || !result.success || !result.updateAvailable || !result.updateInfo) {
             return
         }
 
-        if (latestVersion > currentVersion) {
-            // Show update banner
-            var banner = document.getElementById('update-banner')
-            var message = document.getElementById('update-message')
-            var downloadLink = document.getElementById('update-download-link')
-            var dismissBtn = document.getElementById('update-dismiss')
+        var updateInfo = result.updateInfo
+        var message = document.getElementById('update-message')
+        var downloadLink = document.getElementById('update-download-link')
 
-            message.textContent = ' Version ' + updateInfo.version + ' is now available.'
-            downloadLink.href = updateInfo.downloadUrl || updateInfo.url
-            banner.style.display = 'block'
-
-            dismissBtn.onclick = function() {
-                localStorage['dismissedUpdate_' + updateInfo.version] = 'true'
-                banner.style.display = 'none'
-            }
-        }
+        message.textContent = ' Version ' + updateInfo.version + ' is now available.'
+        downloadLink.href = updateInfo.downloadUrl || updateInfo.url
+        banner.style.display = 'block'
     } catch (e) {
-        console.error('Error parsing update info:', e)
+        console.error('Error checking for updates:', e)
     }
+}
+
+var setUpHostsPermission = function() {
+    var hostsPermissionCheckbox = document.getElementById('hosts-permission-checkbox')
+
+    var hasPermission, permission = { 'origins': ['http://*/*', 'https://*/*'] }
+
+    var onPermissionUpdate = function(granted) {
+        hasPermission = !!granted
+        hostsPermissionCheckbox.checked = hasPermission
+    }
+
+    chrome.permissions.contains(permission, onPermissionUpdate)
+
+    hostsPermissionCheckbox.addEventListener('click', function() {
+        if (hasPermission) {
+            chrome.permissions.remove(permission, function(removed) {
+                onPermissionUpdate(!removed)
+            })
+        } else {
+            chrome.permissions.request(permission, onPermissionUpdate)
+        }
+    })
 }
 
 var setUpSupportLinks = function() {

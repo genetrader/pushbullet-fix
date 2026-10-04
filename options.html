@@ -113,7 +113,6 @@
                         </div>
                         <div style="display:flex;gap:10px;align-items:center;">
                             <a id="update-download-link" href="#" target="_blank" style="color:white;text-decoration:underline;font-weight:bold;">Download</a>
-                            <button id="update-dismiss" style="background:rgba(255,255,255,0.2);color:white;border:1px solid white;border-radius:3px;cursor:pointer;padding:4px 10px;font-size:12px;">Dismiss</button>
                         </div>
                     </div>
                 </div>
@@ -227,12 +226,32 @@
                         <div class="option">
                             <label class="option-label">
                                 <div class="switch">
+                                    <input type="checkbox" id="context-menu-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="context-menu-label" class="option-title"></span>
+                            </label>
+                            <div id="context-menu-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
                                     <input type="checkbox"  id="tabs-permission-checkbox">
                                     <span class="slider round"></span>
                                 </div>
                                 <span id="tabs-permission-label" class="option-title"></span>
                             </label>
                             <div id="tabs-permission-desc" class="option-desc"></div>
+                        </div>
+                        <div class="option">
+                            <label class="option-label">
+                                <div class="switch">
+                                    <input type="checkbox" id="hosts-permission-checkbox">
+                                    <span class="slider round"></span>
+                                </div>
+                                <span id="hosts-permission-label" class="option-title"></span>
+                            </label>
+                            <div id="hosts-permission-desc" class="option-desc"></div>
                         </div>
                         <div class="option chrome">
                             <label class="option-label">
@@ -275,8 +294,34 @@
                 </div>
                 <div id="category-changelog" style="margin-top:24px;padding:15px;background-color:#e8f5e9;border-radius:4px;border:1px solid #4CAF50;">
                     <p style="font-weight:bold;font-size:16px;margin-bottom:12px;color:#2E7D32;">📋 Release Notes</p>
+                    <p style="font-size:13px;color:#1B5E20;margin-bottom:12px;">Installed version: <strong id="installed-version"></strong></p>
 
                     <div style="max-height:200px;overflow-y:auto;padding-right:10px;">
+                        <div style="margin-bottom:16px;">
+                            <p style="font-weight:bold;font-size:14px;color:#1B5E20;margin-bottom:8px;">Version 384 - October 2026</p>
+                            <ul style="margin:0;padding-left:20px;line-height:1.8;">
+                                <li><strong>Fixed:</strong> Settings now performs a fresh update check and keeps the update banner visible until installation</li>
+                                <li><strong>Fixed:</strong> Installed version is shown from the extension manifest instead of stale release-note text</li>
+                                <li><strong>Fixed:</strong> Notification dismissals survive Manifest V3 service-worker restarts</li>
+                                <li><strong>Fixed:</strong> Context menus survive worker restarts while preserving user permission controls</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-bottom:16px;">
+                            <p style="font-weight:bold;font-size:14px;color:#1B5E20;margin-bottom:8px;">Version 383 - October 2026</p>
+                            <ul style="margin:0;padding-left:20px;line-height:1.8;">
+                                <li><strong>Fixed:</strong> SMS threads recover after a missed WebSocket change event</li>
+                                <li><strong>Improved:</strong> One-minute SMS state polling invalidates stale service-worker caches</li>
+                            </ul>
+                        </div>
+
+                        <div style="margin-bottom:16px;">
+                            <p style="font-weight:bold;font-size:14px;color:#1B5E20;margin-bottom:8px;">Version 382 - June 2026</p>
+                            <ul style="margin:0;padding-left:20px;line-height:1.8;">
+                                <li><strong>Fixed:</strong> Settings release notes and manifest version synchronization</li>
+                            </ul>
+                        </div>
+
                         <div style="margin-bottom:16px;">
                             <p style="font-weight:bold;font-size:14px;color:#1B5E20;margin-bottom:8px;">Version 381 - June 2026</p>
                             <ul style="margin:0;padding-left:20px;line-height:1.8;">
