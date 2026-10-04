@@ -243,7 +243,7 @@ var smsChangedListener = function(e) {
                     window.close()
                 }
             }
-        })
+        }, true)
     } else {
         updateThread()
     }
@@ -263,7 +263,7 @@ var updateThread = function() {
                 document.getElementById('input').messages = messages
                 localsChangedListener()
             }
-        })
+        }, true)
 
         var banner = document.getElementById('messaging-banner')
         while (banner.hasChildNodes()) {

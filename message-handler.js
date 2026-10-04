@@ -207,6 +207,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         return true;
     } else if (request.action === 'getThreads') {
         if (pb.getThreads && typeof pb.getThreads === 'function') {
+            if (request.data && request.data.forceRefresh && pb.threads) {
+                delete pb.threads[request.data.deviceIden];
+            }
             pb.getThreads(request.data.deviceIden, function(threads) {
                 sendResponse({ threads: threads || [] });
             });
@@ -217,6 +220,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         return true;
     } else if (request.action === 'getThread') {
         if (pb.getThread && typeof pb.getThread === 'function') {
+            if (request.data && request.data.forceRefresh && pb.thread) {
+                delete pb.thread[request.data.deviceIden + '_thread_' + request.data.threadId];
+            }
             pb.getThread(request.data.deviceIden, request.data.threadId, function(thread) {
                 sendResponse({ thread: thread || null });
             });

@@ -53,7 +53,7 @@ var setUpSmsMessaging = function() {
                     smsInput.messages = messages
                     smsLocalsChangedListener()
                 }
-            })
+            }, true)
 
             // Also refresh the thread list to catch any new conversations
             delete pb.threads[device.iden]
@@ -61,7 +61,7 @@ var setUpSmsMessaging = function() {
                 if (response && device == smsDeviceInput.target) {
                     setUpThreads(response.threads)
                 }
-            })
+            }, true)
         }
     }, 10 * 1000) // Check every 10 seconds for updates
 }
@@ -199,14 +199,14 @@ var smsChangedListener = function() {
                                         smsInput.thread = updatedThread
                                         smsLocalsChangedListener()
                                     }
-                                })
+                                }, true)
                             }
                         }
                     } else {
                         setUpThreads()
                     }
                 }
-            })
+            }, true)
             document.getElementById('sms-update-required').style.display = 'none'
         } else {
             document.getElementById('sms-update-required').style.display = 'block'
@@ -339,7 +339,7 @@ var setUpInput = function() {
 
                         smsLocalsChangedListener()
                     }
-                })
+                }, true)
             }
 
             refreshCount++
@@ -535,7 +535,7 @@ var selectThread = function(thread) {
                 smsLocalsChangedListener()
             }
         }
-    })
+    }, true)
 }
 
 var selectCompose = function(row) {

@@ -238,10 +238,11 @@ window.pb = {
         return localStorage.snoozedUntil > Date.now();
     },
 
-    getThreads: function(deviceIden, callback) {
+    getThreads: function(deviceIden, callback, forceRefresh) {
+        var request = { deviceIden: deviceIden, forceRefresh: !!forceRefresh };
         // Check if callback is provided, if not return a promise
         if (typeof callback === 'function') {
-            this.sendMessage('getThreads', { deviceIden: deviceIden }).then(response => {
+            this.sendMessage('getThreads', request).then(response => {
                 callback(response.threads || response);
             }).catch(error => {
                 console.error('getThreads error:', error);
@@ -249,20 +250,21 @@ window.pb = {
             });
         } else {
             // If no callback, return the promise
-            return this.sendMessage('getThreads', { deviceIden: deviceIden });
+            return this.sendMessage('getThreads', request);
         }
     },
 
-    getThread: function(deviceIden, threadId, callback) {
+    getThread: function(deviceIden, threadId, callback, forceRefresh) {
+        var request = { deviceIden: deviceIden, threadId: threadId, forceRefresh: !!forceRefresh };
         if (typeof callback === 'function') {
-            this.sendMessage('getThread', { deviceIden: deviceIden, threadId: threadId }).then(response => {
+            this.sendMessage('getThread', request).then(response => {
                 callback(response.thread || response);
             }).catch(error => {
                 console.error('getThread error:', error);
                 callback(null);
             });
         } else {
-            return this.sendMessage('getThread', { deviceIden: deviceIden, threadId: threadId });
+            return this.sendMessage('getThread', request);
         }
     },
 

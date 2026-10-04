@@ -7,6 +7,7 @@
 pb.keepalive = {
     ALARM_NAME: 'pushbullet_keepalive',
     CHECK_INTERVAL: 1, // Check every 1 minute (most reliable)
+    SMS_STATE_KEY: 'smsPollStateV1',
     lastAlarmTime: 0,
     lastConnectionCheck: 0
 };
@@ -52,8 +53,11 @@ pb.keepalive.checkConnection = function() {
         pb.log('Keepalive: WebSocket already connected (readyState: ' + websocket.readyState + ')');
     }
 
-    // Fetch any pushes we might have missed (last 60 seconds)
+    // Fetch normal pushes and independently poll SMS permanent objects. SMS change
+    // notices are ephemerals and never appear in /v2/pushes, so the old push-only
+    // fallback could not recover a missed sms_changed WebSocket event.
     pb.keepalive.fetchRecentPushes();
+    pb.keepalive.pollSmsState();
 };
 
 // Fetch recent pushes to catch anything we missed while disconnected
@@ -62,7 +66,7 @@ pb.keepalive.fetchRecentPushes = function() {
         return;
     }
 
-    // Fetch pushes from the last 90 seconds to catch everything (including SMS)
+    // Fetch normal pushes from the last 90 seconds.
     // Wider window accounts for alarm timing variance
     var now = Date.now() / 1000; // Convert to seconds
     var modifiedAfter = now - 90; // Last 90 seconds
@@ -73,8 +77,7 @@ pb.keepalive.fetchRecentPushes = function() {
         if (response && response.pushes && response.pushes.length > 0) {
             pb.log('Keepalive: Found ' + response.pushes.length + ' recent pushes');
 
-            // Process each push (they'll be handled by existing push handlers)
-            // This includes regular pushes AND SMS pushes (type: 'sms_changed')
+            // Process each normal push through the existing handlers.
             response.pushes.forEach(function(push) {
                 pb.log('Keepalive: Processing push type: ' + push.type);
 
@@ -86,6 +89,96 @@ pb.keepalive.fetchRecentPushes = function() {
             });
         } else {
             pb.log('Keepalive: No recent pushes found');
+        }
+    });
+};
+
+pb.keepalive.getSmsPollState = function() {
+    try {
+        return localStorage[pb.keepalive.SMS_STATE_KEY]
+            ? JSON.parse(localStorage[pb.keepalive.SMS_STATE_KEY])
+            : {};
+    } catch (e) {
+        pb.log('Keepalive: Invalid SMS poll state, rebuilding it');
+        return {};
+    }
+};
+
+pb.keepalive.saveSmsPollState = function(state) {
+    localStorage[pb.keepalive.SMS_STATE_KEY] = JSON.stringify(state);
+};
+
+pb.keepalive.latestTimestamp = function(thread) {
+    return thread && thread.latest && Number(thread.latest.timestamp) || 0;
+};
+
+pb.keepalive.pollSmsDevice = function(device, state) {
+    pb.post(pb.maybeApi2() + '/v3/get-permanent', {
+        key: device.iden + '_threads'
+    }, function(response, error) {
+        if (!response || !response.data || response.data.encrypted || !response.data.threads) {
+            if (error) {
+                pb.log('Keepalive: SMS poll failed for ' + device.iden + ': ' + (error.message || error.code || 'unknown error'));
+            }
+            return;
+        }
+
+        var hadBaseline = Object.prototype.hasOwnProperty.call(state, device.iden);
+        var previous = state[device.iden] || {};
+        var current = {};
+        var notifications = [];
+
+        response.data.threads.forEach(function(thread) {
+            var timestamp = pb.keepalive.latestTimestamp(thread);
+            current[thread.id] = timestamp;
+
+            var previousTimestamp = Number(previous[thread.id]) || 0;
+            if (hadBaseline && timestamp > previousTimestamp && thread.latest && thread.latest.direction === 'incoming') {
+                var recipients = thread.recipients || [];
+                notifications.push({
+                    thread_id: thread.id,
+                    title: recipients.map(function(recipient) {
+                        return recipient.name || recipient.address || 'SMS';
+                    }).join(', ') || 'SMS',
+                    body: thread.latest.body || '',
+                    timestamp: timestamp,
+                    image_url: recipients.length === 1 ? recipients[0].image_url : null
+                });
+            }
+        });
+
+        state[device.iden] = current;
+        pb.keepalive.saveSmsPollState(state);
+
+        // The authoritative background caches must be invalidated before any UI
+        // receives the event. Otherwise the popup simply renders the stale object.
+        pb.thread = {};
+        pb.threads = {};
+
+        if (notifications.length > 0) {
+            pb.log('Keepalive: Recovered ' + notifications.length + ' missed SMS update(s) by polling');
+            pb.dispatchEvent('sms_changed', {
+                type: 'sms_changed',
+                source_device_iden: device.iden,
+                notifications: notifications,
+                recovered_by_poll: true
+            });
+        } else if (!hadBaseline) {
+            pb.log('Keepalive: Established SMS polling baseline for ' + device.iden);
+        }
+    });
+};
+
+pb.keepalive.pollSmsState = function() {
+    if (!pb.local.apiKey || !pb.local.devices) {
+        return;
+    }
+
+    var state = pb.keepalive.getSmsPollState();
+    Object.keys(pb.local.devices).forEach(function(deviceIden) {
+        var device = pb.local.devices[deviceIden];
+        if (device && device.active !== false && device.has_sms) {
+            pb.keepalive.pollSmsDevice(device, state);
         }
     });
 };

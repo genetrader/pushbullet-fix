@@ -8,7 +8,15 @@ IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A 
 
 ---
 
-## LATEST UPDATE - v382 (June 2026)
+## LATEST UPDATE - v383 (October 2026)
+
+### SMS Sync Recovery Fix
+- Fixed SMS conversations becoming permanently stale when Chrome's Manifest V3 service worker missed a WebSocket `sms_changed` event
+- Added a one-minute SMS state poll that invalidates stale background caches and recovers missed incoming-message notifications
+- Made the SMS panel and chat window explicitly request fresh thread data during refreshes
+- Corrected the keepalive fallback: SMS change notices are ephemeral and are not returned by `/v2/pushes`
+
+### Included from v382
 
 ### Settings Page and Version Sync Fix
 - Restored the in-extension settings page sections from the GitHub release description
