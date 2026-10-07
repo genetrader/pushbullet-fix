@@ -13,10 +13,17 @@ pb.addEventListener('signed_out', function(e) {
 pb.e2e.setPassword = function(password) {
     if (password && pb.local.user) {
         if (!pb.e2e.key || password != btoa(pb.e2e.key)) {
-            localStorage['e2eKey'] = btoa(forge.pkcs5.pbkdf2(password, pb.local.user.iden, 30000, 32, forge.md.sha256.create()))
+            // Sensitive derived key is kept out of localStorage (CWE-922) and
+            // persisted only in the extension's dedicated chrome.storage.local area.
+            var derivedKey = btoa(forge.pkcs5.pbkdf2(password, pb.local.user.iden, 30000, 32, forge.md.sha256.create()))
+            chrome.storage.local.set({ 'e2eKey': derivedKey })
+            pb.e2e.key = atob(derivedKey)
+            pb.e2e.enabled = true
         }
     } else {
-        localStorage.removeItem('e2eKey')
+        chrome.storage.local.remove('e2eKey')
+        pb.e2e.key = null
+        pb.e2e.enabled = false
     }
 
     localStorage['keyFingerprintDirty'] = true
@@ -39,16 +46,18 @@ pb.e2e.getKeyFingerprint = function() {
 }
 
 pb.e2e.init = function() {
-    var key = localStorage['e2eKey']
-    if (key) {
-        pb.e2e.key = atob(localStorage['e2eKey'])
-        pb.e2e.enabled = true
-    } else {
-        pb.e2e.key = null
-        pb.e2e.enabled = false
-    }
+    chrome.storage.local.get('e2eKey', function(result) {
+        var key = result && result.e2eKey
+        if (key) {
+            pb.e2e.key = atob(key)
+            pb.e2e.enabled = true
+        } else {
+            pb.e2e.key = null
+            pb.e2e.enabled = false
+        }
 
-    pb.notifier.dismiss('e2e')
+        pb.notifier.dismiss('e2e')
+    })
 }
 
 pb.e2e.optEncrypt = function(plaintext) {
