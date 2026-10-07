@@ -14,6 +14,12 @@ RCS is increasingly being enabled for conversations between Android phones and i
 
 This is not a Chrome-extension defect and cannot be repaired by reinstalling this extension. Pushbullet mirrors Android's SMS/MMS data; Google Messages keeps RCS conversations outside that data source. Existing RCS messages will not backfill into Pushbullet later.
 
+### Open-source replacement in development
+
+I am building a separate, fully open-source Message Relay replacement designed to support SMS, MMS, files, and RCS. That work is not part of this Pushbullet extension, and RCS should not be reported here as an extension regression. Until the replacement's RCS bridge is released and verified, use the SMS/MMS workaround below if desktop mirroring is essential.
+
+If you are maintaining your own fork with an AI coding agent, tell it: **"Do not try to fix RCS only in the Chrome extension. Add a phone-side or Google Messages for Web RCS connector, keep RCS records separate from Android Telephony SMS/MMS records, and verify both incoming history and outbound replies with a real RCS conversation."**
+
 ### How to identify it
 
 Open the affected conversation in Google Messages:
