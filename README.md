@@ -8,6 +8,32 @@ IF YOU LIKE THIS EXTENSION I HAVE BUILT A LOT MORE.  JUST SAY THANKS, GIVE IT A 
 
 ---
 
+## ⚠️ RCS MESSAGES DO NOT SYNC TO PUSHBULLET
+
+RCS is increasingly being enabled for conversations between Android phones and iPhones. A conversation can switch from SMS/MMS to RCS without changing its contact or visible thread. When that happens, new messages still appear normally in Google Messages on the Android phone, but they do **not** appear in Pushbullet.
+
+This is not a Chrome-extension defect and cannot be repaired by reinstalling this extension. Pushbullet mirrors Android's SMS/MMS data; Google Messages keeps RCS conversations outside that data source. Existing RCS messages will not backfill into Pushbullet later.
+
+### How to identify it
+
+Open the affected conversation in Google Messages:
+
+- If the compose box says **RCS message**, Pushbullet cannot mirror that conversation.
+- If it says **Text message** and the send button identifies SMS or MMS, Pushbullet should be able to mirror it.
+
+### Workaround when Pushbullet mirroring matters more than RCS
+
+1. Open the affected conversation in Google Messages.
+2. Open the three-dot menu and choose **Details**.
+3. If available, enable **Only send SMS and MMS messages** for that conversation.
+4. Confirm that the compose box now says **Text message**, then send a new test message. Only new SMS/MMS messages can sync; earlier RCS history remains unavailable to Pushbullet.
+
+If the per-conversation option is unavailable, Google Messages also has a global switch under **Profile picture → Messages settings → RCS chats**. Turning RCS off globally removes RCS features such as typing indicators, read receipts, higher-quality media, and some modern group-chat behavior. Google advises against repeatedly toggling RCS because it can affect group chats.
+
+Official references: [Google's RCS explanation](https://support.google.com/messages/answer/9592174), [RCS between Android and iPhone](https://support.google.com/messages/answer/9487020), and [RCS settings and fallback behavior](https://support.google.com/messages/answer/7189714).
+
+---
+
 ## LATEST UPDATE - v384 (October 2026)
 
 ### Manifest V3 Lifecycle and Updater Fixes
