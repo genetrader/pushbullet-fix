@@ -13,7 +13,7 @@ pb.addEventListener('signed_out', function(e) {
 pb.e2e.setPassword = function(password) {
     if (password && pb.local.user) {
         if (!pb.e2e.key || password != btoa(pb.e2e.key)) {
-            localStorage['e2eKey'] = btoa(forge.pkcs5.pbkdf2(password, pb.local.user.iden, 30000, 32, forge.md.sha256.create()))
+            localStorage['e2eKey'] = btoa(forge.pkcs5.pbkdf2(password, pb.local.user.iden, 600000 /* OWASP 2023 minimum */, 32, forge.md.sha256.create()))
         }
     } else {
         localStorage.removeItem('e2eKey')
